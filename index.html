@@ -12,63 +12,52 @@
     
     body { font-family:'Segoe UI', sans-serif; background:var(--bg); color:#fff; padding:20px; margin:0; }
     
-    /* HEADER */
     .header-kejohanan { text-align: center; margin-bottom: 30px; }
-    .header-kejohanan h1 { font-size: 2.8rem; margin: 0; color: var(--utama); text-transform: uppercase; text-shadow: 0 0 20px rgba(0,210,255,0.4); }
+    .header-kejohanan h1 { font-size: 2.5rem; margin: 0; color: var(--utama); text-transform: uppercase; text-shadow: 0 0 15px rgba(0,210,255,0.4); }
     .header-kejohanan p { color: var(--emas); font-weight: bold; letter-spacing: 3px; margin-top: 5px; }
 
-    /* PANEL KAWALAN */
     .kawalan-utama { 
-        background:var(--kad); padding:25px; border-radius:15px; 
+        background:var(--kad); padding:20px; border-radius:15px; 
         max-width: 1100px; margin: 0 auto 40px auto; border:1px solid var(--garis); 
-        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
-    .input-group { text-align: center; margin-bottom: 20px; border-bottom: 1px solid var(--garis); padding-bottom: 20px; }
-    .senarai-nama { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; padding: 10px; }
+    .senarai-nama { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 12px; padding: 10px; }
     .input-kad { background: #000; padding: 12px; border-radius: 8px; border: 1px solid #444; }
-    .input-kad label { font-size: 0.7rem; color: var(--utama); font-weight: bold; text-transform: uppercase; }
     .input-pasukan { width: 92%; background: #111; border: 1px solid #333; color: #fff; padding: 6px; border-radius: 4px; margin-top: 6px; font-size: 0.8rem; }
 
-    /* LAYOUT */
     .tournament-layout { display: flex; flex-direction: column; gap: 60px; margin: 0 auto; width: fit-content; }
     .laluan-row { display: flex; gap: 40px; padding: 20px; background: rgba(255,255,255,0.02); border-radius: 15px; }
-    .pusingan { display: flex; flex-direction: column; gap: 30px; min-width: 250px; justify-content: space-around; }
+    .pusingan { display: flex; flex-direction: column; gap: 30px; min-width: 260px; justify-content: space-around; }
     
-    .tajuk-pusingan { font-size: 0.8rem; font-weight: bold; text-align: center; padding: 10px; text-transform: uppercase; border-radius: 5px; margin-bottom: 15px; }
-    .barisW .tajuk-pusingan { background: rgba(0, 210, 255, 0.1); color: var(--utama); border: 1px solid var(--utama); }
-    .barisL .tajuk-pusingan { background: rgba(231, 76, 60, 0.1); color: #ff6b6b; border: 1px solid #e74c3c; }
+    .tajuk-pusingan { font-size: 0.75rem; font-weight: bold; text-align: center; padding: 8px; text-transform: uppercase; border-radius: 5px; margin-bottom: 10px; border: 1px solid #444; }
+    .barisW .tajuk-pusingan { color: var(--utama); border-color: var(--utama); }
+    .barisL .tajuk-pusingan { color: #ff6b6b; border-color: #e74c3c; }
 
-    /* KOTAK PERLAWANAN */
-    .kotak-perlawanan { background:var(--kad); border:1px solid var(--garis); border-radius:10px; overflow:hidden; position: relative; padding-top: 22px; width: 250px; }
+    .kotak-perlawanan { background:var(--kad); border:1px solid var(--garis); border-radius:10px; overflow:hidden; position: relative; padding-top: 22px; width: 260px; }
     .match-no { 
         position: absolute; top: 0; left: 0; background: rgba(0, 229, 255, 0.2); 
-        color: var(--biru-nombor); font-size: 11px; font-weight: 900; padding: 3px 12px; 
+        color: var(--biru-nombor); font-size: 10px; font-weight: 900; padding: 2px 10px; 
         border-bottom-right-radius: 10px; border-right: 1px solid var(--biru-nombor); border-bottom: 1px solid var(--biru-nombor);
     }
 
-    .slot-pasukan { display:flex; gap: 12px; align-items:center; padding:10px; border-bottom: 1px solid #222; height: 45px; transition: 0.3s; }
-    .slot-bye { opacity: 0.4; font-style: italic; }
+    .slot-pasukan { display:flex; gap: 10px; align-items:center; padding:8px; border-bottom: 1px solid #222; height: 50px; }
     
-    .avatar { width: 38px; height: 38px; border-radius: 50%; background: #222; object-fit: cover; border: 2px solid #333; flex-shrink: 0; }
-    .nama-display { flex:1; font-size:0.9rem; font-weight: 600; color: #eee; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    
-    .skor { width:38px; height: 30px; text-align:center; background:#000; border:1px solid #444; color:#fff; border-radius:6px; font-weight:bold; font-size: 1rem; }
-    .skor.sembunyi { visibility: hidden; }
+    /* AVATAR FIX */
+    .avatar-wrapper { width: 40px; height: 40px; border-radius: 50%; overflow: hidden; background: #333; flex-shrink: 0; border: 2px solid #444; }
+    .avatar { width: 100%; height: 100%; object-fit: cover; display: block; background: #222; }
 
-    /* STATUS MENANG/KALAH */
-    .menang-slot { background: rgba(46, 204, 113, 0.15) !important; }
-    .kalah-slot { background: rgba(231, 76, 60, 0.1) !important; }
-    .skor-menang { background: var(--menang) !important; color: #000 !important; border: none; }
-    .skor-kalah { background: var(--kalah) !important; color: #fff !important; border: none; }
+    .nama-display { flex:1; font-size:0.85rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .skor { width:35px; height: 28px; text-align:center; background:#000; border:1px solid #444; color:#fff; border-radius:4px; font-weight:bold; }
+
+    /* WARNA STATUS */
+    .slot-menang { background: rgba(46, 204, 113, 0.15) !important; }
+    .skor-menang { background: var(--menang) !important; color: #000 !important; }
+    .skor-kalah { background: var(--kalah) !important; color: #fff !important; }
     .teks-menang { color: var(--menang) !important; }
 
-    /* GRAND FINAL HIGHLIGHT */
-    .gf-container { display: flex; align-items: center; padding-left: 50px; border-left: 4px dashed var(--garis); margin-left: 30px; }
-    .grand-final { border: 3px solid var(--emas) !important; box-shadow: 0 0 30px rgba(255, 215, 0, 0.3); width: 280px !important; transform: scale(1.1); }
-    .grand-final .tajuk-pusingan { background: var(--emas) !important; color: #000 !important; }
-
-    button { background:var(--utama); color:#000; font-weight:bold; cursor:pointer; border-radius:8px; padding:12px 25px; border:none; transition: 0.2s; text-transform: uppercase; }
-    button:hover { background: #fff; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,210,255,0.4); }
+    .gf-container { display: flex; align-items: center; padding-left: 50px; border-left: 3px dashed var(--garis); margin-left: 30px; }
+    .grand-final { border: 3px solid var(--emas) !important; box-shadow: 0 0 30px rgba(255, 215, 0, 0.3); }
+    
+    button { background:var(--utama); color:#000; font-weight:bold; cursor:pointer; border-radius:6px; padding:10px 20px; border:none; text-transform:uppercase; }
 </style>
 </head>
 <body>
@@ -79,10 +68,10 @@
 </div>
 
 <div class="kawalan-utama">
-    <div class="input-group">
+    <div style="text-align:center; margin-bottom:20px;">
         <label>JUMLAH PASUKAN:</label>
-        <input type="number" id="bilPasukan" value="6" min="2" style="width:70px; background:#000; color:#fff; border:1px solid #444; padding:8px; border-radius:5px;">
-        <button onclick="jana()">JANA JADUAL & PROFIL</button>
+        <input type="number" id="bilPasukan" value="6" min="2" style="width:60px; background:#000; color:#fff; border:1px solid #444; padding:5px;">
+        <button onclick="jana()">JANA BRACKET</button>
     </div>
     <div id="containerNama" class="senarai-nama"></div>
 </div>
@@ -105,39 +94,36 @@
 
 <script>
 let config = { n: 0, p2: 0, seeds: [] };
-let rujukanData = {}; 
-let matchCounter = 1;
+let infoPasukan = {};
 
-function getSeededOrder(n) {
-    let order = [0, 1];
-    while (order.length < n) {
-        let nextOrder = [];
-        for (let i = 0; i < order.length; i++) {
-            nextOrder.push(order[i]);
-            nextOrder.push(2 * order.length - 1 - order[i]);
+// FUNGSI TUKAR LINK GOOGLE DRIVE
+function fixDriveLink(url) {
+    if (url.includes('drive.google.com')) {
+        let id = url.split('/d/')[1] || url.split('id=')[1];
+        if (id) {
+            id = id.split('/')[0].split('&')[0];
+            return `https://lh3.googleusercontent.com/u/0/d/${id}`;
         }
-        order = nextOrder;
     }
-    return order;
+    return url;
 }
 
 function jana() {
     config.n = parseInt(document.getElementById('bilPasukan').value);
     config.p2 = Math.pow(2, Math.ceil(Math.log2(config.n)));
     config.seeds = getSeededOrder(config.p2);
-    rujukanData = {};
-    matchCounter = 1;
+    infoPasukan = {};
     
-    const containerNama = document.getElementById('containerNama');
-    containerNama.innerHTML = '';
+    const container = document.getElementById('containerNama');
+    container.innerHTML = '';
     for(let i=0; i<config.n; i++) {
-        containerNama.innerHTML += `
+        container.innerHTML += `
             <div class="input-kad">
-                <label>PASUKAN ${i+1}</label>
-                <input type="text" class="input-pasukan" placeholder="Nama..." oninput="updateMaster(${i}, 'nama', this.value)">
-                <input type="text" class="input-pasukan" placeholder="URL Gambar..." oninput="updateMaster(${i}, 'foto', this.value)">
+                <label style="font-size:10px; color:var(--emas)">PASUKAN ${i+1}</label>
+                <input type="text" class="input-pasukan" placeholder="Nama..." oninput="updateLive(${i}, 'nama', this.value)">
+                <input type="text" class="input-pasukan" placeholder="Paste Link Drive Di Sini..." oninput="updateLive(${i}, 'foto', this.value)">
             </div>`;
-        rujukanData[i] = { nama: `Pasukan ${i+1}`, foto: "" };
+        infoPasukan[i] = { nama: `Pasukan ${i+1}`, foto: "" };
     }
 
     document.getElementById('barisW').innerHTML = '';
@@ -163,7 +149,7 @@ function jana() {
         document.getElementById('barisL').appendChild(col);
     }
     document.getElementById('gfBox').appendChild(buatKotak('GF', 0, 0, true));
-    scanAllByes();
+    scanByes();
 }
 
 function buatKotak(j, p, m, gf=false) {
@@ -175,113 +161,105 @@ function buatKotak(j, p, m, gf=false) {
     let n1 = "Menunggu...", n2 = "Menunggu...";
     if (j === 'W' && p === 0) {
         let s1 = config.seeds[m * 2], s2 = config.seeds[m * 2 + 1];
-        n1 = (s1 < config.n) ? `Pasukan ${s1 + 1}` : "BYE";
-        n2 = (s2 < config.n) ? `Pasukan ${s2 + 1}` : "BYE";
+        n1 = s1 < config.n ? `Pasukan ${s1 + 1}` : "BYE";
+        n2 = s2 < config.n ? `Pasukan ${s2 + 1}` : "BYE";
     }
 
     div.innerHTML = `
-        <div class="match-no">M${matchCounter++}</div>
+        <div class="match-no">M</div>
         <div class="slot-pasukan" id="${id}_s1">
-            <img class="avatar" id="${id}_img1" src="">
+            <div class="avatar-wrapper"><img class="avatar" id="${id}_img1" src=""></div>
             <span id="${id}_p1" class="nama-display">${n1}</span>
-            <input type="number" class="skor" id="${id}_score1" oninput="kemaskini('${id}')">
+            <input type="number" class="skor" id="${id}_sc1" oninput="kira('${id}')">
         </div>
         <div class="slot-pasukan" id="${id}_s2">
-            <img class="avatar" id="${id}_img2" src="">
+            <div class="avatar-wrapper"><img class="avatar" id="${id}_img2" src=""></div>
             <span id="${id}_p2" class="nama-display">${n2}</span>
-            <input type="number" class="skor" id="${id}_score2" oninput="kemaskini('${id}')">
+            <input type="number" class="skor" id="${id}_sc2" oninput="kira('${id}')">
         </div>`;
     return div;
 }
 
-function updateMaster(index, jenis, nilai) {
+function updateLive(index, jenis, nilai) {
     const asal = `Pasukan ${index + 1}`;
-    const lama = rujukanData[index][jenis] || asal;
-    rujukanData[index][jenis] = nilai;
+    let rujukan = infoPasukan[index][jenis] || asal;
+    
+    if (jenis === 'foto') nilai = fixDriveLink(nilai); // Auto-fix Drive Link
+    infoPasukan[index][jenis] = nilai;
 
     document.querySelectorAll('.nama-display').forEach(el => {
-        if (el.innerText === lama || el.innerText === asal) {
-            let baseID = el.id.replace(/_p[12]/, '');
-            let slotNum = el.id.slice(-1);
+        if (el.innerText === rujukan || el.innerText === asal) {
+            let baseID = el.id.split('_').slice(0,3).join('_');
+            let num = el.id.slice(-1);
             if (jenis === 'nama') el.innerText = nilai || asal;
-            if (jenis === 'foto') document.getElementById(`${baseID}_img${slotNum}`).src = nilai;
+            if (jenis === 'foto') document.getElementById(`${baseID}_img${num}`).src = nilai;
         }
     });
-    scanAllByes();
+    scanByes();
 }
 
-function scanAllByes() {
-    document.querySelectorAll('.kotak-perlawanan').forEach(box => {
-        let p1 = document.getElementById(box.id+'_p1'), p2 = document.getElementById(box.id+'_p2');
-        let s1 = document.getElementById(box.id+'_s1'), s2 = document.getElementById(box.id+'_s2');
-        let sc1 = document.getElementById(box.id+'_score1'), sc2 = document.getElementById(box.id+'_score2');
-
-        if (p1.innerText.includes("BYE")) {
-            s1.classList.add('slot-bye'); sc1.classList.add('sembunyi');
-            if (p2.innerText !== "Menunggu..." && !p2.innerText.includes("BYE") && sc2.value === "") {
-                sc1.value = 0; sc2.value = 1; kemaskini(box.id);
-            }
-        } else { s1.classList.remove('slot-bye'); sc1.classList.remove('sembunyi'); }
-
-        if (p2.innerText.includes("BYE")) {
-            s2.classList.add('slot-bye'); sc2.classList.add('sembunyi');
-            if (p1.innerText !== "Menunggu..." && !p1.innerText.includes("BYE") && sc1.value === "") {
-                sc1.value = 1; sc2.value = 0; kemaskini(box.id);
-            }
-        } else { s2.classList.remove('slot-bye'); sc2.classList.remove('sembunyi'); }
-    });
-}
-
-function kemaskini(id) {
-    let sc1 = document.getElementById(id + '_score1'), sc2 = document.getElementById(id + '_score2');
+function kira(id) {
+    let sc1 = document.getElementById(id+'_sc1'), sc2 = document.getElementById(id+'_sc2');
     if (sc1.value === '' || sc2.value === '') return;
-    
     let v1 = parseInt(sc1.value), v2 = parseInt(sc2.value);
     if (v1 === v2) return;
 
-    let s1 = document.getElementById(id + '_s1'), s2 = document.getElementById(id + '_s2');
-    let n1 = document.getElementById(id + '_p1'), n2 = document.getElementById(id + '_p2');
-    let img1 = document.getElementById(id + '_img1'), img2 = document.getElementById(id + '_img2');
+    let n1 = document.getElementById(id+'_p1'), n2 = document.getElementById(id+'_p2');
+    let im1 = document.getElementById(id+'_img1'), im2 = document.getElementById(id+'_img2');
+    let sl1 = document.getElementById(id+'_s1'), sl2 = document.getElementById(id+'_s2');
 
-    // UI Feedback (Warna Menang/Kalah)
-    s1.classList.toggle('menang-slot', v1 > v2); s1.classList.toggle('kalah-slot', v1 < v2);
-    s2.classList.toggle('menang-slot', v2 > v1); s2.classList.toggle('kalah-slot', v2 < v1);
+    sl1.classList.toggle('slot-menang', v1 > v2); sl2.classList.toggle('slot-menang', v2 > v1);
     sc1.classList.toggle('skor-menang', v1 > v2); sc1.classList.toggle('skor-kalah', v1 < v2);
     sc2.classList.toggle('skor-menang', v2 > v1); sc2.classList.toggle('skor-kalah', v2 < v1);
     n1.classList.toggle('teks-menang', v1 > v2); n2.classList.toggle('teks-menang', v2 > v1);
 
     let menang = v1 > v2 ? n1.innerText : n2.innerText;
-    let fotoMenang = v1 > v2 ? img1.src : img2.src;
+    let fotoM = v1 > v2 ? im1.src : im2.src;
     let kalah = v1 > v2 ? n2.innerText : n1.innerText;
-    let fotoKalah = v1 > v2 ? img2.src : img1.src;
+    let fotoK = v1 > v2 ? img2.src : img1.src; // fallback
 
     let [j, p, m] = id.split('_').map(x => isNaN(x) ? x : parseInt(x));
-    
     if (j === 'W') {
-        // Winners Next Round
-        let nextW = document.getElementById(`W_${p+1}_${Math.floor(m/2)}_p${(m%2)+1}`);
-        let nextWImg = document.getElementById(`W_${p+1}_${Math.floor(m/2)}_img${(m%2)+1}`);
-        if (nextW) { nextW.innerText = menang; nextWImg.src = fotoMenang; }
-        else { document.getElementById('GF_0_0_p1').innerText = menang; document.getElementById('GF_0_0_img1').src = fotoMenang; }
-        
-        // Drop to Losers
+        let nW = document.getElementById(`W_${p+1}_${Math.floor(m/2)}_p${(m%2)+1}`);
+        let iW = document.getElementById(`W_${p+1}_${Math.floor(m/2)}_img${(m%2)+1}`);
+        if (nW) { nW.innerText = menang; iW.src = fotoM; }
+        else { document.getElementById('GF_0_0_p1').innerText = menang; document.getElementById('GF_0_0_img1').src = fotoM; }
+
+        let tP = (p === 0) ? 0 : p * 2 - 1;
         let totalM = (config.p2 / 2);
         let flipM = (m < totalM/2) ? (m + totalM/2) : (m - totalM/2);
-        let targetP = (p === 0) ? 0 : p * 2 - 1;
-        let targetM = (p === 0) ? Math.floor(flipM / 2) : m;
-        let targetS = (p === 0) ? (flipM % 2) + 1 : 2;
-        
-        let lN = document.getElementById(`L_${targetP}_${targetM}_p${targetS}`);
-        let lI = document.getElementById(`L_${targetP}_${targetM}_img${targetS}`);
-        if (lN) { lN.innerText = kalah.includes("BYE") ? "BYE (Auto)" : kalah; lI.src = kalah.includes("BYE") ? "" : fotoKalah; }
+        let tM = (p === 0) ? Math.floor(flipM / 2) : m;
+        let tS = (p === 0) ? (flipM % 2) + 1 : 2;
+        let lN = document.getElementById(`L_${tP}_${tM}_p${tS}`);
+        let lI = document.getElementById(`L_${tP}_${tM}_img${tS}`);
+        if (lN) { lN.innerText = kalah; lI.src = (v1 > v2 ? im2.src : im1.src); }
     } else if (j === 'L') {
         let np = p + 1, nm = (p % 2 === 0) ? m : Math.floor(m/2), ns = (p % 2 === 0) ? 1 : (m % 2) + 1;
-        let nextL = document.getElementById(`L_${np}_${nm}_p${ns}`);
-        let nextLImg = document.getElementById(`L_${np}_${nm}_img${ns}`);
-        if (nextL) { nextL.innerText = menang; nextLImg.src = fotoMenang; }
-        else { document.getElementById('GF_0_0_p2').innerText = menang; document.getElementById('GF_0_0_img2').src = fotoMenang; }
+        let nL = document.getElementById(`L_${np}_${nm}_p${ns}`);
+        let iL = document.getElementById(`L_${np}_${nm}_img${ns}`);
+        if (nL) { nL.innerText = menang; iL.src = fotoM; }
+        else { document.getElementById('GF_0_0_p2').innerText = menang; document.getElementById('GF_0_0_img2').src = fotoM; }
     }
-    scanAllByes();
+    scanByes();
+}
+
+function scanByes() {
+    document.querySelectorAll('.kotak-perlawanan').forEach(box => {
+        let p1 = document.getElementById(box.id+'_p1'), p2 = document.getElementById(box.id+'_p2');
+        let sc1 = document.getElementById(box.id+'_sc1'), sc2 = document.getElementById(box.id+'_sc2');
+        if (p1.innerText.includes("BYE") && sc2.value === "") { sc1.value = 0; sc2.value = 1; kira(box.id); }
+        if (p2.innerText.includes("BYE") && sc1.value === "") { sc1.value = 1; sc2.value = 0; kira(box.id); }
+    });
+}
+
+function getSeededOrder(n) {
+    let o = [0, 1];
+    while (o.length < n) {
+        let nO = [];
+        for (let i = 0; i < o.length; i++) { nO.push(o[i]); nO.push(2 * o.length - 1 - o[i]); }
+        o = nO;
+    }
+    return o;
 }
 jana();
 </script>
