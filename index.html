@@ -12,15 +12,8 @@
 
     body { font-family:'Segoe UI', sans-serif; background:var(--bg); color:#fff; padding:20px; margin:0; }
 
-    /* WRAPPER UTAMA: Memastikan semua elemen sejajar tengah */
-    .main-wrapper { 
-        display: flex; 
-        flex-direction: column; 
-        align-items: center; 
-        min-width: min-content; /* Elak bracket pecah bila zoom */
-    }
+    .main-wrapper { display: flex; flex-direction: column; align-items: center; min-width: min-content; }
 
-    /* HEADER: Lebar automatik ikut lebar bracket */
     .header-container {
         display: flex; align-items: center; justify-content: space-between;
         background: rgba(255, 255, 255, 0.03); padding: 25px 40px;
@@ -42,22 +35,24 @@
         letter-spacing: 8px; margin-top: 5px; display: block;
     }
 
-    /* SENARAI PASUKAN HORIZONTAL */
+    /* SENARAI PASUKAN - MAX 5 SEBARIS & CENTER */
     .senarai-peserta-awam {
-        background: var(--kad); padding: 15px 25px; border-radius: 15px;
+        background: var(--kad); padding: 20px; border-radius: 15px;
         margin-bottom: 40px; border: 1px solid var(--garis);
         width: 100%; box-sizing: border-box;
     }
     .grid-peserta { 
-        display: flex; overflow-x: auto; gap: 12px; padding-bottom: 10px; 
-        scrollbar-width: thin; scrollbar-color: var(--utama) #000;
+        display: flex; flex-wrap: wrap; gap: 12px; 
+        justify-content: center; /* Memastikan barisan pasukan sentiasa di tengah */
+        max-width: 900px; /* Anggaran lebar untuk 5 pasukan (150px-180px setiap satu) */
+        margin: 0 auto; 
     }
     .kad-peserta-ringkas { 
-        flex: 0 0 auto; background: #000; padding: 8px 15px; 
-        border-radius: 8px; border: 1px solid #333; font-size: 0.85rem; 
+        flex: 0 0 calc(20% - 12px); /* Memaksa 5 item sebaris (20% setiap satu) */
+        min-width: 150px; background: #000; padding: 10px; 
+        border-radius: 8px; border: 1px solid #333; font-size: 0.85rem; text-align: center;
     }
 
-    /* BRACKET LAYOUT: Sangat Stabil */
     .tournament-layout { display: flex; gap: 30px; justify-content: center; align-items: flex-start; }
     .bracket-group { display: flex; flex-direction: column; gap: 50px; }
     
@@ -88,16 +83,21 @@
     .avatar { width: 100%; height: 100%; object-fit: cover; }
     .nama-display { flex:1; font-size:0.8rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     
-    /* SKOR & WARNA */
     .skor { width:35px; height: 28px; text-align:center; background:#000; border:1px solid #444; color:#fff; border-radius:4px; font-weight:bold; }
     .slot-menang { background: rgba(46, 204, 113, 0.15) !important; }
     .skor-menang { background: var(--menang) !important; color: #000 !important; border: none; }
     .skor-kalah { background: var(--kalah) !important; color: #fff !important; border: none; }
 
     .gf-container { display: flex; align-items: center; padding-left: 40px; border-left: 3px dashed var(--garis); margin-left: 10px; }
-    .grand-final { border: 3px solid var(--emas) !important; box-shadow: 0 0 30px rgba(255, 215, 0, 0.3); transform: scale(1.05); }
+    
+    /* GRAND FINAL: BG KUNING DIKURANGKAN (SOFT GOLD) */
+    .grand-final { 
+        border: 3px solid var(--emas) !important; 
+        background: rgba(255, 215, 0, 0.03) !important; /* Latar belakang sangat nipis */
+        box-shadow: 0 0 30px rgba(255, 215, 0, 0.15); 
+        transform: scale(1.05); 
+    }
 
-    /* ADMIN */
     #panelAdmin { display: none; position: fixed; top: 20px; right: 20px; width: 320px; max-height: 85vh; background: var(--kad); border: 2px solid var(--utama); border-radius: 15px; z-index: 1000; padding: 20px; box-shadow: 0 0 50px #000; overflow-y: auto; }
 </style>
 </head>
@@ -114,9 +114,11 @@
     </div>
 
     <div class="senarai-peserta-awam">
-        <h4 style="margin:0 0 10px 0; color:var(--emas); font-size: 0.7rem; letter-spacing: 1px;">SENARAI PASUKAN BERDAFTAR</h4>
+        <h4 style="margin:0 0 15px 0; color:var(--emas); font-size: 0.75rem; letter-spacing: 1px; text-align: center;">SENARAI PASUKAN BERDAFTAR</h4>
         <div id="gridPesertaAwam" class="grid-peserta"></div>
     </div>
+
+    
 
     <div class="tournament-layout">
         <div class="bracket-group">
@@ -125,7 +127,7 @@
         </div>
         <div class="gf-container">
             <div class="pusingan">
-                <div style="background:var(--emas); color:#000; font-weight:900; text-align:center; padding:10px; border-radius:8px; margin-bottom:15px; font-size: 0.8rem;">🏆 GRAND FINAL</div>
+                <div style="background:rgba(255, 215, 0, 0.2); color:var(--emas); font-weight:900; text-align:center; padding:10px; border-radius:8px; margin-bottom:15px; font-size: 0.8rem; border: 1px solid var(--emas);">🏆 GRAND FINAL</div>
                 <div id="gfBox"></div>
             </div>
         </div>
@@ -182,21 +184,16 @@ function kira(id) {
     if (!sc1.value || !sc2.value) return;
     let v1 = parseInt(sc1.value), v2 = parseInt(sc2.value);
     if (v1 === v2) return;
-
     let sl1 = document.getElementById(id+'_s1'), sl2 = document.getElementById(id+'_s2');
     let n1 = document.getElementById(id+'_p1'), n2 = document.getElementById(id+'_p2');
     let im1 = document.getElementById(id+'_img1'), im2 = document.getElementById(id+'_img2');
-
     sl1.classList.toggle('slot-menang', v1 > v2);
     sl2.classList.toggle('slot-menang', v2 > v1);
     sc1.className = v1 > v2 ? 'skor skor-menang' : 'skor skor-kalah';
     sc2.className = v2 > v1 ? 'skor skor-menang' : 'skor skor-kalah';
-
     let mN = v1 > v2 ? n1.innerText : n2.innerText, mF = v1 > v2 ? im1.src : im2.src, mID = v1 > v2 ? sl1.getAttribute('data-pid') : sl2.getAttribute('data-pid');
     let kN = v1 > v2 ? n2.innerText : n1.innerText, kF = v1 > v2 ? im2.src : im1.src, kID = v1 > v2 ? sl2.getAttribute('data-pid') : sl1.getAttribute('data-pid');
-
     let [j, p, m] = id.split('_').map(x => isNaN(x) ? x : parseInt(x));
-    
     if (j === 'W') {
         passToNext('W', p+1, Math.floor(m/2), (m%2)+1, mN, mF, mID);
         let tP = (p === 0) ? 0 : p * 2 - 1, totalM = (config.p2/2), flipM = (m < totalM/2) ? (m+totalM/2) : (m-totalM/2);
@@ -228,7 +225,6 @@ function jana() {
     infoPasukan = {}; matchCounter = 1;
     document.getElementById('containerNamaAdmin').innerHTML = '';
     document.getElementById('gridPesertaAwam').innerHTML = '';
-    
     for(let i=0; i<config.n; i++) {
         document.getElementById('containerNamaAdmin').innerHTML += `
             <div style="background:#000; padding:10px; border-radius:8px; margin-bottom:8px; border:1px solid #333;">
