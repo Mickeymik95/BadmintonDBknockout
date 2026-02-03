@@ -1,264 +1,130 @@
 <!DOCTYPE html>
 <html lang="ms">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pengiraan Gaji - Tema Prasarana</title>
-<style>
-:root {
-    --merah: #E60012;
-    --biru: #003B5C;
-    --biru2: #001F3F;
-    --putih: #FFFFFF;
-    --emas: #FFD700;
-    --abu: #F1F1F1;
-}
+    <meta charset="UTF-8">
+    <title>Double Elimination Scoring System</title>
+    <style>
+        :root { --win: #2ecc71; --lose: #e74c3c; --bg: #121212; --card: #252525; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; padding: 20px; }
+        
+        .controls { margin-bottom: 30px; background: #333; padding: 15px; border-radius: 8px; display: flex; gap: 10px; align-items: center; }
+        input[type="number"] { padding: 8px; border-radius: 4px; border: 1px solid #555; background: #000; color: white; width: 60px; }
+        button { padding: 10px 20px; background: #00ffcc; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; color: #000; }
 
-body {
-    font-family: 'Segoe UI', sans-serif;
-    margin: 0;
-    padding: 0;
-    min-height: 100vh;
-    background: linear-gradient(to right, var(--merah), var(--putih), var(--biru));
-    color: #000;
-}
+        .bracket-row { display: flex; gap: 40px; align-items: flex-start; margin-bottom: 50px; overflow-x: auto; padding-bottom: 20px; }
+        .round { display: flex; flex-direction: column; gap: 30px; justify-content: center; }
+        
+        /* Kotak Perlawanan */
+        .match-card { background: var(--card); border: 1px solid #444; border-radius: 6px; width: 180px; overflow: hidden; }
+        .match-header { background: #444; font-size: 0.7rem; padding: 4px 8px; display: flex; justify-content: space-between; }
+        
+        .team-row { display: flex; align-items: center; justify-content: space-between; padding: 8px; border-bottom: 1px solid #333; }
+        .team-name { font-size: 0.85rem; flex-grow: 1; }
+        
+        /* Input Skor */
+        .score-input { 
+            width: 35px; border: none; background: #444; color: white; 
+            text-align: center; padding: 4px; border-radius: 3px; font-weight: bold;
+        }
 
-/* Header */
-header {
-    text-align: center;
-    padding: 30px 10px;
-    background: linear-gradient(135deg, var(--merah), var(--biru2));
-    color: var(--putih);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    border-radius: 0 0 20px 20px;
-}
+        /* Warna Dinamik */
+        .win { background-color: var(--win) !important; color: white; }
+        .lose { background-color: var(--lose) !important; color: white; }
 
-header img {
-    width: 130px;
-    height: 130px;
-    display: block;
-    margin: 0 auto 10px;
-    border-radius: 65px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-}
-
-header h1 {
-    font-size: 32px;
-    font-weight: bold;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
-}
-
-header h2 {
-    font-size: 18px;
-    font-weight: normal;
-    color: var(--emas);
-    margin-top: 5px;
-    font-style: italic;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-}
-
-/* Container */
-.container {
-    max-width: 800px;
-    margin: 20px auto;
-    background: var(--putih);
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-}
-
-/* Table */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    table-layout: fixed; /* ikut colgroup */
-}
-
-th, td {
-    border: 1px solid var(--emas);
-    padding: 8px;
-    text-align: center;
-    word-wrap: break-word;
-}
-
-th {
-    background-color: var(--biru2);
-    color: var(--putih);
-}
-
-input {
-    width: 90%;             /* muat dalam sel */
-    max-width: 120px;       /* hadkan panjang */
-    text-align: right;
-    border-radius: 5px;
-    border: 1px solid #555;
-    padding: 5px;
-    box-sizing: border-box; /* padding + border dikira sekali */
-}
-
-/* Butang WhatsApp */
-.whatsapp-btn {
-    width: 80%;
-    margin-top: 15px;
-    margin-left : auto ;
-    margin-right : auto ;
-    padding: 12px 25px;
-    font-size: 16px;
-    border-radius: 50px;
-    border: none;
-    background-color: #25D366; /* hijau WhatsApp */
-    color: white;
-    cursor: pointer;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    transition: 0.3s;
-}
-
-.whatsapp-btn:hover {
-    background-color: #1DA851;
-    transform: scale(1.05);
-}
-
-.whatsapp-btn svg {
-    width: 20px;
-    height: 20px;
-    fill: white;
-}
-
-/* Hasil */
-#jumlah {
-    font-size: 18px;
-    font-weight: bold;
-    margin-top: 15px;
-    text-align: center;
-}
-.highlight {
-    background-color: #FFF5B7; /* Kuning lembut */
-    font-weight: bold;
-}
-
-</style>
+        h2 { color: #00ffcc; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px; }
+    </style>
 </head>
 <body>
 
-<header>
-    <img src="IMG20250522183433.jpg" alt="Logo">
-    <h1>Pengiraan Gaji Automatik</h1>
-    <h2>Created by Ppb Nazmi/Mik😈</h2>
-</header>
+    <div class="controls">
+        <label>Jumlah Pasukan:</label>
+        <input type="number" id="teamCount" value="4">
+        <button onclick="renderTournament()">Jana Kejohanan</button>
+    </div>
 
-<div class="container">
-<table id="gajiTable">
-<colgroup>
-  <col style="width: 40%">  <!-- Kolum Perkara -->
-  <col style="width: 30%">  <!-- Kolum Input -->
-  <col style="width: 30%">  <!-- Kolum Hasil -->
-</colgroup>
-<thead>
-<tr>
-    <th>Perkara</th>
-    <th>Input</th>
-    <th>Hasil Kiraan</th>
-</tr>
-</thead>
-<tbody>
-<tr><td>1. Gaji Asas</td><td><input type="number" id="c2_1"></td><td id="c3_1">0</td></tr>
-<tr><td>2. Elaun syif Malam (hari)</td><td><input type="number" id="c2_2"></td><td id="c3_2">0</td></tr>
-<tr><td>3. Elaun syif Pagi (hari)</td><td><input type="number" id="c2_3"></td><td id="c3_3">0</td></tr>
-<tr><td>4. Elaun Dobi</td><td><input type="number" id="c2_4"></td><td id="c3_4">0</td></tr>
-<tr><td>5. Kerja OD (hari)</td><td><input type="number" id="c2_5"></td><td id="c3_5">0</td></tr>
-<tr><td>6. Normal OT (Hari)</td><td><input type="number" id="c2_6"></td><td id="c3_6">0</td></tr>
-<tr><td>7. Normal PH (hari)</td><td><input type="number" id="c2_7"></td><td id="c3_7">0</td></tr>
-<tr><td>8. OT PH (hari)</td><td><input type="number" id="c2_8"></td><td id="c3_8">0</td></tr>
-<tr id="jgk"><td>9. Jumlah Gaji Kasar</td><td>-</td><td id="c3_9">0</td></tr>
-</tbody>
-</table>
+    <h2 id="wTitle">Laluan Atas (Winners) ➔ Grand Final</h2>
+    <div class="bracket-row" id="winnersContainer"></div>
 
-<!-- Butang WhatsApp -->
-<button id="waBtn" class="whatsapp-btn">
-    <!-- Ikon WhatsApp -->
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-        <path d="M16 0C7.164 0 0 6.832 0 15.25c0 2.688.74 5.285 2.145 7.582L0 32l9.426-2.945A15.9 15.9 0 0 0 16 30.5c8.836 0 16-6.832 16-15.25S24.836 0 16 0zm0 28.125c-2.34 0-4.617-.68-6.582-1.973l-.473-.309-5.59 1.75 1.824-5.34-.309-.496C3.895 20.098 3.25 17.73 3.25 15.25 3.25 8.652 9.016 3.375 16 3.375s12.75 5.277 12.75 11.875S22.984 28.125 16 28.125zM23.211 19.27c-.385-.195-2.27-1.113-2.621-1.242-.352-.129-.609-.195-.867.195s-.996 1.242-1.223 1.5c-.223.258-.445.289-.83.098-.387-.195-1.629-.59-3.105-1.875-1.145-1.02-1.914-2.277-2.14-2.664-.223-.387-.023-.598.172-.793.18-.176.387-.457.582-.684.195-.227.258-.387.387-.645.129-.258.066-.484-.031-.68-.098-.195-.867-2.086-1.188-2.855-.312-.75-.633-.648-.867-.66-.223-.012-.48-.012-.738-.012-.258 0-.68.097-1.035.484-.352.387-1.367 1.332-1.367 3.25s1.398 3.77 1.594 4.027c.195.258 2.75 4.395 6.664 6.074.934.402 1.66.641 2.227.82.934.297 1.785.254 2.457.156.75-.113 2.27-.926 2.594-1.82.32-.895.32-1.66.223-1.82-.094-.164-.352-.262-.738-.457z"/>
-    </svg>
-    Hantar WhatsApp
-</button>
+    <h2 id="lTitle">Laluan Bawah (Losers)</h2>
+    <div class="bracket-row" id="losersContainer"></div>
 
-<p id="jumlah">Jumlah Gaji Kasar: RM 0</p>
-</div>
+    <script>
+        function renderTournament() {
+            const n = parseInt(document.getElementById('teamCount').value);
+            const winnersContainer = document.getElementById('winnersContainer');
+            const losersContainer = document.getElementById('losersContainer');
+            
+            winnersContainer.innerHTML = '';
+            losersContainer.innerHTML = '';
 
-<script>
-// Auto kira bila input berubah
-const inputs = document.querySelectorAll('table input');
-inputs.forEach(input => input.addEventListener('input', kiraGaji));
+            let matchCounter = 1;
+            let rounds = Math.ceil(Math.log2(n));
 
-function kiraGaji(){
-    const gajiAsas = parseFloat(document.getElementById('c2_1').value) || 0;
-    const hariMalam = parseFloat(document.getElementById('c2_2').value) || 0;
-    const hariPagi = parseFloat(document.getElementById('c2_3').value) || 0;
-    const elaunDobi = parseFloat(document.getElementById('c2_4').value) || 0;
-    const c2_5 = parseFloat(document.getElementById('c2_5').value) || 0;
-    const c2_6 = parseFloat(document.getElementById('c2_6').value) || 0;
-    const c2_7 = parseFloat(document.getElementById('c2_7').value) || 0;
-    const c2_8 = parseFloat(document.getElementById('c2_8').value) || 0;
+            // Generate Winners
+            for (let i = 0; i <= rounds; i++) {
+                let roundDiv = document.createElement('div');
+                roundDiv.className = 'round';
+                let matchesInRound = (i === rounds) ? 1 : Math.max(1, Math.pow(2, rounds - i - 1));
+                
+                for (let j = 0; j < matchesInRound; j++) {
+                    roundDiv.appendChild(createMatchBox(matchCounter++));
+                }
+                winnersContainer.appendChild(roundDiv);
+            }
 
-    const c3_1 = gajiAsas;
-    const c3_2 = hariMalam * 20;
-    const c3_3 = hariPagi * 15;
-    const c3_4 = elaunDobi;
-    const base = gajiAsas + c3_2 + c3_3;
-
-    const c3_5 = c2_5 * (base / 26 / 8 * 1.5 * 11.5);
-    const c3_6 = c2_6 * (base / 26 / 8 * 1.5 * 3.5);
-    const c3_7 = c2_7 * (base / 26 * 2);
-    const c3_8 = c2_8 * (base / 26 / 8 * 3*3.5);
-
-    const c3_9 = c3_1 + c3_2 + c3_3 + c3_4 + c3_5 + c3_6 + c3_7 + c3_8;
-
-    document.getElementById('c3_1').innerText = c3_1.toFixed(2);
-    document.getElementById('c3_2').innerText = c3_2.toFixed(2);
-    document.getElementById('c3_3').innerText = c3_3.toFixed(2);
-    document.getElementById('c3_4').innerText = c3_4.toFixed(2);
-    document.getElementById('c3_5').innerText = c3_5.toFixed(2);
-    document.getElementById('c3_6').innerText = c3_6.toFixed(2);
-    document.getElementById('c3_7').innerText = c3_7.toFixed(2);
-    document.getElementById('c3_8').innerText = c3_8.toFixed(2);
-    document.getElementById('c3_9').innerText = c3_9.toFixed(2);
-    document.getElementById('jumlah').innerText = `Jumlah Gaji Kasar: RM ${c3_9.toFixed(2)}`;
-}
-
-// Highlight row jumlah gaji
-const row9 = document.querySelector('#gajiTable tbody tr:last-child');
-row9.classList.add('highlight');
-
-// Butang WhatsApp
-document.getElementById('waBtn').addEventListener('click', () => {
-    const gaji = document.getElementById('c3_9').innerText;
-    const mesej = `Gaji Kasar anda pada bulan ini adalah RM ${gaji}`;
-    
-    let noPhone = prompt("Masukkan nombor WhatsApp (contoh: 60123456789):");
-    
-    if(noPhone) {
-        // validation: mesti mula dengan 6 dan nombor sahaja
-        if(/^6\d{8,13}$/.test(noPhone)) {
-            const url = `https://wa.me/${noPhone}?text=${encodeURIComponent(mesej)}`;
-            window.open(url, "_blank");
-        } else {
-            alert("Nombor tidak sah! Sila masukkan format betul, contoh: 60123456789");
+            // Generate Losers (Simplified logic for visual)
+            let loserRounds = (rounds * 2) - 2;
+            for (let i = 0; i < loserRounds; i++) {
+                let roundDiv = document.createElement('div');
+                roundDiv.className = 'round';
+                let matchesInRound = Math.max(1, Math.floor(n / 4));
+                for (let j = 0; j < matchesInRound; j++) {
+                    roundDiv.appendChild(createMatchBox(matchCounter++));
+                }
+                losersContainer.appendChild(roundDiv);
+                if (matchesInRound === 1 && i >= 1) break;
+            }
         }
-    }
-});
 
-const tukarwarna = document.getElementById('jgk') ;
-tukarwarna.style.color = 'blue' ;
-tukarwarna.style.fontWeight = 'bold' ;
+        function createMatchBox(id) {
+            const div = document.createElement('div');
+            div.className = 'match-card';
+            div.innerHTML = `
+                <div class="match-header"><span>PERLAWANAN #${id}</span></div>
+                <div class="team-row">
+                    <span class="team-name">Pasukan A</span>
+                    <input type="number" class="score-input" oninput="updateColors(this)" placeholder="0">
+                </div>
+                <div class="team-row">
+                    <span class="team-name">Pasukan B</span>
+                    <input type="number" class="score-input" oninput="updateColors(this)" placeholder="0">
+                </div>
+            `;
+            return div;
+        }
 
-</script>
+        function updateColors(input) {
+            const card = input.closest('.match-card');
+            const inputs = card.querySelectorAll('.score-input');
+            const s1 = parseInt(inputs[0].value);
+            const s2 = parseInt(inputs[1].value);
 
+            // Reset warna
+            inputs[0].className = 'score-input';
+            inputs[1].className = 'score-input';
+
+            if (!isNaN(s1) && !isNaN(s2)) {
+                if (s1 > s2) {
+                    inputs[0].classList.add('win');
+                    inputs[1].classList.add('lose');
+                } else if (s2 > s1) {
+                    inputs[1].classList.add('win');
+                    inputs[0].classList.add('lose');
+                }
+            }
+        }
+
+        renderTournament();
+    </script>
 </body>
 </html>
