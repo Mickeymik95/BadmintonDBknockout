@@ -2,34 +2,53 @@
 <html lang="ms">
 <head>
 <meta charset="UTF-8">
-<title>Double Elimination - Perfect Bye System</title>
+<title>Double Elimination Pro - Auto Bye Logic</title>
 <style>
     :root{ --menang:#2ecc71;--kalah:#e74c3c;--utama:#00d2ff;--emas:#ffd700;--bg:#0b0b0d;--kad:#1a1a1f; }
-    body{ font-family:'Segoe UI', sans-serif; background:var(--bg); color:#fff; padding:20px; font-size: 14px; }
-    .kawalan{ background:var(--kad); padding:15px; border-radius:12px; display:flex; gap:10px; align-items:center; justify-content:center; position:sticky; top:10px; z-index:99; border:1px solid #333; margin-bottom:30px; }
-    button{ background:var(--utama); color:#000; font-weight:bold; cursor:pointer; border-radius:6px; padding:8px 15px; border:none; }
-    .tournament-layout { display: grid; grid-template-columns: 1fr 300px; gap:30px; max-width: 1500px; margin:0 auto; }
-    .brackets-side { display:flex; flex-direction:column; gap:80px; }
-    .laluan-row { display:flex; gap:40px; padding-bottom:20px; overflow-x:auto; }
-    .pusingan { display:flex; flex-direction:column; gap:20px; min-width:220px; justify-content:space-around; }
-    .tajuk-pusingan { font-size:.7rem; color:var(--utama); border-bottom:2px solid #333; text-align:center; padding-bottom:5px; margin-bottom:15px; }
-    .kotak-perlawanan { background:var(--kad); border:1px solid #333; border-radius:8px; overflow:hidden; }
-    .slot-pasukan { display:flex; justify-content:space-between; align-items:center; padding:10px; border-bottom:1px solid #222; }
-    .slot-bye { background: #25252b; color: #666; font-style: italic; }
-    input[type=text], .nama-display { flex:1; border:none; background:transparent; color:#fff; outline:none; font-size: 0.85rem;}
-    .skor { width:35px; text-align:center; background:#000; border:1px solid #444; color:#fff; border-radius:4px; }
+    body{ font-family:'Segoe UI', sans-serif; background:var(--bg); color:#fff; padding:20px; margin:0; }
+    
+    .kawalan{ 
+        background:var(--kad); padding:15px; border-radius:12px; 
+        display:flex; gap:10px; align-items:center; justify-content:center; 
+        position:sticky; top:10px; z-index:99; border:1px solid #333; margin-bottom:30px; 
+    }
+
+    .tournament-layout { display: grid; grid-template-columns: 1fr 300px; gap:30px; max-width: 1600px; margin:0 auto; }
+    .brackets-side { display:flex; flex-direction:column; gap:60px; }
+    .laluan-row { display:flex; gap:40px; padding-bottom:30px; overflow-x:auto; }
+    
+    .pusingan { display:flex; flex-direction:column; gap:25px; min-width:220px; justify-content:space-around; }
+    .tajuk-pusingan { 
+        font-size:.75rem; color:var(--utama); font-weight:bold; letter-spacing:1px;
+        border-bottom:2px solid #333; text-align:center; padding-bottom:8px; margin-bottom:15px; 
+    }
+
+    .kotak-perlawanan { background:var(--kad); border:1px solid #333; border-radius:8px; overflow:hidden; transition: 0.3s; }
+    .kotak-perlawanan:hover { border-color: var(--utama); }
+    
+    .slot-pasukan { display:flex; justify-content:space-between; align-items:center; padding:12px; border-bottom:1px solid #222; }
+    .slot-bye { background: #25252b; color: #555; font-style: italic; }
+    
+    .nama-display { flex:1; border:none; background:transparent; color:#fff; font-size:0.9rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    input[type=text] { background:transparent; border:none; color:#fff; width:100%; outline:none; }
+    
+    .skor { width:35px; text-align:center; background:#000; border:1px solid #444; color:#fff; border-radius:4px; font-weight:bold; }
+    .skor:disabled { opacity: 0.3; }
+
     .grand-final-area { display:flex; align-items:center; justify-content:center; }
-    .grand-final { border:2px solid var(--emas); box-shadow:0 0 30px rgba(255,215,0,0.2); width:280px; }
+    .grand-final { border:2px solid var(--emas); box-shadow:0 0 40px rgba(255,215,0,0.15); width:280px; }
+    
     .teks-menang { color:var(--menang); font-weight:bold; }
-    .skor-menang { background:var(--menang) !important; border-color: var(--menang); }
+    .teks-kalah { color:var(--kalah); opacity:0.6; text-decoration:line-through; }
+    .skor-menang { background:var(--menang) !important; border-color:var(--menang) !important; color:#000 !important; }
 </style>
 </head>
 <body>
 
 <div class="kawalan">
-    <label>Pasukan:</label>
-    <input type="number" id="bilPasukan" value="6" min="2" max="32" style="width:60px; background:#000; color:#fff; border:1px solid #444; padding:5px;">
-    <button onclick="jana()">Jana Bracket</button>
+    <label>Jumlah Pasukan:</label>
+    <input type="number" id="bilPasukan" value="6" min="2" style="width:60px; background:#000; color:#fff; border:1px solid #444; padding:5px; border-radius:4px;">
+    <button onclick="jana()">Reset & Jana Bracket</button>
 </div>
 
 <div class="tournament-layout">
@@ -55,28 +74,31 @@ function jana() {
 
     const pLen = Math.log2(config.p2);
 
-    // Winners
+    // 1. JANA WINNERS BRACKET (UB)
     for(let p=0; p<pLen; p++) {
         let col = document.createElement('div');
         col.className = 'pusingan';
-        col.innerHTML = `<div class="tajuk-pusingan">WINNERS R${p+1}</div>`;
-        for(let m=0; m < Math.pow(2, pLen-p-1); m++) col.appendChild(createMatch('W', p, m));
+        col.innerHTML = `<div class="tajuk-pusingan">WINNERS ROUND ${p+1}</div>`;
+        let matchCount = Math.pow(2, pLen-p-1);
+        for(let m=0; m<matchCount; m++) col.appendChild(createMatch('W', p, m));
         document.getElementById('barisW').appendChild(col);
     }
 
-    // Losers
-    for(let p=0; p < (pLen-1)*2; p++) {
+    // 2. JANA LOSERS BRACKET (LB)
+    let lTotalRounds = (pLen - 1) * 2;
+    for(let p=0; p<lTotalRounds; p++) {
         let col = document.createElement('div');
         col.className = 'pusingan';
-        col.innerHTML = `<div class="tajuk-pusingan">LOSERS R${p+1}</div>`;
-        let mCount = Math.pow(2, Math.floor(((pLen-1)*2 - p - 1) / 2));
-        for(let m=0; m < mCount; m++) col.appendChild(createMatch('L', p, m));
+        col.innerHTML = `<div class="tajuk-pusingan">LOSERS ROUND ${p+1}</div>`;
+        let mCount = Math.pow(2, Math.floor((lTotalRounds - p - 1) / 2));
+        for(let m=0; m<mCount; m++) col.appendChild(createMatch('L', p, m));
         document.getElementById('barisL').appendChild(col);
     }
     
+    // 3. GRAND FINAL
     document.getElementById('grandFinal').appendChild(createMatch('GF', 0, 0, true));
 
-    applyByes();
+    applyAutoByes();
 }
 
 function createMatch(j, p, m, gf=false) {
@@ -85,35 +107,34 @@ function createMatch(j, p, m, gf=false) {
     div.className = 'kotak-perlawanan' + (gf ? ' grand-final' : '');
     div.id = id;
 
-    // Logic for initial team names & BYE
-    let name1 = "Menunggu...", name2 = "Menunggu...";
+    let n1 = "Menunggu...", n2 = "Menunggu...";
     let b1 = false, b2 = false;
 
+    // Isian awal untuk Round 1 Winners
     if (j === 'W' && p === 0) {
         let t1 = m * 2 + 1;
         let t2 = m * 2 + 2;
-        name1 = t1 <= config.n ? `Pasukan ${t1}` : "BYE";
-        name2 = t2 <= config.n ? `Pasukan ${t2}` : "BYE";
-        b1 = (name1 === "BYE");
-        b2 = (name2 === "BYE");
+        n1 = t1 <= config.n ? `Pasukan ${t1}` : "BYE";
+        n2 = t2 <= config.n ? `Pasukan ${t2}` : "BYE";
+        b1 = (n1 === "BYE"); b2 = (n2 === "BYE");
     }
 
     div.innerHTML = `
-        <div style="font-size:9px; padding:2px 10px; color:#555">${id}</div>
+        <div style="font-size:9px; padding:4px 10px; color:#444; background:#141418;">${id.replace('_',' ')}</div>
         <div class="slot-pasukan ${b1?'slot-bye':''}">
-            <span id="${id}_p1" class="nama-display">${name1}</span>
+            <span id="${id}_p1" class="nama-display">${n1}</span>
             <input type="number" class="skor" oninput="update('${id}')" ${b1?'disabled':''}>
         </div>
         <div class="slot-pasukan ${b2?'slot-bye':''}">
-            <span id="${id}_p2" class="nama-display">${name2}</span>
+            <span id="${id}_p2" class="nama-display">${n2}</span>
             <input type="number" class="skor" oninput="update('${id}')" ${b2?'disabled':''}>
         </div>
     `;
     return div;
 }
 
-function applyByes() {
-    // Cari perlawanan pusingan pertama yang ada BYE
+function applyAutoByes() {
+    // Cari BYE di W R1 dan jalankan auto-win
     for(let m=0; m < config.p2/2; m++) {
         let id = `W_0_${m}`;
         let n1 = document.getElementById(id+'_p1').innerText;
@@ -127,53 +148,62 @@ function applyByes() {
 
 function update(id) {
     let box = document.getElementById(id);
-    let s = box.querySelectorAll('.skor');
-    if (s[0].value === '' || s[1].value === '') return;
+    let skors = box.querySelectorAll('.skor');
+    if (skors[0].value === '' || skors[1].value === '') return;
 
-    let v1 = parseInt(s[0].value), v2 = parseInt(s[1].value);
+    let v1 = parseInt(skors[0].value), v2 = parseInt(skors[1].value);
     if (v1 === v2) return;
 
     let n1 = document.getElementById(id + '_p1'), n2 = document.getElementById(id + '_p2');
-    let win = v1 > v2 ? n1.innerText : n2.innerText;
-    let lose = v1 > v2 ? n2.innerText : n1.innerText;
+    let winName = v1 > v2 ? n1.innerText : n2.innerText;
+    let loseName = v1 > v2 ? n2.innerText : n1.innerText;
 
-    n1.classList.toggle('teks-menang', v1 > v2);
-    n2.classList.toggle('teks-menang', v2 > v1);
-    s[0].classList.toggle('skor-menang', v1 > v2);
-    s[1].classList.toggle('skor-menang', v2 > v1);
+    n1.className = v1 > v2 ? 'nama-display teks-menang' : 'nama-display teks-kalah';
+    n2.className = v2 > v1 ? 'nama-display teks-menang' : 'nama-display teks-kalah';
+    skors[0].className = v1 > v2 ? 'skor skor-menang' : 'skor';
+    skors[1].className = v2 > v1 ? 'skor skor-menang' : 'skor';
 
     let [j, p, m] = id.split('_').map(x => isNaN(x) ? x : parseInt(x));
 
     if (j === 'W') {
-        // Winner moves up
+        // PEMENANG ke Winners Round seterusnya
         let nextW = document.getElementById(`W_${p+1}_${Math.floor(m/2)}_p${(m%2)+1}`);
-        if (nextW) nextW.innerText = win; else document.getElementById('GF_0_0_p1').innerText = win;
+        if (nextW) nextW.innerText = winName; 
+        else document.getElementById('GF_0_0_p1').innerText = winName;
 
-        // Loser drops to LB
-        if (lose !== "BYE") {
-            let targetP = (p === 0) ? 0 : p * 2 - 1; // WR1->LR1, WR2->LR2
-            let targetSlot = (p === 0) ? `p${(m%2)+1}` : `p2`;
-            let targetM = (p === 0) ? Math.floor(m/2) : m;
+        // KALAH ke Losers Round yang tepat
+        if (loseName !== "BYE") {
+            let targetP, targetM, targetSlot;
             
-            // CROSSOVER for LR1
             if (p === 0) {
+                // WR1 -> LR1
+                targetP = 0;
                 let totalM = (config.p2 / 2);
-                let flipM = (m < totalM/2) ? (m + totalM/2) : (m - totalM/2);
+                let flipM = (m < totalM/2) ? (m + totalM/2) : (m - totalM/2); // Penyilangan
                 targetM = Math.floor(flipM / 2);
                 targetSlot = `p${(flipM % 2) + 1}`;
+            } else {
+                // WR2 -> LR2, WR3 -> LR4, dsb.
+                targetP = p * 2 - 1; 
+                targetM = m;
+                targetSlot = "p2"; // Slot menunggu orang dari Winners
             }
 
             let target = document.getElementById(`L_${targetP}_${targetM}_${targetSlot}`);
-            if (target) target.innerText = lose;
+            if (target) target.innerText = loseName;
         }
     } else if (j === 'L') {
+        // Pemenang di Losers Bracket
         let np = p + 1;
         let nm = (p % 2 === 0) ? m : Math.floor(m/2);
         let ns = (p % 2 === 0) ? 'p1' : `p${(m%2)+1}`;
         let nextL = document.getElementById(`L_${np}_${nm}_${ns}`);
-        if (nextL) nextL.innerText = win; else document.getElementById('GF_0_0_p2').innerText = win;
+        if (nextL) nextL.innerText = winName; 
+        else document.getElementById('GF_0_0_p2').innerText = winName;
     }
 }
+
+// Mula Jana
 jana();
 </script>
 </body>
