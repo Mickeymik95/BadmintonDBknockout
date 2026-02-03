@@ -2,129 +2,142 @@
 <html lang="ms">
 <head>
     <meta charset="UTF-8">
-    <title>Double Elimination Scoring System</title>
+    <title>Sistem Double Elimination Pro</title>
     <style>
-        :root { --win: #2ecc71; --lose: #e74c3c; --bg: #121212; --card: #252525; }
+        :root {
+            --win: #2ecc71; --lose: #e74c3c; --primary: #00ffcc;
+            --bg: #121212; --card: #1e1e1e;
+        }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; padding: 20px; }
         
-        .controls { margin-bottom: 30px; background: #333; padding: 15px; border-radius: 8px; display: flex; gap: 10px; align-items: center; }
-        input[type="number"] { padding: 8px; border-radius: 4px; border: 1px solid #555; background: #000; color: white; width: 60px; }
-        button { padding: 10px 20px; background: #00ffcc; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; color: #000; }
+        .controls { background: var(--card); padding: 20px; border-radius: 8px; margin-bottom: 30px; display: flex; gap: 15px; align-items: center; border: 1px solid #333; }
+        input { padding: 8px; border-radius: 4px; border: 1px solid #444; background: #000; color: white; width: 60px; }
+        button { padding: 8px 20px; background: var(--primary); border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
 
-        .bracket-row { display: flex; gap: 40px; align-items: flex-start; margin-bottom: 50px; overflow-x: auto; padding-bottom: 20px; }
-        .round { display: flex; flex-direction: column; gap: 30px; justify-content: center; }
+        .bracket-wrapper { display: flex; flex-direction: column; gap: 50px; }
+        .bracket-row { display: flex; gap: 30px; padding-bottom: 20px; overflow-x: auto; align-items: flex-start; }
         
-        /* Kotak Perlawanan */
-        .match-card { background: var(--card); border: 1px solid #444; border-radius: 6px; width: 180px; overflow: hidden; }
-        .match-header { background: #444; font-size: 0.7rem; padding: 4px 8px; display: flex; justify-content: space-between; }
-        
-        .team-row { display: flex; align-items: center; justify-content: space-between; padding: 8px; border-bottom: 1px solid #333; }
-        .team-name { font-size: 0.85rem; flex-grow: 1; }
-        
-        /* Input Skor */
-        .score-input { 
-            width: 35px; border: none; background: #444; color: white; 
-            text-align: center; padding: 4px; border-radius: 3px; font-weight: bold;
-        }
+        .round-container { display: flex; flex-direction: column; gap: 20px; min-width: 180px; }
+        .round-title { font-size: 0.7rem; color: var(--primary); font-weight: bold; margin-bottom: 10px; text-transform: uppercase; border-bottom: 1px solid #333; }
 
-        /* Warna Dinamik */
-        .win { background-color: var(--win) !important; color: white; }
-        .lose { background-color: var(--lose) !important; color: white; }
+        .match-box { background: #252525; border: 1px solid #333; border-radius: 6px; overflow: hidden; }
+        .match-id { font-size: 0.6rem; background: #333; padding: 2px 8px; color: #bbb; }
+        
+        .team { display: flex; justify-content: space-between; align-items: center; padding: 8px; border-bottom: 1px solid #333; }
+        .team:last-child { border-bottom: none; }
+        .score { width: 30px; height: 25px; border: none; background: #111; color: white; text-align: center; border-radius: 3px; font-weight: bold; }
+        
+        /* State Colors */
+        .winner { background: var(--win) !important; color: white; }
+        .loser { background: var(--lose) !important; color: white; opacity: 0.6; }
 
-        h2 { color: #00ffcc; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px; }
+        h2 { color: var(--primary); font-size: 1.2rem; margin-bottom: 15px; }
     </style>
 </head>
 <body>
 
     <div class="controls">
-        <label>Jumlah Pasukan:</label>
-        <input type="number" id="teamCount" value="4">
-        <button onclick="renderTournament()">Jana Kejohanan</button>
+        <label>Bilangan Pasukan:</label>
+        <input type="number" id="teamInput" value="8" min="4">
+        <button onclick="generateTournament()">Bina Tournament</button>
     </div>
 
-    <h2 id="wTitle">Laluan Atas (Winners) ➔ Grand Final</h2>
-    <div class="bracket-row" id="winnersContainer"></div>
+    <div class="bracket-wrapper">
+        <div id="winnersSection">
+            <h2>Laluan Atas (Winners Bracket)</h2>
+            <div id="winnersRow" class="bracket-row"></div>
+        </div>
 
-    <h2 id="lTitle">Laluan Bawah (Losers)</h2>
-    <div class="bracket-row" id="losersContainer"></div>
+        <div id="losersSection">
+            <h2>Laluan Bawah (Losers Bracket - Penyingkiran)</h2>
+            <div id="losersRow" class="bracket-row"></div>
+        </div>
+    </div>
 
     <script>
-        function renderTournament() {
-            const n = parseInt(document.getElementById('teamCount').value);
-            const winnersContainer = document.getElementById('winnersContainer');
-            const losersContainer = document.getElementById('losersContainer');
-            
-            winnersContainer.innerHTML = '';
-            losersContainer.innerHTML = '';
+        let matchCount = 1;
 
-            let matchCounter = 1;
+        function generateTournament() {
+            const n = parseInt(document.getElementById('teamInput').value);
+            const wRow = document.getElementById('winnersRow');
+            const lRow = document.getElementById('losersRow');
+            wRow.innerHTML = ''; lRow.innerHTML = '';
+            matchCount = 1;
+
             let rounds = Math.ceil(Math.log2(n));
 
-            // Generate Winners
-            for (let i = 0; i <= rounds; i++) {
-                let roundDiv = document.createElement('div');
-                roundDiv.className = 'round';
-                let matchesInRound = (i === rounds) ? 1 : Math.max(1, Math.pow(2, rounds - i - 1));
-                
-                for (let j = 0; j < matchesInRound; j++) {
-                    roundDiv.appendChild(createMatchBox(matchCounter++));
+            // 1. WINNERS BRACKET
+            for (let r = 1; r <= rounds + 1; r++) {
+                let matchesInRound = Math.pow(2, rounds - r);
+                if (r > rounds) matchesInRound = 1; // Grand Final
+
+                const roundDiv = document.createElement('div');
+                roundDiv.className = 'round-container';
+                roundDiv.innerHTML = `<div class="round-title">${r > rounds ? 'Grand Final' : 'Winners R' + r}</div>`;
+
+                for (let m = 0; m < matchesInRound; m++) {
+                    roundDiv.appendChild(createMatchCard(matchCount++));
                 }
-                winnersContainer.appendChild(roundDiv);
+                wRow.appendChild(roundDiv);
             }
 
-            // Generate Losers (Simplified logic for visual)
-            let loserRounds = (rounds * 2) - 2;
-            for (let i = 0; i < loserRounds; i++) {
-                let roundDiv = document.createElement('div');
-                roundDiv.className = 'round';
-                let matchesInRound = Math.max(1, Math.floor(n / 4));
-                for (let j = 0; j < matchesInRound; j++) {
-                    roundDiv.appendChild(createMatchBox(matchCounter++));
+            // 2. LOSERS BRACKET
+            // Bilangan pusingan Losers adalah 2 * (rounds - 1)
+            let loserRounds = (rounds - 1) * 2;
+            for (let r = 1; r <= loserRounds; r++) {
+                const roundDiv = document.createElement('div');
+                roundDiv.className = 'round-container';
+                roundDiv.innerHTML = `<div class="round-title">Losers R${r}</div>`;
+
+                // Logik Losers: Bilangan match berkurang setiap 2 pusingan
+                // Pusingan 1&2: sama, 3&4: sama, dsb.
+                let matchesInLoserRound = Math.pow(2, Math.floor((loserRounds - r) / 2));
+
+                for (let m = 0; m < matchesInLoserRound; m++) {
+                    roundDiv.appendChild(createMatchCard(matchCount++));
                 }
-                losersContainer.appendChild(roundDiv);
-                if (matchesInRound === 1 && i >= 1) break;
+                lRow.appendChild(roundDiv);
             }
         }
 
-        function createMatchBox(id) {
+        function createMatchCard(id) {
             const div = document.createElement('div');
-            div.className = 'match-card';
+            div.className = 'match-box';
             div.innerHTML = `
-                <div class="match-header"><span>PERLAWANAN #${id}</span></div>
-                <div class="team-row">
-                    <span class="team-name">Pasukan A</span>
-                    <input type="number" class="score-input" oninput="updateColors(this)" placeholder="0">
+                <div class="match-id">PERLAWANAN #${id}</div>
+                <div class="team">
+                    <span>Pasukan A</span>
+                    <input type="number" class="score" oninput="updateScore(this)">
                 </div>
-                <div class="team-row">
-                    <span class="team-name">Pasukan B</span>
-                    <input type="number" class="score-input" oninput="updateColors(this)" placeholder="0">
+                <div class="team">
+                    <span>Pasukan B</span>
+                    <input type="number" class="score" oninput="updateScore(this)">
                 </div>
             `;
             return div;
         }
 
-        function updateColors(input) {
-            const card = input.closest('.match-card');
-            const inputs = card.querySelectorAll('.score-input');
-            const s1 = parseInt(inputs[0].value);
-            const s2 = parseInt(inputs[1].value);
+        function updateScore(input) {
+            const parent = input.closest('.match-box');
+            const scores = parent.querySelectorAll('.score');
+            const s1 = parseInt(scores[0].value);
+            const s2 = parseInt(scores[1].value);
 
-            // Reset warna
-            inputs[0].className = 'score-input';
-            inputs[1].className = 'score-input';
+            scores[0].classList.remove('winner', 'loser');
+            scores[1].classList.remove('winner', 'loser');
 
             if (!isNaN(s1) && !isNaN(s2)) {
                 if (s1 > s2) {
-                    inputs[0].classList.add('win');
-                    inputs[1].classList.add('lose');
+                    scores[0].classList.add('winner');
+                    scores[1].classList.add('loser');
                 } else if (s2 > s1) {
-                    inputs[1].classList.add('win');
-                    inputs[0].classList.add('lose');
+                    scores[1].classList.add('winner');
+                    scores[0].classList.add('loser');
                 }
             }
         }
 
-        renderTournament();
+        generateTournament();
     </script>
 </body>
 </html>
