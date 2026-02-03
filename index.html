@@ -16,48 +16,39 @@
     .header-kejohanan h1 { font-size: 2.5rem; margin: 0; color: var(--utama); text-transform: uppercase; text-shadow: 0 0 15px rgba(0,210,255,0.4); }
     .header-kejohanan p { color: var(--emas); font-weight: bold; letter-spacing: 3px; margin-top: 5px; }
 
-    /* PANEL INPUT */
     .kawalan-utama { background:var(--kad); padding:20px; border-radius:15px; max-width: 1100px; margin: 0 auto 40px auto; border:1px solid var(--garis); }
     .senarai-nama { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
     .input-kad { background: #000; padding: 12px; border-radius: 8px; border: 1px solid #444; }
     .input-pasukan { width: 92%; background: #111; border: 1px solid #333; color: #fff; padding: 6px; border-radius: 4px; margin-top: 6px; font-size: 0.8rem; }
 
-    /* LAYOUT BRACKET */
     .tournament-layout { display: flex; flex-direction: column; gap: 50px; margin: 0 auto; width: fit-content; }
-    .laluan-row { display: flex; gap: 40px; padding: 20px; background: rgba(255,255,255,0.02); border-radius: 15px; position: relative; }
+    .laluan-row { display: flex; gap: 40px; padding: 20px; background: rgba(255,255,255,0.02); border-radius: 15px; }
     .pusingan { display: flex; flex-direction: column; gap: 30px; min-width: 260px; justify-content: space-around; }
     
     .tajuk-pusingan { font-size: 0.8rem; font-weight: bold; text-align: center; padding: 10px; text-transform: uppercase; border-radius: 5px; margin-bottom: 15px; border: 1px solid #444; }
     .barisW .tajuk-pusingan { color: var(--utama); border-color: var(--utama); background: rgba(0, 210, 255, 0.05); }
     .barisL .tajuk-pusingan { color: #ff6b6b; border-color: #e74c3c; background: rgba(231, 76, 60, 0.05); }
 
-    /* PERLAWANAN */
-    .kotak-perlawanan { background:var(--kad); border:1px solid var(--garis); border-radius:10px; overflow:hidden; position: relative; padding-top: 25px; width: 260px; transition: 0.3s; }
+    .kotak-perlawanan { background:var(--kad); border:1px solid var(--garis); border-radius:10px; overflow:hidden; position: relative; padding-top: 25px; width: 260px; }
     .match-no { position: absolute; top: 0; left: 0; background: rgba(0, 229, 255, 0.2); color: var(--biru-nombor); font-size: 10px; font-weight: 900; padding: 3px 12px; border-bottom-right-radius: 10px; border-right: 1px solid var(--biru-nombor); border-bottom: 1px solid var(--biru-nombor); }
 
-    .slot-pasukan { display:flex; gap: 12px; align-items:center; padding:10px; border-bottom: 1px solid #222; height: 50px; transition: 0.3s; }
-    
-    /* GAMBAR (AVATAR) */
-    .avatar-wrapper { width: 42px; height: 42px; border-radius: 50%; overflow: hidden; background: #222; flex-shrink: 0; border: 2px solid var(--garis); }
+    .slot-pasukan { display:flex; gap: 12px; align-items:center; padding:10px; border-bottom: 1px solid #222; height: 50px; }
+    .avatar-wrapper { width: 42px; height: 42px; border-radius: 50%; overflow: hidden; background: #222; flex-shrink: 0; border: 2px solid var(--utama); box-shadow: 0 0 8px rgba(0, 210, 255, 0.2); }
     .avatar { width: 100%; height: 100%; object-fit: cover; display: block; }
 
     .nama-display { flex:1; font-size:0.9rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .skor { width:40px; height: 32px; text-align:center; background:#000; border:1px solid #444; color:#fff; border-radius:4px; font-weight:bold; font-size: 1.1rem; }
 
-    /* STATUS MENANG/KALAH */
     .slot-menang { background: rgba(46, 204, 113, 0.15) !important; }
-    .slot-kalah { background: rgba(231, 76, 60, 0.05) !important; }
-    .skor-menang { background: var(--menang) !important; color: #000 !important; border: none; box-shadow: 0 0 10px rgba(46, 204, 113, 0.4); }
+    .skor-menang { background: var(--menang) !important; color: #000 !important; border: none; }
     .skor-kalah { background: var(--kalah) !important; color: #fff !important; border: none; }
     .teks-menang { color: var(--menang) !important; }
 
-    /* GRAND FINAL EMAS */
     .gf-container { display: flex; align-items: center; padding-left: 50px; border-left: 3px dashed var(--garis); margin-left: 30px; }
     .grand-final { border: 3px solid var(--emas) !important; box-shadow: 0 0 30px rgba(255, 215, 0, 0.3); transform: scale(1.05); }
-    .grand-final .tajuk-pusingan { background: var(--emas) !important; color: #000 !important; border: none; }
     
-    button { background:var(--utama); color:#000; font-weight:bold; cursor:pointer; border-radius:6px; padding:12px 25px; border:none; text-transform: uppercase; transition: 0.2s; }
-    button:hover { background: #fff; transform: translateY(-2px); }
+    button { background:var(--utama); color:#000; font-weight:bold; cursor:pointer; border-radius:6px; padding:12px 25px; border:none; text-transform: uppercase; }
+    button:hover { background: #fff; }
 </style>
 </head>
 <body>
@@ -97,20 +88,6 @@ let config = { n: 0, p2: 0, seeds: [] };
 let infoPasukan = {};
 let matchCounter = 1;
 
-// FUNGSI UNTUK MEMBAIKI LINK POSTIMAGES
-function fixPostImages(url) {
-    if (!url) return "";
-    // Jika user letak link viewer (postimg.cc), kita tukar ke direct link (i.postimg.cc)
-    if (url.includes("postimg.cc") && !url.includes("i.postimg.cc")) {
-        let parts = url.split('/');
-        let id = parts[parts.length - 1];
-        // Nota: Ini adalah anggaran, link direct sebenar memerlukan nama fail. 
-        // Paling baik user guna "Direct Link" dari PostImages.
-        return url; 
-    }
-    return url;
-}
-
 function jana() {
     config.n = parseInt(document.getElementById('bilPasukan').value);
     config.p2 = Math.pow(2, Math.ceil(Math.log2(config.n)));
@@ -124,8 +101,8 @@ function jana() {
         container.innerHTML += `
             <div class="input-kad">
                 <label style="font-size:11px; color:var(--emas)">PASUKAN ${i+1}</label>
-                <input type="text" class="input-pasukan" placeholder="Nama Pasukan..." oninput="update(${i}, 'nama', this.value)">
-                <input type="text" class="input-pasukan" placeholder="Pautan Direct PostImages..." oninput="update(${i}, 'foto', this.value)">
+                <input type="text" class="input-pasukan" placeholder="Nama..." oninput="update(${i}, 'nama', this.value)">
+                <input type="text" class="input-pasukan" placeholder="Direct Link Gambar..." oninput="update(${i}, 'foto', this.value)">
             </div>`;
         infoPasukan[i] = { nama: `Pasukan ${i+1}`, foto: "" };
     }
@@ -139,7 +116,6 @@ function render() {
     matchCounter = 1;
 
     const pLen = Math.log2(config.p2);
-    // Winners Bracket
     for(let p=0; p<pLen; p++) {
         let col = document.createElement('div');
         col.className = 'pusingan';
@@ -147,7 +123,6 @@ function render() {
         for(let m=0; m < Math.pow(2, pLen-p-1); m++) col.appendChild(buatKotak('W', p, m));
         document.getElementById('barisW').appendChild(col);
     }
-    // Losers Bracket
     let lTotal = (pLen - 1) * 2;
     for(let p=0; p<lTotal; p++) {
         let col = document.createElement('div');
@@ -157,7 +132,6 @@ function render() {
         for(let m=0; m < mCount; m++) col.appendChild(buatKotak('L', p, m));
         document.getElementById('barisL').appendChild(col);
     }
-    // Grand Final
     document.getElementById('gfBox').appendChild(buatKotak('GF', 0, 0, true));
     scanByes();
 }
@@ -169,20 +143,22 @@ function buatKotak(j, p, m, gf=false) {
     div.id = id;
 
     let n1 = "Menunggu...", n2 = "Menunggu...";
+    let id1 = "none", id2 = "none";
+
     if (j === 'W' && p === 0) {
         let s1 = config.seeds[m * 2], s2 = config.seeds[m * 2 + 1];
-        n1 = s1 < config.n ? `Pasukan ${s1 + 1}` : "BYE";
-        n2 = s2 < config.n ? `Pasukan ${s2 + 1}` : "BYE";
+        if (s1 < config.n) { n1 = `Pasukan ${s1 + 1}`; id1 = s1; } else { n1 = "BYE"; }
+        if (s2 < config.n) { n2 = `Pasukan ${s2 + 1}`; id2 = s2; } else { n2 = "BYE"; }
     }
 
     div.innerHTML = `
         <div class="match-no">M${matchCounter++}</div>
-        <div class="slot-pasukan" id="${id}_s1">
+        <div class="slot-pasukan" id="${id}_s1" data-pid="${id1}">
             <div class="avatar-wrapper"><img class="avatar" id="${id}_img1" src=""></div>
             <span id="${id}_p1" class="nama-display">${n1}</span>
             <input type="number" class="skor" id="${id}_sc1" oninput="kira('${id}')">
         </div>
-        <div class="slot-pasukan" id="${id}_s2">
+        <div class="slot-pasukan" id="${id}_s2" data-pid="${id2}">
             <div class="avatar-wrapper"><img class="avatar" id="${id}_img2" src=""></div>
             <span id="${id}_p2" class="nama-display">${n2}</span>
             <input type="number" class="skor" id="${id}_sc2" oninput="kira('${id}')">
@@ -190,25 +166,23 @@ function buatKotak(j, p, m, gf=false) {
     return div;
 }
 
+// FUNGSI UPDATE BARU: Guna data-pid (Team ID) supaya 'space' tidak jadi masalah
 function update(index, jenis, nilai) {
-    const asal = `Pasukan ${index + 1}`;
-    let rujukan = infoPasukan[index][jenis] || asal;
-    
-    if (jenis === 'foto') nilai = fixPostImages(nilai);
     infoPasukan[index][jenis] = nilai;
+    const defaultNama = `Pasukan ${index + 1}`;
 
-    document.querySelectorAll('.nama-display').forEach(el => {
-        if (el.innerText === rujukan || el.innerText === asal) {
-            let base = el.id.slice(0, -3);
-            let num = el.id.slice(-1);
-            if (jenis === 'nama') el.innerText = nilai || asal;
-            if (jenis === 'foto') {
-                let img = document.getElementById(`${base}_img${num}`);
-                if (img) img.src = nilai;
-            }
+    document.querySelectorAll(`[data-pid="${index}"]`).forEach(slot => {
+        let side = slot.id.split('_').pop(); // s1 atau s2
+        let base = slot.id.replace('_' + side, '');
+        let num = side.replace('s', '');
+
+        if (jenis === 'nama') {
+            document.getElementById(`${base}_p${num}`).innerText = nilai || defaultNama;
+        }
+        if (jenis === 'foto') {
+            document.getElementById(`${base}_img${num}`).src = nilai;
         }
     });
-    scanByes();
 }
 
 function kira(id) {
@@ -217,46 +191,53 @@ function kira(id) {
     let v1 = parseInt(sc1.value), v2 = parseInt(sc2.value);
     if (v1 === v2) return;
 
-    let n1 = document.getElementById(id+'_p1'), n2 = document.getElementById(id+'_p2');
     let sl1 = document.getElementById(id+'_s1'), sl2 = document.getElementById(id+'_s2');
+    let n1 = document.getElementById(id+'_p1'), n2 = document.getElementById(id+'_p2');
     let im1 = document.getElementById(id+'_img1'), im2 = document.getElementById(id+'_img2');
 
-    // UI Feedback
-    sl1.classList.toggle('slot-menang', v1 > v2); sl1.classList.toggle('slot-kalah', v1 < v2);
-    sl2.classList.toggle('slot-menang', v2 > v1); sl2.classList.toggle('slot-kalah', v2 < v1);
+    sl1.classList.toggle('slot-menang', v1 > v2); sl2.classList.toggle('slot-menang', v2 > v1);
     sc1.className = v1 > v2 ? 'skor skor-menang' : 'skor skor-kalah';
     sc2.className = v2 > v1 ? 'skor skor-menang' : 'skor skor-kalah';
-    n1.classList.toggle('teks-menang', v1 > v2); n2.classList.toggle('teks-menang', v2 > v1);
 
-    let menang = v1 > v2 ? n1.innerText : n2.innerText;
-    let fotoM = v1 > v2 ? im1.src : im2.src;
-    let kalah = v1 > v2 ? n2.innerText : n1.innerText;
-    let fotoK = v1 > v2 ? im2.src : im1.src;
+    let menangNama = v1 > v2 ? n1.innerText : n2.innerText;
+    let menangFoto = v1 > v2 ? im1.src : im2.src;
+    let menangID = v1 > v2 ? sl1.getAttribute('data-pid') : sl2.getAttribute('data-pid');
+    
+    let kalahNama = v1 > v2 ? n2.innerText : n1.innerText;
+    let kalahFoto = v1 > v2 ? im2.src : im1.src;
+    let kalahID = v1 > v2 ? sl2.getAttribute('data-pid') : sl1.getAttribute('data-pid');
 
     let [j, p, m] = id.split('_').map(x => isNaN(x) ? x : parseInt(x));
     
     if (j === 'W') {
-        // Winners Path
-        let nW = document.getElementById(`W_${p+1}_${Math.floor(m/2)}_p${(m%2)+1}`);
-        let iW = document.getElementById(`W_${p+1}_${Math.floor(m/2)}_img${(m%2)+1}`);
-        if (nW) { nW.innerText = menang; iW.src = fotoM; }
-        else { document.getElementById('GF_0_0_p1').innerText = menang; document.getElementById('GF_0_0_img1').src = fotoM; }
-
-        // Losers Path
+        passToNext('W', p+1, Math.floor(m/2), (m%2)+1, menangNama, menangFoto, menangID);
+        
         let tP = (p === 0) ? 0 : p * 2 - 1;
         let totalM = (config.p2 / 2);
         let flipM = (m < totalM/2) ? (m + totalM/2) : (m - totalM/2);
         let tM = (p === 0) ? Math.floor(flipM / 2) : m;
         let tS = (p === 0) ? (flipM % 2) + 1 : 2;
-        let lN = document.getElementById(`L_${tP}_${tM}_p${tS}`);
-        let lI = document.getElementById(`L_${tP}_${tM}_img${tS}`);
-        if (lN) { lN.innerText = kalah; lI.src = fotoK; }
+        passToNext('L', tP, tM, tS, kalahNama, kalahFoto, kalahID);
     } else if (j === 'L') {
         let np = p + 1, nm = (p % 2 === 0) ? m : Math.floor(m/2), ns = (p % 2 === 0) ? 1 : (m % 2) + 1;
-        let nL = document.getElementById(`L_${np}_${nm}_p${ns}`);
-        let iL = document.getElementById(`L_${np}_${nm}_img${ns}`);
-        if (nL) { nL.innerText = menang; iL.src = fotoM; }
-        else { document.getElementById('GF_0_0_p2').innerText = menang; document.getElementById('GF_0_0_img2').src = fotoM; }
+        passToNext('L', np, nm, ns, menangNama, menangFoto, menangID);
+    }
+}
+
+function passToNext(j, p, m, s, nama, foto, pid) {
+    let targetSlot = document.getElementById(`${j}_${p}_${m}_s${s}`);
+    let targetNama = document.getElementById(`${j}_${p}_${m}_p${s}`);
+    let targetImg = document.getElementById(`${j}_${p}_${m}_img${s}`);
+    
+    if (targetNama) {
+        targetNama.innerText = nama;
+        targetImg.src = foto;
+        targetSlot.setAttribute('data-pid', pid);
+    } else if (j === 'W' || (j === 'L' && p > 0)) {
+        // Grand Final
+        document.getElementById(`GF_0_0_p${j==='W'?1:2}`).innerText = nama;
+        document.getElementById(`GF_0_0_img${j==='W'?1:2}`).src = foto;
+        document.getElementById(`GF_0_0_s${j==='W'?1:2}`).setAttribute('data-pid', pid);
     }
 }
 
@@ -264,8 +245,8 @@ function scanByes() {
     document.querySelectorAll('.kotak-perlawanan').forEach(box => {
         let p1 = document.getElementById(box.id+'_p1'), p2 = document.getElementById(box.id+'_p2');
         let sc1 = document.getElementById(box.id+'_sc1'), sc2 = document.getElementById(box.id+'_sc2');
-        if (p1.innerText.includes("BYE") && sc2.value === "") { sc1.value = 0; sc2.value = 1; kira(box.id); }
-        if (p2.innerText.includes("BYE") && sc1.value === "") { sc1.value = 1; sc2.value = 0; kira(box.id); }
+        if (p1 && p1.innerText === "BYE" && sc2.value === "") { sc1.value = 0; sc2.value = 1; kira(box.id); }
+        if (p2 && p2.innerText === "BYE" && sc1.value === "") { sc1.value = 1; sc2.value = 0; kira(box.id); }
     });
 }
 
