@@ -2,155 +2,170 @@
 <html lang="ms">
 <head>
     <meta charset="UTF-8">
-    <title>Sistem Double Elimination - Input Nama & Skor</title>
+    <title>Sistem Auto-Tournament Double Elimination</title>
     <style>
-        :root {
-            --win: #2ecc71; --lose: #e74c3c; --primary: #00ffcc;
-            --bg: #121212; --card: #1e1e1e; --border: #333;
-        }
+        :root { --win: #2ecc71; --lose: #e74c3c; --primary: #00d2ff; --bg: #111; --card: #222; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; padding: 20px; }
-        
-        .controls { background: var(--card); padding: 20px; border-radius: 8px; margin-bottom: 30px; display: flex; gap: 15px; align-items: center; border: 1px solid var(--border); }
-        input[type="number"] { padding: 8px; border-radius: 4px; border: 1px solid #444; background: #000; color: white; width: 60px; }
-        button { padding: 8px 20px; background: var(--primary); border: none; border-radius: 4px; cursor: pointer; font-weight: bold; color: #121212; }
+        .controls { background: var(--card); padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #333; }
+        input[type="number"] { padding: 8px; border-radius: 4px; border: none; width: 60px; }
+        button { padding: 8px 20px; background: var(--primary); border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
 
-        .bracket-wrapper { display: flex; flex-direction: column; gap: 50px; }
-        .bracket-row { display: flex; gap: 30px; padding-bottom: 20px; overflow-x: auto; align-items: flex-start; }
-        
-        .round-container { display: flex; flex-direction: column; gap: 20px; min-width: 220px; }
-        .round-title { font-size: 0.75rem; color: var(--primary); font-weight: bold; margin-bottom: 10px; text-transform: uppercase; border-bottom: 1px solid var(--border); padding-bottom: 5px; }
+        .bracket-container { display: flex; flex-direction: column; gap: 40px; }
+        .bracket-row { display: flex; gap: 30px; overflow-x: auto; padding-bottom: 20px; }
+        .round { display: flex; flex-direction: column; gap: 20px; justify-content: space-around; min-width: 220px; }
+        .round-header { font-size: 0.7rem; color: var(--primary); text-transform: uppercase; margin-bottom: 10px; border-bottom: 1px solid #333; }
 
-        .match-box { background: #252525; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-        .match-id { font-size: 0.65rem; background: #333; padding: 4px 10px; color: #bbb; display: flex; justify-content: space-between; }
+        .match-box { background: #2a2a2a; border: 1px solid #444; border-radius: 6px; position: relative; }
+        .match-id { font-size: 0.6rem; background: #333; padding: 2px 8px; color: #888; }
         
-        .team { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #333; }
-        .team:last-child { border-bottom: none; }
+        .team-slot { display: flex; justify-content: space-between; align-items: center; padding: 8px; border-bottom: 1px solid #333; }
+        .team-slot:last-child { border-bottom: none; }
         
-        .team-name-input { background: transparent; border: 1px dashed #555; color: white; font-size: 0.85rem; padding: 4px; width: 120px; border-radius: 3px; }
-        .team-name-input:focus { border-color: var(--primary); outline: none; }
-        .static-name { font-size: 0.85rem; color: #ddd; }
-        
-        .score { width: 35px; height: 30px; border: none; background: #111; color: white; text-align: center; border-radius: 4px; font-weight: bold; font-size: 1rem; }
-        
-        .winner { background: var(--win) !important; color: white; }
-        .loser { background: var(--lose) !important; color: white; opacity: 0.7; }
+        input[type="text"] { background: transparent; border: 1px dashed #555; color: white; font-size: 0.85rem; width: 130px; padding: 2px; }
+        .name-display { font-size: 0.85rem; width: 130px; display: inline-block; }
+        .score-input { width: 35px; height: 25px; text-align: center; background: #000; color: white; border: 1px solid #444; border-radius: 3px; font-weight: bold; }
 
-        h2 { color: var(--primary); font-size: 1.4rem; margin-bottom: 15px; border-left: 4px solid var(--primary); padding-left: 10px; }
+        .win-text { color: var(--win) !important; font-weight: bold; }
+        .lose-text { color: var(--lose) !important; text-decoration: line-through; opacity: 0.6; }
+        .win-bg { background: var(--win) !important; color: white; }
+        .lose-bg { background: var(--lose) !important; color: white; }
     </style>
 </head>
 <body>
 
-    <div class="controls">
-        <label>Jumlah Pasukan:</label>
-        <input type="number" id="teamInput" value="8" min="2">
-        <button onclick="generateTournament()">Jana Bracket Baru</button>
-    </div>
+<div class="controls">
+    <label>Jumlah Pasukan:</label>
+    <input type="number" id="teamCount" value="8">
+    <button onclick="initTournament()">Jana & Reset</button>
+</div>
 
-    <div class="bracket-wrapper">
-        <div id="winnersSection">
-            <h2>Laluan Atas (Winners Bracket)</h2>
-            <div id="winnersRow" class="bracket-row"></div>
+<div class="bracket-container">
+    <h2>Laluan Atas (Winners)</h2>
+    <div id="winnersRow" class="bracket-row"></div>
+    
+    <h2>Laluan Bawah (Losers - Penyingkiran)</h2>
+    <div id="losersRow" class="bracket-row"></div>
+</div>
+
+<script>
+let tournamentData = {};
+
+function initTournament() {
+    const n = parseInt(document.getElementById('teamCount').value);
+    const wRow = document.getElementById('winnersRow');
+    const lRow = document.getElementById('losersRow');
+    wRow.innerHTML = ''; lRow.innerHTML = '';
+    
+    const rounds = Math.ceil(Math.log2(n));
+    
+    // Jana Winners
+    for(let r=0; r <= rounds; r++) {
+        let div = document.createElement('div');
+        div.className = 'round';
+        let matchCount = (r === rounds) ? 1 : Math.pow(2, rounds - r - 1);
+        div.innerHTML = `<div class="round-header">${r === rounds ? 'Grand Final' : 'Round '+(r+1)}</div>`;
+        
+        for(let m=0; m < matchCount; m++) {
+            div.appendChild(createMatch('W', r, m));
+        }
+        wRow.appendChild(div);
+    }
+
+    // Jana Losers (Simplified standard logic)
+    let lRounds = (rounds - 1) * 2;
+    for(let r=0; r < lRounds; r++) {
+        let div = document.createElement('div');
+        div.className = 'round';
+        let matchCount = Math.pow(2, Math.floor((lRounds - r - 1) / 2));
+        div.innerHTML = `<div class="round-header">Losers R${r+1}</div>`;
+        
+        for(let m=0; m < matchCount; m++) {
+            div.appendChild(createMatch('L', r, m));
+        }
+        lRow.appendChild(div);
+    }
+}
+
+function createMatch(type, round, match) {
+    const matchId = `${type}_${round}_${match}`;
+    const div = document.createElement('div');
+    div.className = 'match-box';
+    div.id = matchId;
+    
+    const isFirstRound = (type === 'W' && round === 0);
+    const nameField = (isFirstRound) 
+        ? `<input type="text" id="${matchId}_n1" oninput="propagateName('${matchId}_n1')" placeholder="Sila taip...">`
+        : `<span id="${matchId}_n1" class="name-display">Menunggu...</span>`;
+    
+    const nameField2 = (isFirstRound) 
+        ? `<input type="text" id="${matchId}_n2" oninput="propagateName('${matchId}_n2')" placeholder="Sila taip...">`
+        : `<span id="${matchId}_n2" class="name-display">Menunggu...</span>`;
+
+    div.innerHTML = `
+        <div class="match-id">${type} R${round+1} M${match+1}</div>
+        <div class="team-slot">
+            ${nameField}
+            <input type="number" class="score-input" oninput="processMatch('${matchId}')">
         </div>
-
-        <div id="losersSection">
-            <h2>Laluan Bawah (Elimination Bracket)</h2>
-            <div id="losersRow" class="bracket-row"></div>
+        <div class="team-slot">
+            ${nameField2}
+            <input type="number" class="score-input" oninput="processMatch('${matchId}')">
         </div>
-    </div>
+    `;
+    return div;
+}
 
-    <script>
-        let matchCount = 1;
+function propagateName(id) {
+    const val = document.getElementById(id).value || document.getElementById(id).innerText;
+    // Update visual only if needed
+}
 
-        function generateTournament() {
-            const n = parseInt(document.getElementById('teamInput').value);
-            const wRow = document.getElementById('winnersRow');
-            const lRow = document.getElementById('losersRow');
-            wRow.innerHTML = ''; 
-            lRow.innerHTML = '';
-            matchCount = 1;
+function processMatch(mId) {
+    const box = document.getElementById(mId);
+    const scores = box.querySelectorAll('.score-input');
+    const s1 = parseInt(scores[0].value);
+    const s2 = parseInt(scores[1].value);
+    const n1 = document.getElementById(mId + '_n1');
+    const n2 = document.getElementById(mId + '_n2');
 
-            let rounds = Math.ceil(Math.log2(n));
+    if (isNaN(s1) || isNaN(s2)) return;
 
-            // 1. WINNERS BRACKET
-            for (let r = 1; r <= rounds + 1; r++) {
-                let matchesInRound = Math.pow(2, rounds - r);
-                if (r > rounds) matchesInRound = 1; // Slot Grand Final
+    // Reset styles
+    n1.className = n2.className = 'name-display';
+    scores[0].className = scores[1].className = 'score-input';
 
-                const roundDiv = document.createElement('div');
-                roundDiv.className = 'round-container';
-                let title = r > rounds ? 'Grand Final' : 'Winners Round ' + r;
-                roundDiv.innerHTML = `<div class="round-title">${title}</div>`;
+    const winnerName = (s1 > s2) ? (n1.value || n1.innerText) : (n2.value || n2.innerText);
+    const loserName = (s1 > s2) ? (n2.value || n2.innerText) : (n1.value || n1.innerText);
 
-                // r === 1 bermaksud pusingan pertama, boleh isi nama
-                const isFirstRound = (r === 1);
+    if (s1 > s2) {
+        n1.classList.add('win-text'); n2.classList.add('lose-text');
+        scores[0].classList.add('win-bg'); scores[1].classList.add('lose-bg');
+    } else {
+        n2.classList.add('win-text'); n1.classList.add('lose-text');
+        scores[1].classList.add('win-bg'); scores[0].classList.add('lose-bg');
+    }
 
-                for (let m = 0; m < matchesInRound; m++) {
-                    roundDiv.appendChild(createMatchCard(matchCount++, title, isFirstRound));
-                }
-                wRow.appendChild(roundDiv);
-            }
+    // AUTO ADVANCE LOGIC
+    const [type, r, m] = mId.split('_');
+    const nextRound = parseInt(r) + 1;
+    const nextMatch = Math.floor(parseInt(m) / 2);
+    const slot = (parseInt(m) % 2 === 0) ? 'n1' : 'n2';
 
-            // 2. LOSERS BRACKET (Logik Penyingkiran Automatik)
-            let loserRounds = (rounds - 1) * 2;
-            for (let r = 1; r <= loserRounds; r++) {
-                const roundDiv = document.createElement('div');
-                roundDiv.className = 'round-container';
-                roundDiv.innerHTML = `<div class="round-title">Losers Round ${r}</div>`;
+    // Maju ke Laluan Atas
+    if (type === 'W') {
+        const targetId = `W_${nextRound}_${nextMatch}_${slot}`;
+        const target = document.getElementById(targetId);
+        if (target) target.innerText = winnerName;
 
-                let matchesInLoserRound = Math.pow(2, Math.floor((loserRounds - r) / 2));
+        // Jatuh ke Laluan Bawah (Silang)
+        // Logik: Kalah W R1 M1 jatuh ke L R1 M1
+        const loserTargetId = `L_0_${m}_${(m % 2 === 0 ? 'n1' : 'n2')}`;
+        const loserTarget = document.getElementById(loserTargetId);
+        if (loserTarget) loserTarget.innerText = loserName;
+    }
+}
 
-                for (let m = 0; m < matchesInLoserRound; m++) {
-                    // Laluan bawah biasanya nama ditarik dari kekalahan atas, jadi tiada input nama pusingan pertama di sini
-                    roundDiv.appendChild(createMatchCard(matchCount++, `Loser R${r}`, false));
-                }
-                lRow.appendChild(roundDiv);
-            }
-        }
-
-        function createMatchCard(id, roundName, canEditName) {
-            const div = document.createElement('div');
-            div.className = 'match-box';
-            
-            // Logik untuk paparan nama (Input atau Label Statik)
-            const teamDisplay = canEditName 
-                ? `<input type="text" class="team-name-input" placeholder="Nama Pasukan...">`
-                : `<span class="static-name">Menunggu...</span>`;
-
-            div.innerHTML = `
-                <div class="match-id"><span>PERLAWANAN #${id}</span> <span>${roundName}</span></div>
-                <div class="team">
-                    ${teamDisplay}
-                    <input type="number" class="score" oninput="updateScore(this)" placeholder="0">
-                </div>
-                <div class="team">
-                    ${teamDisplay}
-                    <input type="number" class="score" oninput="updateScore(this)" placeholder="0">
-                </div>
-            `;
-            return div;
-        }
-
-        function updateScore(input) {
-            const parent = input.closest('.match-box');
-            const scores = parent.querySelectorAll('.score');
-            const s1 = parseInt(scores[0].value);
-            const s2 = parseInt(scores[1].value);
-
-            scores[0].classList.remove('winner', 'loser');
-            scores[1].classList.remove('winner', 'loser');
-
-            if (!isNaN(s1) && !isNaN(s2)) {
-                if (s1 > s2) {
-                    scores[0].classList.add('winner');
-                    scores[1].classList.add('loser');
-                } else if (s2 > s1) {
-                    scores[1].classList.add('winner');
-                    scores[0].classList.add('loser');
-                }
-            }
-        }
-
-        generateTournament();
-    </script>
+initTournament();
+</script>
 </body>
 </html>
