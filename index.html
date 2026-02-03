@@ -4,11 +4,11 @@
 <meta charset="UTF-8">
 <title>BWF BADMINTON KELUARGA² SUPER SERIES 10</title>
 <style>
-    :root{ --menang:#2ecc71;--kalah:#e74c3c;--utama:#00d2ff;--emas:#ffd700;--bg:#0b0b0d;--kad:#1a1a1f; --nombor:#2c3e50; }
+    :root{ --menang:#2ecc71;--kalah:#e74c3c;--utama:#00d2ff;--emas:#ffd700;--bg:#0b0b0d;--kad:#1a1a1f; --biru-nombor:#00e5ff; }
     body{ font-family:'Segoe UI', sans-serif; background:var(--bg); color:#fff; padding:20px; margin:0; }
     
     .header-kejohanan { text-align: center; margin-bottom: 20px; }
-    .header-kejohanan h1 { font-size: 2.2rem; margin: 0; color: var(--utama); text-transform: uppercase; }
+    .header-kejohanan h1 { font-size: 2.2rem; margin: 0; color: var(--utama); text-transform: uppercase; text-shadow: 0 0 10px rgba(0,210,255,0.3); }
     .header-kejohanan p { color: var(--emas); font-weight: bold; margin-top: 5px; }
 
     .kawalan-utama { 
@@ -25,6 +25,7 @@
         background: #000; border: 1px solid #444; color: #fff; 
         padding: 6px 10px; border-radius: 4px; font-size: 0.8rem;
     }
+    .input-pasukan:focus { border-color: var(--biru-nombor); outline: none; }
 
     .tournament-layout { display: flex; flex-direction: column; gap: 40px; align-items: flex-start; max-width: fit-content; margin: 0 auto; }
     .laluan-row { display: flex; gap: 30px; align-items: stretch; }
@@ -33,11 +34,16 @@
     
     .kotak-perlawanan { background:var(--kad); border:1px solid #333; border-radius:8px; overflow:hidden; position: relative; padding-top: 15px; }
     
-    /* Warna nombor dimalapkan */
+    /* NOMBOR PERLAWANAN - BIRU TERANG */
     .match-no { 
-        position: absolute; top: 0; left: 0; background: var(--nombor); 
-        color: #bdc3c7; font-size: 10px; font-weight: bold; padding: 2px 8px; 
-        border-bottom-right-radius: 8px; 
+        position: absolute; top: 0; left: 0; 
+        background: rgba(0, 229, 255, 0.15); /* Glow latar belakang */
+        color: var(--biru-nombor); 
+        font-size: 10px; font-weight: 800; padding: 2px 10px; 
+        border-bottom-right-radius: 8px;
+        border-right: 1px solid var(--biru-nombor);
+        border-bottom: 1px solid var(--biru-nombor);
+        text-shadow: 0 0 5px var(--biru-nombor);
     }
 
     .slot-pasukan { display:flex; justify-content:space-between; align-items:center; padding:10px; border-bottom:1px solid #222; height: 35px; }
@@ -53,6 +59,7 @@
     .teks-menang { color: var(--menang); font-weight: bold; }
 
     button { background:var(--utama); color:#000; font-weight:bold; cursor:pointer; border-radius:6px; padding:8px 15px; border:none; }
+    button:hover { background: #fff; }
 </style>
 </head>
 <body>
@@ -88,7 +95,8 @@
 </div>
 
 <script>
-let config = { n: 0, p2: 0, seeds: [], senaraiNama: [] };
+let config = { n: 0, p2: 0, seeds: [] };
+let nama_sebelumnya = {};
 let matchCounter = 1;
 
 function getSeededOrder(n) {
@@ -108,13 +116,13 @@ function jana() {
     config.n = parseInt(document.getElementById('bilPasukan').value);
     config.p2 = Math.pow(2, Math.ceil(Math.log2(config.n)));
     config.seeds = getSeededOrder(config.p2);
-    config.senaraiNama = Array(config.n).fill("");
+    nama_sebelumnya = {};
     matchCounter = 1;
     
     const containerNama = document.getElementById('containerNama');
     containerNama.innerHTML = '';
     for(let i=0; i<config.n; i++) {
-        containerNama.innerHTML += `<input type="text" class="input-pasukan" placeholder="Pasukan ${i+1}" oninput="kemaskiniNama(${i}, this.value)">`;
+        containerNama.innerHTML += `<input type="text" class="input-pasukan" placeholder="Nama Pasukan ${i+1}" oninput="kemaskiniNama(${i}, this.value)">`;
     }
 
     document.getElementById('barisW').innerHTML = '';
@@ -152,10 +160,9 @@ function buatKotak(j, p, m, gf=false) {
     div.id = id;
 
     let n1 = "Menunggu...", n2 = "Menunggu...";
-    let s1 = "", s2 = "";
     if (j === 'W' && p === 0) {
-        s1 = config.seeds[m * 2];
-        s2 = config.seeds[m * 2 + 1];
+        let s1 = config.seeds[m * 2];
+        let s2 = config.seeds[m * 2 + 1];
         n1 = (s1 < config.n) ? `Pasukan ${s1 + 1}` : "BYE";
         n2 = (s2 < config.n) ? `Pasukan ${s2 + 1}` : "BYE";
     }
@@ -163,11 +170,11 @@ function buatKotak(j, p, m, gf=false) {
     div.innerHTML = `
         <div class="match-no">M${matchCounter++}</div>
         <div class="slot-pasukan" id="${id}_s1">
-            <span id="${id}_p1" class="nama-display" data-orig="${n1}">${n1}</span>
+            <span id="${id}_p1" class="nama-display">${n1}</span>
             <input type="number" class="skor" oninput="kemaskini('${id}')">
         </div>
         <div class="slot-pasukan" id="${id}_s2">
-            <span id="${id}_p2" class="nama-display" data-orig="${n2}">${n2}</span>
+            <span id="${id}_p2" class="nama-display">${n2}</span>
             <input type="number" class="skor" oninput="kemaskini('${id}')">
         </div>
     `;
@@ -176,20 +183,19 @@ function buatKotak(j, p, m, gf=false) {
 
 function kemaskiniNama(index, nama) {
     const asal = `Pasukan ${index + 1}`;
-    const baru = nama === "" ? asal : nama;
-    config.senaraiNama[index] = baru;
+    const targetNama = nama === "" ? asal : nama;
+    const cari = nama_sebelumnya[index] || asal;
 
-    // Cari dan ganti semua teks yang sepadan di seluruh bracket
+    // Ganti nama di seluruh pusingan
     document.querySelectorAll('.nama-display').forEach(el => {
-        if (el.innerText === asal || el.getAttribute('data-last') === asal || el.innerText === nama_sebelumnya[index]) {
-            el.innerText = baru;
+        if (el.innerText === cari) {
+            el.innerText = targetNama;
         }
     });
     
-    nama_sebelumnya[index] = baru; // Simpan rujukan untuk tukar kali kedua
-    scanAllByes();
+    nama_sebelumnya[index] = targetNama;
+    scanAllByes(); // Jalankan scan bye jika nama yang baru diisi dapat auto-win
 }
-let nama_sebelumnya = {};
 
 function scanAllByes() {
     let allMatches = document.querySelectorAll('.kotak-perlawanan');
