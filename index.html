@@ -18,53 +18,53 @@
         /* HEADER */
         .header-container {
             display: flex; flex-direction: column; align-items: center;
-            background: rgba(255, 255, 255, 0.03); padding: 30px;
-            border-radius: 35px; border-bottom: 2px solid var(--garis); margin-bottom: 40px;
+            background: rgba(255, 255, 255, 0.03); padding: 20px 40px;
+            border-radius: 40px; border-bottom: 2px solid var(--garis); margin-bottom: 40px;
             width: 100%; box-sizing: border-box;
         }
 
-        .header-top { display: flex; align-items: center; justify-content: space-between; width: 100%; margin-bottom: 35px; gap: 20px; }
+        .header-top { display: flex; align-items: center; justify-content: space-between; width: 100%; margin-bottom: 25px; gap: 30px; }
         
-        /* LOGO & BUTANG ADMIN SAMA SAIZ */
-        .logo-box img { height: 115px; width: 115px; border-radius: 20px; filter: drop-shadow(0 0 15px var(--utama)); object-fit: cover; }
+        /* LOGO & BUTANG ADMIN - LEBIH BESAR MEMENUHI HEADER */
+        .logo-box img { height: 140px; width: 140px; border-radius: 25px; filter: drop-shadow(0 0 20px var(--utama)); object-fit: cover; }
         
         .btn-admin-besar { 
-            height: 115px; width: 115px; border-radius: 20px; border: 3px solid var(--utama); 
+            height: 140px; width: 140px; border-radius: 25px; border: 4px solid var(--utama); 
             background: rgba(0, 210, 255, 0.1); color: var(--utama); cursor: pointer; 
-            font-weight: 900; font-size: 0.85rem; text-transform: uppercase; transition: 0.3s;
+            font-weight: 900; font-size: 1rem; text-transform: uppercase; transition: 0.3s;
             display: flex; align-items: center; justify-content: center; text-align: center;
-            line-height: 1.2; padding: 10px;
+            padding: 10px; line-height: 1.2;
         }
-        .btn-admin-besar:hover { background: var(--utama); color: #000; box-shadow: 0 0 30px var(--utama); }
+        .btn-admin-besar:hover { background: var(--utama); color: #000; box-shadow: 0 0 35px var(--utama); transform: scale(1.02); }
 
         .tajuk-box { text-align: center; flex: 2; }
-        .tajuk-box h1 { font-size: 2.6rem; margin: 0; background: linear-gradient(130deg, #00d2ff, #2ecc71, #e74c3c, #ffd700); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; }
-        .siri-tag { font-size: 1.8rem; color: var(--emas); letter-spacing: 8px; font-weight: 900; display: block; margin: 5px 0; }
+        .tajuk-box h1 { font-size: 2.8rem; margin: 0; background: linear-gradient(130deg, #00d2ff, #2ecc71, #e74c3c, #ffd700); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; line-height: 1.1; }
+        .siri-tag { font-size: 1.6rem; color: var(--emas); letter-spacing: 10px; font-weight: 900; display: block; margin-top: 10px; }
 
-        /* ADMIN CARDS - CENTER VERTIKAL */
-        .admin-header-grid { display: flex; justify-content: center; width: 100%; gap: 12px; flex-wrap: wrap; }
+        /* ADMIN CARDS - LEBIH KECIL/SLIM & CENTER VERTIKAL */
+        .admin-header-grid { display: flex; justify-content: center; width: 100%; gap: 10px; flex-wrap: wrap; }
         .admin-ws-card { 
-            width: 190px; height: 110px; 
-            background: rgba(37, 211, 102, 0.05); border: 2px solid var(--ws-hijau); border-radius: 15px; 
+            width: 180px; height: 85px; /* Ketinggian dikurangkan lagi */
+            background: rgba(37, 211, 102, 0.05); border: 2px solid var(--ws-hijau); border-radius: 12px; 
             text-decoration: none; display: flex; flex-direction: column; align-items: center; justify-content: center;
-            text-align: center; gap: 6px; transition: 0.4s; padding: 10px;
+            text-align: center; gap: 4px; transition: 0.3s; padding: 5px;
         }
-        .admin-ws-card:hover { background: rgba(37, 211, 102, 0.15); transform: translateY(-5px); border-color: var(--emas); }
-        .ws-logo-icon { width: 28px; height: 28px; }
-        .ws-name { color: #fff; font-weight: 800; font-size: 1rem; margin: 0; }
-        .ws-role { color: var(--emas); font-size: 0.7rem; text-transform: uppercase; font-weight: bold; margin: 0; }
+        .admin-ws-card:hover { background: rgba(37, 211, 102, 0.15); border-color: var(--emas); }
+        .ws-logo-icon { width: 22px; height: 22px; }
+        .ws-name { color: #fff; font-weight: 800; font-size: 0.9rem; margin: 0; }
+        .ws-role { color: var(--emas); font-size: 0.65rem; text-transform: uppercase; font-weight: bold; margin: 0; }
 
         /* BRACKETS */
         .tournament-layout { display: flex; flex-direction: column; gap: 50px; align-items: center; }
         .laluan-row { display: flex; gap: 30px; padding: 45px; border-radius: 25px; border: 1px solid #222; position: relative; }
         .baris-menang { background: var(--bg-menang); border-color: var(--utama); }
         .baris-kalah { background: var(--bg-kalah); border-color: var(--kalah); }
-        .label-bracket { position: absolute; top: -15px; left: 30px; background: var(--bg); padding: 0 15px; font-weight: 900; font-size: 1rem; border-radius: 10px; }
+        .label-bracket { position: absolute; top: -15px; left: 30px; background: var(--bg); padding: 0 15px; font-weight: 900; font-size: 0.9rem; border-radius: 10px; }
         .label-menang { color: var(--utama); border: 1px solid var(--utama); }
         .label-kalah { color: var(--kalah); border: 1px solid var(--kalah); }
 
         .pusingan { display: flex; flex-direction: column; gap: 20px; min-width: 240px; justify-content: space-around; }
-        .tajuk-pusingan { font-size: 0.75rem; font-weight: 900; text-align: center; padding: 8px; background: #000; color: #fff; border: 1px solid #444; border-radius: 6px; margin-bottom: 10px; }
+        .tajuk-pusingan { font-size: 0.75rem; font-weight: 900; text-align: center; padding: 8px; background: #000; color: #fff; border: 1px solid #444; border-radius: 6px; }
         
         .kotak-perlawanan { background: var(--kad); border: 1px solid var(--garis); border-radius: 12px; position: relative; padding-top: 25px; width: 240px; }
         .match-no { position: absolute; top: 0; left: 0; right: 0; background: #25252b; color: var(--biru-nombor); font-size: 8px; padding: 4px; text-align: center; font-weight: bold; }
@@ -72,7 +72,7 @@
         .p-logo { width: 22px; height: 22px; border-radius: 4px; object-fit: cover; background: #333; }
         .slot-pasukan { display: flex; gap: 8px; align-items: center; padding: 8px 12px; border-bottom: 1px solid #222; height: 42px; }
         .nama-display { flex: 1; font-size: 0.8rem; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .skor { width: 35px; height: 28px; text-align: center; background: #000; border: 1px solid #444; color: #fff; border-radius: 4px; font-weight: 900; outline: none; }
+        .skor { width: 35px; height: 28px; text-align: center; background: #000; border: 1px solid #444; color: #fff; border-radius: 4px; font-weight: 900; }
 
         .skor-menang { background: var(--menang) !important; color: #000 !important; border: none; }
         .skor-kalah { background: var(--kalah) !important; color: #fff !important; border: none; }
@@ -81,7 +81,6 @@
         .gf-container { display: flex; align-items: center; padding-left: 40px; border-left: 3px dashed #444; margin-left: 10px; }
         .grand-final { border: 3px solid var(--emas) !important; background: rgba(255, 215, 0, 0.05) !important; transform: scale(1.1); }
 
-        /* ADMIN PANEL */
         #panelAdmin { display: none; position: fixed; top: 10px; right: 10px; width: 340px; max-height: 90vh; background: var(--kad); border: 2px solid var(--utama); border-radius: 20px; z-index: 9999; padding: 25px; overflow-y: auto; box-shadow: 0 0 50px #000; }
         .admin-row-input { display: flex; gap: 8px; margin-bottom: 12px; }
     </style>
@@ -91,12 +90,18 @@
 <div class="main-wrapper">
     <div class="header-container">
         <div class="header-top">
-            <div class="logo-box"><img src="logo.jpeg" onerror="this.src='https://via.placeholder.com/115'"></div>
+            <div class="logo-box">
+                <img src="logo.jpeg" onerror="this.src='https://via.placeholder.com/140'">
+            </div>
+            
             <div class="tajuk-box">
                 <h1>BWF BADMINTON FAMILY TOUR</h1>
                 <span class="siri-tag">SIRI II</span>
             </div>
-            <div class="admin-box"><button class="btn-admin-besar" onclick="toggleAdmin()">PANEL ADMIN</button></div>
+
+            <div class="admin-box">
+                <button class="btn-admin-besar" onclick="toggleAdmin()">PANEL ADMIN</button>
+            </div>
         </div>
 
         <div class="admin-header-grid">
@@ -139,7 +144,6 @@
     <input type="password" id="passInput" placeholder="Kata Laluan" style="width:100%; padding:12px; margin-bottom:10px; background:#000; border:1px solid #444; color:#fff; box-sizing:border-box; border-radius:8px;">
     <button onclick="checkAuth()" style="width:100%; padding:12px; background:var(--utama); font-weight:bold; color:#000; border:none; cursor:pointer; border-radius:8px;">LOG MASUK</button>
     <div id="controlBox" style="display:none; margin-top:20px;">
-        <label style="font-size:12px; color:var(--emas);">JUMLAH PASUKAN:</label>
         <input type="number" id="inputN" value="14" style="width:100%; padding:10px; background:#000; color:#fff; border:1px solid #444; margin-bottom:15px; border-radius:5px;">
         <button onclick="manualJana()" style="width:100%; padding:12px; background:var(--menang); font-weight:bold; color:#000; border:none; cursor:pointer; border-radius:8px;">JANA CARTA BARU</button>
         <p style="font-size:11px; color:#888; margin-top:25px; border-top:1px solid #333; padding-top:10px;">KEMASKINI NAMA & LOGO (URL):</p>
