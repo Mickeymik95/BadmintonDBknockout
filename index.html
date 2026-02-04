@@ -100,7 +100,7 @@
 
 <div class="main-wrapper">
     <div class="header-container">
-        <div class="tajuk-box"><h1>BWF BADMINTON KELUARGA² TOUR</h1></div>
+        <div class="tajuk-box"><h1>CARTA BADMINTON KELUARGA² TOUR</h1></div>
         <div class="header-actions-grid">
             <a href="https://wa.me/60149236577" target="_blank" class="admin-ws-card"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="20"><p class="ws-name">Ammik</p><p class="ws-role">Teknikal</p></a>
             <a href="https://wa.me/601111639636" target="_blank" class="admin-ws-card"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="20"><p class="ws-name">Anggan</p><p class="ws-role">Penganjur</p></a>
@@ -154,7 +154,6 @@
             document.getElementById('controlBox').style.display = 'block'; 
             isAdmin = true; 
             renderInputs(); 
-            // Aktifkan semua input skor serta-merta
             document.querySelectorAll('.skor').forEach(el => el.removeAttribute('readonly'));
         } else { alert("Kata laluan salah!"); } 
     }
@@ -237,8 +236,12 @@
         }
         for(let m=0; m < p2/2; m++) {
             let s1 = seeds[m*2], s2 = seeds[m*2+1];
-            updateSlot(`W_0_${m}`, 1, s1 < nPasukan ? (teamData[s1]?.nama || `Pasukan ${s1+1}`) : "BYE", s1 < nPasukan ? s1 : "BYE");
-            updateSlot(`W_0_${m}`, 2, s2 < nPasukan ? (teamData[s2]?.nama || `Pasukan ${s2+1}`) : "BYE", s2 < nPasukan ? s2 : "BYE");
+            // Format nama: "1. Nama"
+            let name1 = s1 < nPasukan ? `${s1+1}. ${teamData[s1]?.nama || `Pasukan ${s1+1}`}` : "BYE";
+            let name2 = s2 < nPasukan ? `${s2+1}. ${teamData[s2]?.nama || `Pasukan ${s2+1}`}` : "BYE";
+            
+            updateSlot(`W_0_${m}`, 1, name1, s1 < nPasukan ? s1 : "BYE");
+            updateSlot(`W_0_${m}`, 2, name2, s2 < nPasukan ? s2 : "BYE");
         }
     }
 
