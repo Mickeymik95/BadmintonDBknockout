@@ -17,10 +17,10 @@
             --glow-loser: 0 0 25px rgba(231, 76, 60, 0.3);
             --bg-pemenang: rgba(46, 204, 113, 0.15);
             
-            /* Warna Laluan Juara */
-            --emas-path: #ffd700;
-            --perak-path: #e0e0e0;
-            --gangsa-path: #cd7f32;
+            /* Warna Tulisan Pingat */
+            --emas-text: #ffd700;
+            --perak-text: #c0c0c0;
+            --gangsa-text: #cd7f32;
         }
 
         body { 
@@ -138,7 +138,7 @@
             font-size: 12px; padding: 6px 0; text-align: center; font-weight: 900; border-bottom: 1px solid #333; border-radius: 14px 14px 0 0;
         }
 
-        .slot-pasukan { display: flex; gap: 10px; align-items: center; padding: 15px 18px; border-bottom: 1px solid #25252b; transition: background 0.5s; }
+        .slot-pasukan { display: flex; gap: 10px; align-items: center; padding: 15px 18px; border-bottom: 1px solid #25252b; }
         .slot-pasukan:last-child { border-bottom: none; }
 
         .nama-display { flex: 1; font-size: 1.1rem; font-weight: 800; color: #eee; background: transparent; border: none; outline: none; width: 100%; }
@@ -149,13 +149,10 @@
         .slot-pasukan.pemenang .nama-display { color: var(--menang); }
         .slot-pasukan.pemenang .skor { background: var(--menang); color: #000; border-color: var(--menang); box-shadow: 0 0 15px rgba(46, 204, 113, 0.5); }
 
-        /* LALUAN PINGAT SOLID */
-        .path-emas { background: var(--emas-path) !important; color: #000 !important; }
-        .path-emas .nama-display, .path-emas .skor { color: #000 !important; font-weight: 900; }
-        .path-perak { background: var(--perak-path) !important; color: #000 !important; }
-        .path-perak .nama-display, .path-perak .skor { color: #000 !important; font-weight: 900; }
-        .path-gangsa { background: var(--gangsa-path) !important; color: #fff !important; }
-        .path-gangsa .nama-display, .path-gangsa .skor { color: #fff !important; font-weight: 900; }
+        /* TULISAN LALUAN PINGAT */
+        .txt-emas .nama-display { color: var(--emas-text) !important; text-shadow: 0 0 8px rgba(255,215,0,0.4); }
+        .txt-perak .nama-display { color: var(--perak-text) !important; }
+        .txt-gangsa .nama-display { color: var(--gangsa-text) !important; }
 
         .grand-final { width: 320px !important; border: 3px solid #ffd700 !important; transform: scale(1.05); box-shadow: var(--glow-emas); z-index: 5; }
         .grand-final .match-no { background: var(--emas); color: #000; font-size: 14px; }
@@ -391,12 +388,12 @@
         }
     }
 
-    // Fungsi tambahan untuk pewarnaan laluan
-    function updatePathColors(nama, cssClass) {
+    // Fungsi tambahan untuk pewarnaan TULISAN laluan
+    function updatePathTextColors(nama, cssClass) {
         if(!nama || nama === "BYE" || nama === "...") return;
         document.querySelectorAll('.slot-pasukan').forEach(slot => {
             if(slot.querySelector('.nama-display').value === nama) {
-                slot.classList.remove('path-emas', 'path-perak', 'path-gangsa');
+                slot.classList.remove('txt-emas', 'txt-perak', 'txt-gangsa');
                 slot.classList.add(cssClass);
             }
         });
@@ -431,14 +428,16 @@
             } else {
                 updateSlot('GF_0_0', 2, winN, winP);
                 document.getElementById('res_3').innerText = losN;
-                updatePathColors(losN, 'path-gangsa');
+                // WARNA TULISAN GANGSA
+                updatePathTextColors(losN, 'txt-gangsa');
             }
         } else if(p[0] === 'GF') {
             document.getElementById('res_1').innerText = winN;
             document.getElementById('res_2').innerText = losN;
             document.getElementById('podiumFinal').style.display = 'block';
-            updatePathColors(winN, 'path-emas');
-            updatePathColors(losN, 'path-perak');
+            // WARNA TULISAN EMAS & PERAK
+            updatePathTextColors(winN, 'txt-emas');
+            updatePathTextColors(losN, 'txt-perak');
         }
     };
 
