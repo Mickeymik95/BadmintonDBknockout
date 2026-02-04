@@ -17,10 +17,10 @@
             --glow-loser: 0 0 25px rgba(231, 76, 60, 0.3);
             --bg-pemenang: rgba(46, 204, 113, 0.15);
             
-            /* Warna Tulisan Pingat */
-            --emas-text: #ffd700;
-            --perak-text: #c0c0c0;
-            --gangsa-text: #cd7f32;
+            /* Warna Laluan Juara (Lutsinar/Soft) */
+            --soft-emas: rgba(255, 215, 0, 0.2);
+            --soft-perak: rgba(192, 192, 192, 0.2);
+            --soft-gangsa: rgba(205, 127, 50, 0.25);
         }
 
         body { 
@@ -138,7 +138,7 @@
             font-size: 12px; padding: 6px 0; text-align: center; font-weight: 900; border-bottom: 1px solid #333; border-radius: 14px 14px 0 0;
         }
 
-        .slot-pasukan { display: flex; gap: 10px; align-items: center; padding: 15px 18px; border-bottom: 1px solid #25252b; }
+        .slot-pasukan { display: flex; gap: 10px; align-items: center; padding: 15px 18px; border-bottom: 1px solid #25252b; transition: all 0.4s ease; }
         .slot-pasukan:last-child { border-bottom: none; }
 
         .nama-display { flex: 1; font-size: 1.1rem; font-weight: 800; color: #eee; background: transparent; border: none; outline: none; width: 100%; }
@@ -147,12 +147,16 @@
 
         .slot-pasukan.pemenang { background: var(--bg-pemenang); }
         .slot-pasukan.pemenang .nama-display { color: var(--menang); }
-        .slot-pasukan.pemenang .skor { background: var(--menang); color: #000; border-color: var(--menang); box-shadow: 0 0 15px rgba(46, 204, 113, 0.5); }
 
-        /* TULISAN LALUAN PINGAT */
-        .txt-emas .nama-display { color: var(--emas-text) !important; text-shadow: 0 0 8px rgba(255,215,0,0.4); }
-        .txt-perak .nama-display { color: var(--perak-text) !important; }
-        .txt-gangsa .nama-display { color: var(--gangsa-text) !important; }
+        /* LALUAN PINGAT LEMBUT (SOFT) */
+        .path-emas { background: var(--soft-emas) !important; border-left: 4px solid #ffd700; }
+        .path-emas .nama-display { color: #ffd700 !important; }
+        
+        .path-perak { background: var(--soft-perak) !important; border-left: 4px solid #c0c0c0; }
+        .path-perak .nama-display { color: #c0c0c0 !important; }
+
+        .path-gangsa { background: var(--soft-gangsa) !important; border-left: 4px solid #cd7f32; }
+        .path-gangsa .nama-display { color: #ff9f43 !important; }
 
         .grand-final { width: 320px !important; border: 3px solid #ffd700 !important; transform: scale(1.05); box-shadow: var(--glow-emas); z-index: 5; }
         .grand-final .match-no { background: var(--emas); color: #000; font-size: 14px; }
@@ -388,12 +392,12 @@
         }
     }
 
-    // Fungsi tambahan untuk pewarnaan TULISAN laluan
-    function updatePathTextColors(nama, cssClass) {
+    // Fungsi tambahan untuk pewarnaan latar lutsinar
+    function updatePathSoftColors(nama, cssClass) {
         if(!nama || nama === "BYE" || nama === "...") return;
         document.querySelectorAll('.slot-pasukan').forEach(slot => {
             if(slot.querySelector('.nama-display').value === nama) {
-                slot.classList.remove('txt-emas', 'txt-perak', 'txt-gangsa');
+                slot.classList.remove('path-emas', 'path-perak', 'path-gangsa');
                 slot.classList.add(cssClass);
             }
         });
@@ -428,16 +432,14 @@
             } else {
                 updateSlot('GF_0_0', 2, winN, winP);
                 document.getElementById('res_3').innerText = losN;
-                // WARNA TULISAN GANGSA
-                updatePathTextColors(losN, 'txt-gangsa');
+                updatePathSoftColors(losN, 'path-gangsa');
             }
         } else if(p[0] === 'GF') {
             document.getElementById('res_1').innerText = winN;
             document.getElementById('res_2').innerText = losN;
             document.getElementById('podiumFinal').style.display = 'block';
-            // WARNA TULISAN EMAS & PERAK
-            updatePathTextColors(winN, 'txt-emas');
-            updatePathTextColors(losN, 'txt-perak');
+            updatePathSoftColors(winN, 'path-emas');
+            updatePathSoftColors(losN, 'path-perak');
         }
     };
 
