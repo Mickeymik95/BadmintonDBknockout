@@ -25,7 +25,6 @@
 
         .main-wrapper { display: flex; flex-direction: column; align-items: center; min-width: max-content; padding-bottom: 200px; }
 
-        /* HEADER PREMIUM */
         .header-container {
             display: flex; flex-direction: column; align-items: center;
             background: radial-gradient(circle at center, rgba(0, 210, 255, 0.05) 0%, rgba(0,0,0,0) 70%);
@@ -52,7 +51,6 @@
 
         @keyframes shine { to { background-position: 200% center; } }
 
-        /* BUTTONS */
         .header-actions-grid { display: flex; justify-content: center; gap: 15px; margin-top: 35px; }
         .btn-action { 
             height: 50px; padding: 0 30px; border-radius: 50px; border: 1px solid var(--garis); 
@@ -63,7 +61,6 @@
         .btn-action:hover { background: #fff; color: #000; }
         .btn-save { background: var(--utama) !important; color: #000 !important; border: none !important; }
 
-        /* TOURNAMENT LAYOUT */
         .tournament-layout { 
             display: flex; 
             flex-direction: column; 
@@ -79,9 +76,8 @@
             border-radius: 40px; 
             position: relative; 
             background: rgba(255,255,255,0.01);
-            width: max-content; /* Biarkan ia mengikut isi secara dinamik */
+            width: max-content; 
             box-sizing: border-box;
-            transition: min-width 0.3s ease;
         }
 
         #barisW { border: 2px solid rgba(0, 210, 255, 0.3); box-shadow: inset 0 0 50px rgba(0, 210, 255, 0.05); }
@@ -98,7 +94,6 @@
 
         .pusingan { display: flex; flex-direction: column; width: 280px; justify-content: center; gap: 40px; }
 
-        /* MATCH BOX */
         .kotak-perlawanan { background: var(--kad); border: 1px solid #333; border-radius: 14px; position: relative; padding-top: 30px; }
         .match-no { 
             position: absolute; top: 0; width: 100%; background: #25252b; color: #aaa; 
@@ -112,12 +107,10 @@
         .skor { width: 45px; height: 40px; text-align: center; background: #000; border: 1px solid #444; color: #fff; border-radius: 8px; font-weight: 900; font-size: 1.3rem; }
         .seed-no { color: var(--kuning-pekat); font-weight: 900; font-size: 0.9rem; min-width: 32px; height: 24px; display: flex; align-items: center; justify-content: center; background: rgba(255, 204, 0, 0.1); border: 1px solid rgba(255, 204, 0, 0.3); border-radius: 4px; }
 
-        /* HIGHLIGHT PEMENANG */
         .slot-pasukan.pemenang { background: var(--bg-pemenang); }
         .slot-pasukan.pemenang .nama-display { color: var(--menang); }
         .slot-pasukan.pemenang .skor { background: var(--menang); color: #000; border-color: var(--menang); box-shadow: 0 0 15px rgba(46, 204, 113, 0.5); }
 
-        /* GRAND FINAL - KEKAL DALAM ALIRAN NORMAL */
         .pusingan-gf { margin-left: 0; } 
         .grand-final { width: 420px !important; border: 3px solid #ffd700 !important; transform: scale(1.05); box-shadow: var(--glow-emas); }
         .grand-final .match-no { background: var(--emas); color: #000; font-size: 14px; }
@@ -247,20 +240,17 @@
         bw.innerHTML = '<div class="label-bracket">Winner Bracket (Upper)</div>'; 
         bl.innerHTML = '<div class="label-bracket">Loser Bracket (Lower)</div>';
 
-        // Winner rounds
         for(let r=0; r<4; r++) {
             let div = document.createElement('div'); div.className = 'pusingan';
             for(let m=0; m<Math.pow(2, 3-r); m++) div.appendChild(createBox('W', r, m));
             bw.appendChild(div);
         }
 
-        // Grand Final
         let divGF = document.createElement('div'); divGF.className = 'pusingan pusingan-gf';
         let gfBox = createBox('GF', 0, 0); gfBox.classList.add('grand-final');
         divGF.appendChild(gfBox); 
         bw.appendChild(divGF);
 
-        // Loser rounds
         for(let r=0; r < 6; r++) {
             let div = document.createElement('div'); div.className = 'pusingan';
             let mCount = Math.pow(2, Math.floor((5 - r) / 2));
@@ -272,7 +262,6 @@
             bl.appendChild(div);
         }
 
-        // Isian Data & Seed
         const seeds = [0, 15, 7, 8, 3, 12, 4, 11, 1, 14, 6, 9, 2, 13, 5, 10];
         for(let m=0; m < 8; m++) {
             let s1 = seeds[m*2], s2 = seeds[m*2+1];
@@ -291,9 +280,8 @@
             el.readOnly = el.classList.contains('nama-display') ? !(window.isAdminMode && isRound1) : !window.isAdminMode;
         });
 
-        // SYNC WIDTH: Paksa kedua-dua border sama panjang dinamik
         setTimeout(() => {
-            bw.style.minWidth = "0"; bl.style.minWidth = "0"; // Reset dulu
+            bw.style.minWidth = "0"; bl.style.minWidth = "0";
             const maxWidth = Math.max(bw.scrollWidth, bl.scrollWidth) + "px";
             bw.style.minWidth = maxWidth;
             bl.style.minWidth = maxWidth;
@@ -305,8 +293,13 @@
         let div = document.createElement('div'); div.className = 'kotak-perlawanan'; div.id = id;
         let lbl = (j === 'GF') ? 'GRAND FINAL' : (j === 'L' && r === 5) ? 'LOSER FINAL' : `${j}${r+1}-M${m+1}`;
         div.innerHTML = `<div class="match-no">${lbl}</div>
-            <div class="slot-pasukan" id="${id}_s1"><span class="seed-no" id="${id}_sd1"></span><input type="text" class="nama-display" id="${id}_p1" placeholder="..."><input type="number" class="skor" id="${id}_sc1" oninput="window.kira('${id}')"></div>
-            <div class="slot-pasukan" id="${id}_s2"><span class="seed-no" id="${id}_sd2"></span><input type="text" class="nama-display" id="${id}_p2" placeholder="..."><input type="number" class="skor" id="${id}_sc2" oninput="window.kira('${id}')"></div>`;
+            <div class="slot-pasukan" id="${id}_s1"><span class="seed-no" id="${id}_sd1"></span><input type="text" class="nama-display" id="${id}_p1" placeholder="..." disabled><input type="number" class="skor" id="${id}_sc1" oninput="window.kira('${id}')"></div>
+            <div class="slot-pasukan" id="${id}_s2"><span class="seed-no" id="${id}_sd2"></span><input type="text" class="nama-display" id="${id}_p2" placeholder="..." disabled><input type="number" class="skor" id="${id}_sc2" oninput="window.kira('${id}')"></div>`;
+        
+        // Lepaskan input nama hanya untuk pusingan 1 Winner
+        if(j === 'W' && r === 0) {
+            div.querySelectorAll('.nama-display').forEach(input => input.disabled = false);
+        }
         return div;
     }
 
@@ -325,18 +318,30 @@
     window.kira = (id) => {
         let sc1 = document.getElementById(id+'_sc1').value, sc2 = document.getElementById(id+'_sc2').value;
         const sl1 = document.getElementById(id+'_s1'), sl2 = document.getElementById(id+'_s2');
-        if(sc1 === "" || sc2 === "" || sc1 === sc2) { sl1.classList.remove('pemenang'); sl2.classList.remove('pemenang'); return; }
+        if(sc1 === "" || sc2 === "" || sc1 === sc2) return;
+        
         let win = parseInt(sc1) > parseInt(sc2) ? 1 : 2;
         sl1.classList.toggle('pemenang', win === 1); sl2.classList.toggle('pemenang', win === 2);
+        
         let winN = document.getElementById(`${id}_p${win}`).value, winP = document.getElementById(`${id}_s${win}`).getAttribute('data-pid');
         let losN = document.getElementById(`${id}_p${win===1?2:1}`).value, losP = document.getElementById(`${id}_s${win===1?2:1}`).getAttribute('data-pid');
+        
         let p = id.split('_'), r = parseInt(p[1]), m = parseInt(p[2]);
+        
         if(p[0] === 'W') {
+            // MENANG: Ke pusingan seterusnya Winner
             let nextR = r + 1, nextM = Math.floor(m/2), nextS = (m % 2) + 1;
             if(document.getElementById(`W_${nextR}_${nextM}`)) updateSlot(`W_${nextR}_${nextM}`, nextS, winN, winP);
             else updateSlot('GF_0_0', 1, winN, winP);
-            updateSlot(`L_${r*2}_${m}`, 2, losN, losP);
+            
+            // KALAH: Ke Loser Bracket
+            if(r === 0) updateSlot(`L_0_${Math.floor(m/2)}`, (m % 2) + 1, losN, losP);
+            else if(r === 1) updateSlot(`L_2_${3-m}`, 2, losN, losP);
+            else if(r === 2) updateSlot(`L_4_${1-m}`, 2, losN, losP);
+            else if(r === 3) updateSlot(`L_5_0`, 2, losN, losP);
+
         } else if(p[0] === 'L') {
+            // MENANG: Ke pusingan seterusnya Loser
             if(r < 5) {
                 let nextR = r+1, nextM = (r%2===0)?m:Math.floor(m/2), nextS = (r%2===0)?1:(m%2)+1;
                 updateSlot(`L_${nextR}_${nextM}`, nextS, winN, winP);
@@ -348,8 +353,8 @@
         document.querySelectorAll('.kotak-perlawanan').forEach(box => {
             let p1 = document.getElementById(box.id+'_p1').value, p2 = document.getElementById(box.id+'_p2').value;
             let sc1 = document.getElementById(box.id+'_sc1'), sc2 = document.getElementById(box.id+'_sc2');
-            if(p1 === "BYE" && p2 !== "" && p2 !== "BYE" && sc1.value === "") { sc1.value=0; sc2.value=21; kira(box.id); }
-            else if(p2 === "BYE" && p1 !== "" && p1 !== "BYE" && sc2.value === "") { sc1.value=21; sc2.value=0; kira(box.id); }
+            if(p1 === "BYE" && p2 !== "" && p2 !== "BYE" && sc1.value === "") { sc1.value=0; sc2.value=21; window.kira(box.id); }
+            else if(p2 === "BYE" && p1 !== "" && p1 !== "BYE" && sc2.value === "") { sc1.value=21; sc2.value=0; window.kira(box.id); }
         });
     }
 </script>
