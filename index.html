@@ -2,7 +2,7 @@
 <html lang="ms">
 <head>
     <meta charset="UTF-8">
-    <title>BWF BADMINTON SUPER SERIES - AUTO-BYE SYSTEM</title>
+    <title>BWF BADMINTON SUPER SERIES - AUTO BYE LOCKED</title>
     <style>
         :root { 
             --menang: #2ecc71; --kalah: #e74c3c; --utama: #00d2ff; 
@@ -43,17 +43,16 @@
             background: rgba(37, 211, 102, 0.05); border: 2px solid var(--ws-hijau); border-radius: 15px; 
             text-decoration: none; display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
-        .ws-logo-icon { width: 22px; height: 22px; margin-bottom: 4px; }
         .ws-name { color: #fff; font-weight: 800; font-size: 0.9rem; margin: 0; }
         .ws-role { color: var(--emas); font-size: 0.65rem; text-transform: uppercase; margin: 0; }
 
-        /* SENARAI PENYERTAAN */
+        /* PENYERTAAN */
         .senarai-luar { width: 100%; max-width: 1200px; background: rgba(255,255,255,0.02); border-radius: 25px; padding: 25px; border: 1px solid var(--garis); margin-bottom: 30px; }
         .grid-penyertaan { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 12px; }
         .kad-pasukan { background: #111; border: 1px solid #222; border-radius: 12px; padding: 10px 15px; display: flex; align-items: center; gap: 12px; }
-        .no-p { background: var(--biru-nombor); color: #000; font-weight: 900; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; }
+        .no-p { background: var(--biru-nombor); color: #000; font-weight: 900; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; }
 
-        /* BRACKET LAYOUT */
+        /* BRACKET */
         .tournament-layout { display: flex; flex-direction: column; gap: 60px; padding: 20px; }
         .laluan-row { display: flex; gap: 50px; padding: 90px 50px; border-radius: 40px; border: 2px solid #222; position: relative; justify-content: center; }
         .baris-menang { background: var(--bg-menang); border-color: var(--utama); }
@@ -72,10 +71,11 @@
         .nama-display { flex: 1; font-size: 1rem; font-weight: 700; overflow: hidden; }
         .p-logo { width: 32px; height: 32px; border-radius: 6px; background: #333; }
 
-        /* SKOR COLORS */
-        .skor { width: 45px; height: 35px; text-align: center; background: #000; border: 1px solid #444; color: #fff; border-radius: 6px; font-weight: 900; }
+        /* SKOR */
+        .skor { width: 45px; height: 35px; text-align: center; background: #000; border: 1px solid #444; color: #fff; border-radius: 6px; font-weight: 900; font-size: 1.1rem; }
         .skor-menang { background: var(--menang) !important; color: #000 !important; border: none; }
         .skor-kalah { background: var(--kalah) !important; color: #fff !important; border: none; }
+        .skor:disabled { cursor: not-allowed; opacity: 1; }
 
         /* HIGHLIGHTS */
         .final-loser-box { border: 3px solid var(--biru-final) !important; box-shadow: 0 0 20px var(--biru-final); }
@@ -93,10 +93,7 @@
     <div class="header-container">
         <div class="header-top">
             <div class="logo-box"><img src="logo.jpeg" onerror="this.src='https://via.placeholder.com/140'"></div>
-            <div class="tajuk-box">
-                <h1>BWF BADMINTON FAMILY TOUR</h1>
-                <span class="siri-tag">SIRI II</span>
-            </div>
+            <div class="tajuk-box"><h1>BWF BADMINTON FAMILY TOUR</h1><span class="siri-tag">SIRI II</span></div>
             <button class="btn-admin-besar" onclick="toggleAdmin()">PANEL<br>ADMIN</button>
         </div>
         <div class="admin-header-grid">
@@ -107,13 +104,11 @@
         </div>
     </div>
 
-    <div class="senarai-luar">
-        <div id="displayPenyertaan" class="grid-penyertaan"></div>
-    </div>
+    <div class="senarai-luar"><div id="displayPenyertaan" class="grid-penyertaan"></div></div>
 
     <div class="tournament-layout">
-        <div id="barisW" class="laluan-row baris-menang"></div>
-        <div id="barisL" class="laluan-row baris-kalah"></div>
+        <div id="barisW" class="laluan-row baris-menang"><div class="label-bracket label-menang">BRACKET MENANG</div></div>
+        <div id="barisL" class="laluan-row baris-kalah"><div class="label-bracket label-kalah">BRACKET KALAH</div></div>
     </div>
 </div>
 
@@ -156,6 +151,7 @@
             document.getElementById('controlBox').style.display='block';
             isAdmin = true;
             renderInputs();
+            updateInputAccess();
         }
     }
 
@@ -177,6 +173,15 @@
         teamData[idx][key] = val;
     }
 
+    function updateInputAccess() {
+        document.querySelectorAll('.skor').forEach(input => {
+            // Jika ia bukan auto-bye, admin boleh edit
+            if(!input.hasAttribute('data-autobye')) {
+                input.readOnly = !isAdmin;
+            }
+        });
+    }
+
     function saveData() {
         nPasukan = parseInt(document.getElementById('inputNumTeams').value);
         let sc = {};
@@ -189,7 +194,6 @@
         let p2 = Math.pow(2, Math.ceil(Math.log2(nPasukan)));
         let seeds = getSeeds(p2);
 
-        // Render Penyertaan
         let list = document.getElementById('displayPenyertaan');
         list.innerHTML = "";
         for(let i=0; i<nPasukan; i++) {
@@ -205,7 +209,6 @@
         let roundsW = Math.log2(p2);
         let mCount = 1;
 
-        // Winners
         for(let r=0; r<roundsW; r++) {
             let divR = document.createElement('div'); divR.className = 'pusingan';
             divR.innerHTML = `<div class="tajuk-pusingan">PUSINGAN ${r+1}</div>`;
@@ -214,13 +217,11 @@
             bw.appendChild(divR);
         }
 
-        // Grand Final
         let divGF = document.createElement('div'); divGF.className = 'pusingan';
         divGF.innerHTML = `<div class="tajuk-pusingan" style="background:var(--emas); color:#000;">GRAND FINAL</div>`;
         divGF.appendChild(createMatch('GF', 0, 0, null, mCount++, true));
         bw.appendChild(divGF);
 
-        // Losers
         let roundsL = (roundsW - 1) * 2;
         for(let r=0; r<roundsL; r++) {
             let divR = document.createElement('div'); divR.className = 'pusingan';
@@ -241,8 +242,6 @@
                 if(el && savedScores[id] !== "") { el.value = savedScores[id]; kira(id.split('_sc')[0]); }
             });
         }
-        
-        // PENTING: Jalankan Auto-Bye selepas render
         setTimeout(autoByeSystem, 500);
     }
 
@@ -260,12 +259,12 @@
             <div class="slot-pasukan" id="${mId}_s1" data-pid="${id1}">
                 <img src="${id1!=='none'?(teamData[id1]?.logo||'https://via.placeholder.com/30'):'https://via.placeholder.com/30'}" class="p-logo" id="${mId}_img1">
                 <span class="nama-display" id="${mId}_p1">${p1}</span>
-                <input type="number" class="skor" id="${mId}_sc1" oninput="kira('${mId}')">
+                <input type="number" class="skor" id="${mId}_sc1" oninput="kira('${mId}')" readonly>
             </div>
             <div class="slot-pasukan" id="${mId}_s2" data-pid="${id2}">
                 <img src="${id2!=='none'?(teamData[id2]?.logo||'https://via.placeholder.com/30'):'https://via.placeholder.com/30'}" class="p-logo" id="${mId}_img2">
                 <span class="nama-display" id="${mId}_p2">${p2}</span>
-                <input type="number" class="skor" id="${mId}_sc2" oninput="kira('${mId}')">
+                <input type="number" class="skor" id="${mId}_sc2" oninput="kira('${mId}')" readonly>
             </div>`;
         return div;
     }
@@ -276,16 +275,21 @@
             let sc1 = document.getElementById(m.id+'_sc1'), sc2 = document.getElementById(m.id+'_sc2');
             let p1 = document.getElementById(m.id+'_p1').innerText, p2 = document.getElementById(m.id+'_p2').innerText;
             
-            // Logik: Jika ada BYE dan slot satu lagi ada pasukan (bukan Menunggu), auto-skor.
+            // Logik Auto-Bye: Jika ada BYE
             if(sc1.value === "" && sc2.value === "") {
                 if(p1 === "BYE" && p2 !== "BYE" && p2 !== "Menunggu...") {
-                    sc1.value = 0; sc2.value = 21; kira(m.id); found = true;
+                    sc1.value = 0; sc2.value = 21; 
+                    sc1.setAttribute('data-autobye', 'true'); sc2.setAttribute('data-autobye', 'true');
+                    sc1.disabled = true; sc2.disabled = true;
+                    kira(m.id); found = true;
                 } else if(p2 === "BYE" && p1 !== "BYE" && p1 !== "Menunggu...") {
-                    sc1.value = 21; sc2.value = 0; kira(m.id); found = true;
+                    sc1.value = 21; sc2.value = 0; 
+                    sc1.setAttribute('data-autobye', 'true'); sc2.setAttribute('data-autobye', 'true');
+                    sc1.disabled = true; sc2.disabled = true;
+                    kira(m.id); found = true;
                 }
             }
         });
-        // Jika ada perlawanan baru diupdate, semak lagi pusingan depan (recursively)
         if(found) setTimeout(autoByeSystem, 100);
     }
 
@@ -309,7 +313,6 @@
         if(j==='W') {
             if(p < Math.log2(p2_val)-1) hantar('W', p+1, Math.floor(m/2), (m%2)+1, winP, winId);
             else hantar('GF', 0, 0, 1, winP, winId);
-            
             let nextLP = (p===0)?0:(p*2)-1; 
             let totalM = Math.pow(2, Math.log2(p2_val)-p-1);
             let flipM = (m < totalM/2)?(m+totalM/2):(m-totalM/2);
@@ -319,7 +322,6 @@
             if(p < roundsL - 1) hantar('L', p+1, (p%2===0)?m:Math.floor(m/2), (p%2===0)?1:(m%2)+1, winP, winId);
             else hantar('GF', 0, 0, 2, winP, winId);
         }
-        // Selepas hantar ke pusingan depan, semak jika pusingan depan itu ada BYE
         setTimeout(autoByeSystem, 50);
     }
 
