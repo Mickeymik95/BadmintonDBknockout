@@ -13,7 +13,7 @@
             --kuning-pekat: #ffcc00; 
             --bg: #0b0b0d; --kad: #1a1a1f; 
             --garis: #333; 
-            --glow-emas: 0 0 30px rgba(255, 215, 0, 0.4);
+            --glow-emas: 0 0 40px rgba(255, 215, 0, 0.5);
             --glow-loser: 0 0 25px rgba(231, 76, 60, 0.3);
             --bg-pemenang: rgba(46, 204, 113, 0.15);
         }
@@ -85,33 +85,40 @@
         #barisW { 
             border: 2px solid rgba(0, 210, 255, 0.3); 
             box-shadow: inset 0 0 50px rgba(0, 210, 255, 0.05);
-            padding-bottom: 120px; /* Ruang untuk podium di bawah */
+            padding-bottom: 180px; /* Tambah ruang untuk podium */
         }
         #barisW .label-bracket { background: var(--utama); color: #000; }
 
         #barisL { border: 2px solid rgba(231, 76, 60, 0.3); box-shadow: inset 0 0 50px rgba(231, 76, 60, 0.05); }
         #barisL .label-bracket { background: var(--kalah); color: #fff; }
 
-        /* --- STYLE PODIUM DI DALAM WINNER BRACKET --- */
+        /* --- STYLE PODIUM MEWAH --- */
         #podiumFinal {
             position: absolute;
-            bottom: 30px;
+            bottom: 45px; /* Kedudukan lebih naik sikit */
             left: 50%;
             transform: translateX(-50%);
-            display: none; /* Muncul bila selesai */
-            background: rgba(26, 26, 31, 0.95);
+            display: none;
+            background: linear-gradient(180deg, #1a1a1f 0%, #0b0b0d 100%);
             border: 2px solid #ffd700;
-            padding: 20px 40px;
-            border-radius: 20px;
+            padding: 30px 60px;
+            border-radius: 30px;
             box-shadow: var(--glow-emas);
             z-index: 100;
-            min-width: 400px;
+            min-width: 500px;
+            text-align: center;
         }
-        .podium-flex { display: flex; justify-content: space-around; align-items: center; gap: 30px; }
-        .podium-item { text-align: center; }
-        .pod-rank { font-size: 2rem; display: block; margin-bottom: 5px; }
-        .pod-name { font-weight: 900; font-size: 1.2rem; color: #fff; white-space: nowrap; }
-        /* ------------------------------------------- */
+        .podium-title { 
+            font-size: 0.8rem; color: #ffd700; font-weight: 900; 
+            text-transform: uppercase; letter-spacing: 4px; margin-bottom: 20px;
+            opacity: 0.8;
+        }
+        .podium-flex { display: flex; justify-content: center; align-items: flex-end; gap: 40px; }
+        .podium-item { display: flex; flex-direction: column; align-items: center; }
+        .pod-rank { font-size: 3rem; margin-bottom: 5px; filter: drop-shadow(0 0 10px rgba(255,215,0,0.3)); }
+        .pod-name { font-weight: 900; font-size: 1.5rem; color: #fff; text-transform: uppercase; }
+        .pod-label { font-size: 0.7rem; color: #888; font-weight: 700; margin-top: 5px; text-transform: uppercase; }
+        /* --------------------------- */
 
         .label-bracket { 
             position: absolute; top: -20px; left: 40px; 
@@ -139,19 +146,11 @@
         .slot-pasukan.pemenang .nama-display { color: var(--menang); }
         .slot-pasukan.pemenang .skor { background: var(--menang); color: #000; border-color: var(--menang); box-shadow: 0 0 15px rgba(46, 204, 113, 0.5); }
 
-        /* HIGHLIGHTS */
         .grand-final { width: 320px !important; border: 3px solid #ffd700 !important; transform: scale(1.05); box-shadow: var(--glow-emas); z-index: 5; }
         .grand-final .match-no { background: var(--emas); color: #000; font-size: 14px; }
 
-        .loser-final-highlight { 
-            border: 3px solid var(--kalah) !important; 
-            box-shadow: var(--glow-loser);
-            transform: scale(1.02);
-        }
-        .loser-final-highlight .match-no {
-            background: var(--kalah);
-            color: #fff;
-        }
+        .loser-final-highlight { border: 3px solid var(--kalah) !important; box-shadow: var(--glow-loser); transform: scale(1.02); }
+        .loser-final-highlight .match-no { background: var(--kalah); color: #fff; }
 
         #panelAdmin { display: none; position: fixed; top: 30px; right: 30px; width: 320px; background: #111; border: 1px solid #444; border-radius: 20px; z-index: 1000; padding: 30px; box-shadow: 0 30px 60px rgba(0,0,0,0.8); }
         .admin-only { display: none; }
@@ -181,18 +180,22 @@
             <div class="label-bracket">Winner Bracket (Upper)</div>
             
             <div id="podiumFinal">
+                <div class="podium-title">Official Tournament Results</div>
                 <div class="podium-flex">
-                    <div class="podium-item" style="order:2; transform: scale(1.2);">
-                        <span class="pod-rank">🥇</span>
-                        <span class="pod-name" id="res_1">-</span>
-                    </div>
                     <div class="podium-item" style="order:1;">
                         <span class="pod-rank">🥈</span>
                         <span class="pod-name" id="res_2">-</span>
+                        <span class="pod-label">Runner Up</span>
+                    </div>
+                    <div class="podium-item" style="order:2; transform: translateY(-15px) scale(1.2);">
+                        <span class="pod-rank">🥇</span>
+                        <span class="pod-name" id="res_1" style="color:#ffd700;">-</span>
+                        <span class="pod-label" style="color:#ffd700;">Champion</span>
                     </div>
                     <div class="podium-item" style="order:3;">
                         <span class="pod-rank">🥉</span>
                         <span class="pod-name" id="res_3">-</span>
+                        <span class="pod-label">3rd Place</span>
                     </div>
                 </div>
             </div>
@@ -292,14 +295,10 @@
     function jana(savedScores) {
         const bw = document.getElementById('barisW'); 
         const bl = document.getElementById('barisL');
-        
-        // Simpan podium yang ada dalam barisW sebelum innerHTML dikosongkan
         const podiumClone = document.getElementById('podiumFinal');
         
         bw.innerHTML = '<div class="label-bracket">Winner Bracket (Upper)</div>'; 
         bl.innerHTML = '<div class="label-bracket">Loser Bracket (Lower)</div>';
-        
-        // Masukkan semula podium
         bw.appendChild(podiumClone);
 
         for(let r=0; r<4; r++) {
@@ -411,11 +410,9 @@
                 else updateSlot(`L_${r+1}_${Math.floor(m/2)}`, (m % 2) + 1, winN, winP);
             } else {
                 updateSlot('GF_0_0', 2, winN, winP);
-                // SET PEMENANG TEMPAT KE-3
                 document.getElementById('res_3').innerText = losN;
             }
         } else if(p[0] === 'GF') {
-            // SET JUARA & NAIB JUARA
             document.getElementById('res_1').innerText = winN;
             document.getElementById('res_2').innerText = losN;
             document.getElementById('podiumFinal').style.display = 'block';
