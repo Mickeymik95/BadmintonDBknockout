@@ -18,43 +18,43 @@
 
         .main-wrapper { display: flex; flex-direction: column; align-items: center; min-width: max-content; padding-bottom: 100px; }
 
-        /* HEADER YANG DIKEMASKINI */
+        /* HEADER TERKINI */
         .header-container {
             display: flex; flex-direction: column; align-items: center;
             background: rgba(255, 255, 255, 0.03); padding: 30px;
             border-radius: 30px; border: 1px solid var(--garis); margin-bottom: 30px;
             width: 100%; max-width: 1200px; box-sizing: border-box;
-            gap: 20px;
-        }
-
-        .header-top-row {
-            display: flex; justify-content: space-between; align-items: center; width: 100%;
+            gap: 25px;
         }
 
         .tajuk-box h1 { 
-            font-size: 2.2rem; margin: 0; 
+            font-size: 2.5rem; margin: 0; text-align: center;
             background: linear-gradient(130deg, #00d2ff, #2ecc71, #e74c3c, #ffd700); 
             -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
             font-weight: 900; 
         }
 
-        .btn-admin-kecil { 
-            padding: 10px 20px; border-radius: 12px; border: 2px solid var(--utama); 
+        .header-actions-grid { 
+            display: flex; justify-content: center; align-items: center; 
+            width: 100%; gap: 10px; flex-wrap: wrap; 
+        }
+
+        .btn-admin-sebaris { 
+            width: 160px; height: 75px; border-radius: 15px; border: 2px solid var(--utama); 
             background: rgba(0, 210, 255, 0.1); color: var(--utama); cursor: pointer; 
             font-weight: 800; font-size: 0.8rem; text-transform: uppercase; transition: 0.3s;
+            display: flex; align-items: center; justify-content: center;
         }
-        .btn-admin-kecil:hover { background: var(--utama); color: #000; box-shadow: 0 0 15px var(--utama); }
+        .btn-admin-sebaris:hover { background: var(--utama); color: #000; box-shadow: 0 0 15px var(--utama); }
 
-        /* WHATSAPP GRID */
-        .admin-header-grid { display: flex; justify-content: center; width: 100%; gap: 10px; flex-wrap: wrap; }
         .admin-ws-card { 
-            width: 160px; padding: 12px; 
+            width: 160px; height: 75px; 
             background: rgba(37, 211, 102, 0.05); border: 1px solid var(--ws-hijau); border-radius: 15px; 
-            text-decoration: none; display: flex; flex-direction: column; align-items: center; transition: 0.3s;
+            text-decoration: none; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.3s;
         }
         .admin-ws-card:hover { background: rgba(37, 211, 102, 0.2); transform: translateY(-3px); }
-        .ws-name { color: #fff; font-weight: 800; font-size: 0.8rem; margin: 8px 0 2px 0; }
-        .ws-role { color: var(--emas); font-size: 0.6rem; text-transform: uppercase; font-weight: bold; margin: 0; }
+        .ws-name { color: #fff; font-weight: 800; font-size: 0.8rem; margin: 4px 0 0 0; }
+        .ws-role { color: var(--emas); font-size: 0.55rem; text-transform: uppercase; font-weight: bold; }
 
         /* BRACKET LAYOUT */
         .tournament-layout { display: flex; flex-direction: column; gap: 60px; padding: 20px; }
@@ -62,8 +62,11 @@
             display: flex; gap: 40px; padding: 60px 30px; border-radius: 30px; 
             border: 2px solid #222; position: relative; min-width: 100%;
         }
-        .baris-menang { background: var(--bg-menang); border-color: var(--utama); }
+        .baris-menang { background: var(--bg-menang); border-color: var(--utama); justify-content: flex-start; }
         .baris-kalah { background: var(--bg-kalah); border-color: var(--kalah); }
+
+        /* RAPATKAN GRAND FINAL */
+        .pusingan-gf-container { margin-left: -20px; }
 
         .label-bracket { 
             position: absolute; top: -15px; left: 30px; background: var(--bg); 
@@ -85,7 +88,9 @@
         .skor-menang { background: var(--menang) !important; color: #000 !important; }
         .skor-kalah { background: var(--kalah) !important; color: #fff !important; }
 
+        /* HIGHLIGHTS */
         .grand-final { border: 4px solid var(--emas) !important; transform: scale(1.05); }
+        .final-loser-highlight { border: 3px solid var(--kalah) !important; box-shadow: 0 0 15px rgba(231, 76, 60, 0.3); }
 
         #panelAdmin { display: none; position: fixed; top: 20px; right: 20px; width: 320px; max-height: 80vh; background: #1a1a1f; border: 2px solid var(--utama); border-radius: 20px; z-index: 1000; padding: 20px; overflow-y: auto; box-shadow: 0 10px 40px #000; }
         .admin-input { width: 100%; padding: 10px; margin-bottom: 8px; background: #000; border: 1px solid #333; color: #fff; border-radius: 6px; }
@@ -95,29 +100,24 @@
 
 <div class="main-wrapper">
     <div class="header-container">
-        <div class="header-top-row">
-            <div class="tajuk-box">
-                <h1>BWF BADMINTON FAMILY TOUR</h1>
-            </div>
-            <button class="btn-admin-kecil" onclick="toggleAdmin()">PANEL ADMIN</button>
+        <div class="tajuk-box">
+            <h1>BWF BADMINTON FAMILY TOUR</h1>
         </div>
 
-        <div class="admin-header-grid">
+        <div class="header-actions-grid">
             <a href="https://wa.me/60149236577" target="_blank" class="admin-ws-card">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="22">
-                <p class="ws-name">Ammik</p>
-                <p class="ws-role">Teknikal</p>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="20">
+                <p class="ws-name">Ammik</p><p class="ws-role">Teknikal</p>
             </a>
             <a href="https://wa.me/601111639636" target="_blank" class="admin-ws-card">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="22">
-                <p class="ws-name">Anggan</p>
-                <p class="ws-role">Penganjur</p>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="20">
+                <p class="ws-name">Anggan</p><p class="ws-role">Penganjur</p>
             </a>
             <a href="https://wa.me/601139058698" target="_blank" class="admin-ws-card">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="22">
-                <p class="ws-name">Banding</p>
-                <p class="ws-role">Admin</p>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="20">
+                <p class="ws-name">Banding</p><p class="ws-role">Admin</p>
             </a>
+            <button class="btn-admin-sebaris" onclick="toggleAdmin()">PANEL ADMIN</button>
         </div>
     </div>
 
@@ -146,7 +146,6 @@
 </div>
 
 <script>
-    /* ... (Semua fungsi JavaScript kekal sama seperti kod sebelumnya anda) ... */
     let nPasukan = 14;
     let teamData = {};
     let isAdmin = false;
@@ -269,10 +268,17 @@
         const totalLRounds = (rounds - 1) * 2;
         for(let r=0; r < totalLRounds; r++) {
             let divR = document.createElement('div'); divR.className = 'pusingan';
-            divR.innerHTML = `<div class="tajuk-pusingan">L-P${r+1}</div>`;
+            
+            // Check if this is the last round in Loser Bracket
             let matches = Math.pow(2, Math.floor(((totalLRounds - 1) - r) / 2));
+            let isFinalLoser = (r === totalLRounds - 1);
+            
+            divR.innerHTML = `<div class="tajuk-pusingan">${isFinalLoser ? 'FINAL LOSER BRACKET' : 'L-P'+(r+1)}</div>`;
+            
             for(let m=0; m<matches; m++) {
-                divR.appendChild(createMatchBox('L', r, m));
+                let box = createMatchBox('L', r, m);
+                if(isFinalLoser) box.classList.add('final-loser-highlight');
+                divR.appendChild(box);
             }
             bl.appendChild(divR);
         }
@@ -280,7 +286,7 @@
 
     function renderGrandFinal() {
         const bw = document.getElementById('barisW');
-        let divR = document.createElement('div'); divR.className = 'pusingan';
+        let divR = document.createElement('div'); divR.className = 'pusingan pusingan-gf-container';
         divR.innerHTML = `<div class="tajuk-pusingan" style="background:var(--emas); color:#000;">GRAND FINAL</div>`;
         let box = createMatchBox('GF', 0, 0);
         box.classList.add('grand-final');
@@ -309,10 +315,15 @@
     }
 
     function updateSlot(mid, slot, nama, pid) {
-        document.getElementById(`${mid}_p${slot}`).innerText = nama;
-        document.getElementById(`${mid}_s${slot}`).setAttribute('data-pid', pid);
-        if(pid !== "BYE" && pid !== "" && teamData[pid]?.logo) {
-            document.getElementById(`${mid}_img${slot}`).src = teamData[pid].logo;
+        let elNama = document.getElementById(`${mid}_p${slot}`);
+        if(elNama) elNama.innerText = nama;
+        
+        let elSlot = document.getElementById(`${mid}_s${slot}`);
+        if(elSlot) elSlot.setAttribute('data-pid', pid);
+        
+        let elImg = document.getElementById(`${mid}_img${slot}`);
+        if(elImg && pid !== "BYE" && pid !== "" && teamData[pid]?.logo) {
+            elImg.src = teamData[pid].logo;
         }
     }
 
