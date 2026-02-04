@@ -2,7 +2,7 @@
 <html lang="ms">
 <head>
     <meta charset="UTF-8">
-    <title>BWF BADMINTON SUPER SERIES FAMILY TOUR</title>
+    <title>BWF BADMINTON SUPER SERIES FAMILY TOUR SIRI II</title>
     <style>
         :root { 
             --menang: #2ecc71; --kalah: #e74c3c; --utama: #00d2ff; 
@@ -11,6 +11,7 @@
             --biru-nombor: rgba(0, 229, 255, 0.5); 
             --bg-menang: rgba(0, 210, 255, 0.04);
             --bg-kalah: rgba(231, 76, 60, 0.04);
+            --biru-final: #0088ff;
         }
 
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #fff; padding: 20px; margin: 0; overflow-x: auto; }
@@ -36,7 +37,6 @@
         .btn-admin-besar:hover { background: var(--utama); color: #000; box-shadow: 0 0 30px var(--utama); transform: scale(1.05); }
 
         .tajuk-box h1 { font-size: 2.5rem; margin: 0; background: linear-gradient(130deg, #00d2ff, #2ecc71, #e74c3c, #ffd700); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; text-align: center; }
-        .siri-tag { font-size: 1.4rem; color: var(--emas); letter-spacing: 10px; font-weight: 900; display: block; margin-top: 5px; text-align: center; }
 
         /* WHATSAPP ADMIN GRID */
         .admin-header-grid { display: flex; justify-content: center; width: 100%; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
@@ -59,18 +59,7 @@
 
         /* TOURNAMENT LAYOUT */
         .tournament-layout { display: flex; flex-direction: column; gap: 50px; padding: 20px; width: max-content; }
-
-        .laluan-row { 
-            display: flex; 
-            gap: 40px; 
-            padding: 80px 40px; 
-            border-radius: 40px; 
-            border: 2px solid #222; 
-            position: relative; 
-            min-width: 100%;
-            justify-content: center;
-        }
-
+        .laluan-row { display: flex; gap: 40px; padding: 80px 40px; border-radius: 40px; border: 2px solid #222; position: relative; min-width: 100%; justify-content: center; }
         .baris-menang { background: var(--bg-menang); border-color: var(--utama); }
         .baris-kalah { background: var(--bg-kalah); border-color: var(--kalah); }
 
@@ -78,24 +67,30 @@
         .label-menang { color: var(--utama); border-color: var(--utama); }
         .label-kalah { color: var(--kalah); border-color: var(--kalah); }
 
-        .pusingan { display: flex; flex-direction: column; gap: 30px; width: 260px; flex-shrink: 0; justify-content: center; }
+        .pusingan { display: flex; flex-direction: column; gap: 30px; width: 280px; flex-shrink: 0; justify-content: center; }
         .tajuk-pusingan { font-size: 0.75rem; font-weight: 900; text-align: center; padding: 8px; background: #000; border: 1px solid #333; border-radius: 6px; margin-bottom: 15px; color: #fff; text-transform: uppercase; }
 
         /* MATCH BOX */
         .kotak-perlawanan { background: var(--kad); border: 1px solid var(--garis); border-radius: 14px; position: relative; padding-top: 25px; width: 100%; }
         .match-no { position: absolute; top: 0; left: 0; right: 0; background: #25252b; color: var(--utama); font-size: 9px; padding: 5px; text-align: center; font-weight: bold; border-radius: 13px 13px 0 0; }
 
-        .slot-pasukan { display: flex; gap: 10px; align-items: center; padding: 10px 15px; height: 45px; border-bottom: 1px solid #222; }
+        .slot-pasukan { display: flex; gap: 12px; align-items: center; padding: 10px 15px; height: 50px; border-bottom: 1px solid #222; }
         .slot-pasukan:last-child { border-bottom: none; }
-        .nama-display { flex: 1; font-size: 0.85rem; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .p-logo { width: 24px; height: 24px; border-radius: 5px; background: #333; object-fit: cover; }
+        .nama-display { flex: 1; font-size: 0.9rem; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        
+        /* LOGO DIPERBESAR */
+        .p-logo { width: 32px; height: 32px; border-radius: 6px; background: #333; object-fit: cover; border: 1px solid #444; }
 
-        .skor { width: 38px; height: 30px; text-align: center; background: #000; border: 1px solid #444; color: #fff; border-radius: 5px; font-weight: 900; }
+        .skor { width: 40px; height: 32px; text-align: center; background: #000; border: 1px solid #444; color: #fff; border-radius: 5px; font-weight: 900; font-size: 1rem; }
         .skor-menang { background: var(--menang) !important; color: #000 !important; border: none; }
         .skor-kalah { background: var(--kalah) !important; color: #fff !important; border: none; }
 
+        /* FINAL LB HIGHLIGHTS BIRU */
+        .final-lb-box { border: 3px solid var(--biru-final) !important; box-shadow: 0 0 20px rgba(0, 136, 255, 0.4); }
+        .final-lb-box .match-no { background: var(--biru-final); color: #fff; }
+
         /* GRAND FINAL LEBAR & TEBAL */
-        .pusingan-gf { width: 450px !important; }
+        .pusingan-gf { width: 480px !important; }
         .grand-final { 
             border: 6px solid var(--emas) !important; 
             box-shadow: 0 0 50px rgba(255, 215, 0, 0.4); 
@@ -103,7 +98,8 @@
             z-index: 5;
         }
         .grand-final .match-no { background: var(--emas); color: #000; font-size: 11px; }
-        .grand-final .nama-display { font-size: 1.1rem; color: var(--emas); }
+        .grand-final .nama-display { font-size: 1.15rem; color: var(--emas); }
+        .grand-final .p-logo { width: 40px; height: 40px; }
 
         /* ADMIN PANEL POPUP */
         #panelAdmin { display: none; position: fixed; top: 20px; right: 20px; width: 340px; max-height: 85vh; background: #1a1a1f; border: 2px solid var(--utama); border-radius: 20px; z-index: 1000; padding: 25px; overflow-y: auto; box-shadow: 0 20px 60px #000; }
@@ -118,8 +114,7 @@
         <div class="header-top">
             <div class="logo-box"><img src="logo.jpeg" onerror="this.src='https://via.placeholder.com/130'"></div>
             <div class="tajuk-box">
-                <h1>BWF BADMINTON FAMILY TOUR</h1>
-                <span class="siri-tag">SIRI II</span>
+                <h1>BWF BADMINTON FAMILY TOUR SIRI II</h1>
             </div>
             <div class="admin-box"><button class="btn-admin-besar" onclick="toggleAdmin()">PANEL<br>ADMIN</button></div>
         </div>
@@ -169,13 +164,10 @@
     <div id="controlBox" style="display:none; margin-top:20px; border-top: 1px solid #333; padding-top:15px;">
         <label style="font-size:12px; color:var(--emas);">JUMLAH PASUKAN:</label>
         <input type="number" id="inputNumTeams" class="admin-input" value="14" min="2" max="64">
-
         <div id="adminTeamInputs"></div>
         <button class="btn-save" onclick="saveData()">SAVE & GENERATE CARTA</button>
     </div>
 </div>
-
-
 
 <script>
     let nPasukan = 14; 
@@ -254,7 +246,6 @@
         let p2 = Math.pow(2, Math.ceil(Math.log2(nPasukan)));
         let seeds = getSeeds(p2);
 
-        // Render List
         let listContainer = document.getElementById('displayPenyertaan');
         listContainer.innerHTML = "";
         for(let i=0; i<nPasukan; i++) {
@@ -262,7 +253,7 @@
             listContainer.innerHTML += `
                 <div class="kad-pasukan">
                     <div class="no-p">${i+1}</div>
-                    <img src="${t.logo || 'https://via.placeholder.com/24'}" class="p-logo">
+                    <img src="${t.logo || 'https://via.placeholder.com/32'}" class="p-logo">
                     <div class="nama-p" style="font-size:12px; font-weight:bold;">${t.nama}</div>
                 </div>`;
         }
@@ -280,7 +271,6 @@
         let rounds = Math.log2(p2);
         let mCount = 1;
 
-        // Winner Bracket
         for(let r=0; r<rounds; r++) {
             let divR = document.createElement('div'); divR.className = 'pusingan';
             divR.innerHTML = `<div class="tajuk-pusingan">PUSINGAN ${r+1}</div>`;
@@ -291,19 +281,19 @@
             bw.appendChild(divR);
         }
 
-        // Grand Final
         let divGF = document.createElement('div'); divGF.className = 'pusingan pusingan-gf';
         divGF.innerHTML = `<div class="tajuk-pusingan" style="background:var(--emas);color:#000;border:none;">GRAND FINAL</div>`;
-        divGF.appendChild(createMatch('GF', 0, 0, null, mCount++, true));
+        divGF.appendChild(createMatch('GF', 0, 0, null, 'PENENTUAN', true));
         bw.appendChild(divGF);
 
-        // Loser Bracket
-        for(let r=0; r<(rounds-1)*2; r++) {
+        let totalRecoveryRounds = (rounds - 1) * 2;
+        for(let r=0; r < totalRecoveryRounds; r++) {
             let divR = document.createElement('div'); divR.className = 'pusingan';
-            divR.innerHTML = `<div class="tajuk-pusingan">KALAH P${r+1}</div>`;
-            let numM = Math.pow(2, Math.floor(((rounds-1)*2-r-1)/2));
+            divR.innerHTML = `<div class="tajuk-pusingan">RECOVERY P${r+1}</div>`;
+            let numM = Math.pow(2, Math.floor((totalRecoveryRounds - r - 1) / 2));
             for(let m=0; m<numM; m++) {
-                divR.appendChild(createMatch('L', r, m, null, mCount++));
+                let isFinalLB = (r === totalRecoveryRounds - 1);
+                divR.appendChild(createMatch('L', r, m, null, mCount++, false, isFinalLB));
             }
             bl.appendChild(divR);
         }
@@ -320,10 +310,10 @@
         autoBye();
     }
 
-    function createMatch(j, r, m, seeds, mNum, gf=false) {
+    function createMatch(j, r, m, seeds, mNum, gf=false, finalLB=false) {
         let mId = `${j}_${r}_${m}`;
         let div = document.createElement('div'); 
-        div.className = "kotak-perlawanan"+(gf?" grand-final":""); 
+        div.className = "kotak-perlawanan" + (gf?" grand-final":"") + (finalLB?" final-lb-box":""); 
         div.id = mId;
 
         let p1 = "Menunggu...", p2 = "Menunggu...", id1="none", id2="none";
@@ -336,14 +326,14 @@
         }
 
         div.innerHTML = `
-            <div class="match-no">PERLAWANAN ${mNum}</div>
+            <div class="match-no">${gf?'PENTAS AKHIR':'PERLAWANAN '+mNum}</div>
             <div class="slot-pasukan" id="${mId}_s1" data-pid="${id1}">
-                <img src="${id1!=='none'?(teamData[id1]?.logo||'https://via.placeholder.com/24'):'https://via.placeholder.com/24'}" class="p-logo" id="${mId}_img1">
+                <img src="${id1!=='none'?(teamData[id1]?.logo||'https://via.placeholder.com/32'):'https://via.placeholder.com/32'}" class="p-logo" id="${mId}_img1">
                 <span class="nama-display" id="${mId}_p1">${p1}</span>
                 <input type="number" class="skor" id="${mId}_sc1" oninput="kira('${mId}')" readonly>
             </div>
             <div class="slot-pasukan" id="${mId}_s2" data-pid="${id2}">
-                <img src="${id2!=='none'?(teamData[id2]?.logo||'https://via.placeholder.com/24'):'https://via.placeholder.com/24'}" class="p-logo" id="${mId}_img2">
+                <img src="${id2!=='none'?(teamData[id2]?.logo||'https://via.placeholder.com/32'):'https://via.placeholder.com/32'}" class="p-logo" id="${mId}_img2">
                 <span class="nama-display" id="${mId}_p2">${p2}</span>
                 <input type="number" class="skor" id="${mId}_sc2" oninput="kira('${mId}')" readonly>
             </div>`;
@@ -390,11 +380,9 @@
         let tid = `${jenis}_${p}_${m}_s${s}`;
         let slot = document.getElementById(tid);
         if(slot) {
-                                    document.getElementById(`${jenis}_${p}_${m}_p${s}`).innerText = nama;
-            document.getElementById(`${jenis}_${p}_${m}_img${s}`).src = (pid !== 'none' && teamData[pid]?.logo) ? teamData[pid].logo : 'https://via.placeholder.com/24';
+            document.getElementById(`${jenis}_${p}_${m}_p${s}`).innerText = nama;
+            document.getElementById(`${jenis}_${p}_${m}_img${s}`).src = (pid !== 'none' && teamData[pid]?.logo) ? teamData[pid].logo : 'https://via.placeholder.com/32';
             slot.setAttribute('data-pid', pid);
-            
-            // Auto-update jika pusingan seterusnya juga melibatkan BYE
             autoBye();
         }
     }
@@ -406,15 +394,9 @@
             let p2 = document.getElementById(mId + '_p2').innerText;
             let sc1 = document.getElementById(mId + '_sc1');
             let sc2 = document.getElementById(mId + '_sc2');
-
             if (sc1.value === "" && sc2.value === "") {
-                if (p1 === "BYE") {
-                    sc1.value = 0; sc2.value = 21;
-                    kira(mId);
-                } else if (p2 === "BYE") {
-                    sc1.value = 21; sc2.value = 0;
-                    kira(mId);
-                }
+                if (p1 === "BYE") { sc1.value = 0; sc2.value = 21; kira(mId); } 
+                else if (p2 === "BYE") { sc1.value = 21; sc2.value = 0; kira(mId); }
             }
         });
     }
@@ -434,6 +416,5 @@
 
     window.onload = loadData;
 </script>
-
 </body>
 </html>
