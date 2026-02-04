@@ -65,8 +65,6 @@
         .baris-menang .pusingan-p2 .kotak-perlawanan::before { height: 184px; transform: translateY(-50%); }
         .baris-menang .pusingan-p3 { gap: 376px; }
         .baris-menang .pusingan-p3 .kotak-perlawanan::before { height: 408px; transform: translateY(-50%); }
-        .baris-menang .pusingan-p4 { gap: 824px; }
-        .baris-menang .pusingan-p4 .kotak-perlawanan::before { height: 856px; transform: translateY(-50%); }
 
         .loser-final-highlight { border: 2px solid var(--kalah) !important; box-shadow: 0 0 15px rgba(231, 76, 60, 0.3); }
         .grand-final { border: 4px solid var(--emas) !important; transform: scale(1.05); box-shadow: 0 0 25px rgba(255, 215, 0, 0.4); }
@@ -147,12 +145,10 @@
   const db = getDatabase(app);
   const dbRef = ref(db, 'tournament_data');
 
-  // --- GLOBAL VARIABLES & FUNCTIONS ---
   window.nPasukan = 14;
   window.teamData = {};
   let matchCounter = 1;
 
-  // Listen for changes from Firebase
   onValue(dbRef, (snapshot) => {
     const data = snapshot.val();
     if (data) {
@@ -168,9 +164,7 @@
     document.getElementById('barisW').innerHTML = '<div class="label-bracket" style="color:var(--utama); border-color:var(--utama)">WINNER BRACKET</div>';
     document.getElementById('barisL').innerHTML = '<div class="label-bracket" style="color:var(--kalah); border-color:var(--kalah)">LOSER BRACKET (NYAWA KEDUA)</div>';
     jana(scores);
-    if(sessionStorage.getItem('isAdmin') === 'true') {
-        applyAdminMode();
-    }
+    if(sessionStorage.getItem('isAdmin') === 'true') applyAdminMode();
   }
 
   window.saveData = function() {
@@ -195,7 +189,6 @@
     if(confirm("Padam semua data?")) set(dbRef, null).then(() => location.reload());
   };
 
-  // --- TOURNAMENT LOGIC ---
   function getSeeds(n) {
     let seeds = [0, 1];
     for (let i = 2; i < n; i <<= 1) {
@@ -253,9 +246,8 @@
       for(let m=0; m<matches; m++) { 
         let box = createMatchBox('L', r, m);
         if(r === totalLR - 1) box.classList.add('loser-final-highlight');
-        divR.appendChild(box); 
+        bl.appendChild(divR); 
       }
-      bl.appendChild(divR);
     }
   }
 
@@ -309,7 +301,13 @@
       let nextR = r + 1, nextM = Math.floor(m/2), nextS = (m % 2) + 1;
       if(document.getElementById(`W_${nextR}_${nextM}`)) updateSlot(`W_${nextR}_${nextM}`, nextS, winName, winPid);
       else updateSlot(`GF_0_0`, 1, winName, winPid);
-      updateSlot(`L_${r*2}_${m}`, 2, loseName, losePid);
+      
+      // PEMBETULAN: Mapping ke Loser Bracket
+      let loserRound = r * 2;
+      let loserSlot = (r % 2 === 0) ? 1 : 2; // Menentukan slot 1 atau 2 dalam Loser Match
+      if(document.getElementById(`L_${loserRound}_${m}`)) {
+          updateSlot(`L_${loserRound}_${m}`, 2, loseName, losePid);
+      }
     } else if (j === 'L') {
       let totalLR = (Math.log2(Math.pow(2, Math.ceil(Math.log2(window.nPasukan)))) - 1) * 2;
       if(r < totalLR - 1) {
@@ -332,7 +330,6 @@
     });
   }
 
-  // --- UI CONTROLS ---
   window.toggleAdmin = function() { 
     const p = document.getElementById('panelAdmin'); 
     p.style.display = p.style.display === 'block' ? 'none' : 'block'; 
@@ -350,8 +347,10 @@
   }
 
   function applyAdminMode() {
-    document.getElementById('loginSection').style.display = 'none';
-    document.getElementById('controlBox').style.display = 'block'; 
+    const loginSec = document.getElementById('loginSection');
+    const ctrlBox = document.getElementById('controlBox');
+    if(loginSec) loginSec.style.display = 'none';
+    if(ctrlBox) ctrlBox.style.display = 'block'; 
     renderInputs(); 
     document.querySelectorAll('.skor').forEach(el => el.removeAttribute('readonly'));
   }
@@ -380,7 +379,6 @@
     if(!window.teamData[idx]) window.teamData[idx] = {nama:'', logo:''}; 
     window.teamData[idx][key] = val; 
   }
-
 </script>
 </body>
 </html>
