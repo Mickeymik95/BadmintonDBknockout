@@ -69,7 +69,7 @@
             flex-direction: column; 
             gap: 80px; 
             padding: 0 100px;
-            align-items: flex-start; /* Pastikan border bermula dari kiri yang sama */
+            align-items: flex-start;
         }
 
         .laluan-row { 
@@ -79,10 +79,9 @@
             border-radius: 40px; 
             position: relative; 
             background: rgba(255,255,255,0.01);
-            /* Kunci lebar supaya kedua-dua row sentiasa sama lebar mengikut yang paling panjang */
-            width: max-content;
-            min-width: 2100px; 
+            width: max-content; /* Biarkan ia mengikut isi secara dinamik */
             box-sizing: border-box;
+            transition: min-width 0.3s ease;
         }
 
         #barisW { border: 2px solid rgba(0, 210, 255, 0.3); box-shadow: inset 0 0 50px rgba(0, 210, 255, 0.05); }
@@ -111,7 +110,6 @@
 
         .nama-display { flex: 1; font-size: 1.1rem; font-weight: 800; color: #eee; background: transparent; border: none; outline: none; width: 100%; }
         .skor { width: 45px; height: 40px; text-align: center; background: #000; border: 1px solid #444; color: #fff; border-radius: 8px; font-weight: 900; font-size: 1.3rem; }
-
         .seed-no { color: var(--kuning-pekat); font-weight: 900; font-size: 0.9rem; min-width: 32px; height: 24px; display: flex; align-items: center; justify-content: center; background: rgba(255, 204, 0, 0.1); border: 1px solid rgba(255, 204, 0, 0.3); border-radius: 4px; }
 
         /* HIGHLIGHT PEMENANG */
@@ -119,9 +117,9 @@
         .slot-pasukan.pemenang .nama-display { color: var(--menang); }
         .slot-pasukan.pemenang .skor { background: var(--menang); color: #000; border-color: var(--menang); box-shadow: 0 0 15px rgba(46, 204, 113, 0.5); }
 
-        /* GRAND FINAL - DIPERINGKATKAN KE HUJUNG */
-        .pusingan-gf { margin-left: auto; } /* Tolak Grand Final ke paling kanan baris Winner */
-        .grand-final { width: 400px !important; border: 3px solid #ffd700 !important; transform: scale(1.05); box-shadow: var(--glow-emas); }
+        /* GRAND FINAL - KEKAL DALAM ALIRAN NORMAL */
+        .pusingan-gf { margin-left: 0; } 
+        .grand-final { width: 420px !important; border: 3px solid #ffd700 !important; transform: scale(1.05); box-shadow: var(--glow-emas); }
         .grand-final .match-no { background: var(--emas); color: #000; font-size: 14px; }
         .grand-final .nama-display { font-size: 1.4rem; }
 
@@ -256,7 +254,7 @@
             bw.appendChild(div);
         }
 
-        // Grand Final - Diletakkan dalam div khas untuk pusingan
+        // Grand Final
         let divGF = document.createElement('div'); divGF.className = 'pusingan pusingan-gf';
         let gfBox = createBox('GF', 0, 0); gfBox.classList.add('grand-final');
         divGF.appendChild(gfBox); 
@@ -274,6 +272,7 @@
             bl.appendChild(div);
         }
 
+        // Isian Data & Seed
         const seeds = [0, 15, 7, 8, 3, 12, 4, 11, 1, 14, 6, 9, 2, 13, 5, 10];
         for(let m=0; m < 8; m++) {
             let s1 = seeds[m*2], s2 = seeds[m*2+1];
@@ -291,6 +290,14 @@
             const isRound1 = el.id.startsWith('W_0_');
             el.readOnly = el.classList.contains('nama-display') ? !(window.isAdminMode && isRound1) : !window.isAdminMode;
         });
+
+        // SYNC WIDTH: Paksa kedua-dua border sama panjang dinamik
+        setTimeout(() => {
+            bw.style.minWidth = "0"; bl.style.minWidth = "0"; // Reset dulu
+            const maxWidth = Math.max(bw.scrollWidth, bl.scrollWidth) + "px";
+            bw.style.minWidth = maxWidth;
+            bl.style.minWidth = maxWidth;
+        }, 200);
     }
 
     function createBox(j, r, m) {
