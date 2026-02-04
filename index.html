@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BWF BADMINTON FAMILY TOUR - SECURE SYSTEM</title>
+    <title>BWF BADMINTON FAMILY TOUR - PRO SYSTEM</title>
     <style>
         :root { 
             --menang: #2ecc71; --kalah: #e74c3c; --utama: #00d2ff; 
@@ -34,10 +34,11 @@
             width: 150px; height: 55px; border-radius: 12px; border: 2px solid var(--utama); 
             background: rgba(0, 210, 255, 0.1); color: var(--utama); cursor: pointer; 
             font-weight: 800; font-size: 0.75rem; text-transform: uppercase; transition: 0.3s;
+            display: flex; align-items: center; justify-content: center; text-align: center;
         }
         .btn-action:hover { background: var(--utama); color: #000; }
 
-        /* BRACKET DESIGN */
+        /* BRACKET */
         .tournament-layout { display: flex; flex-direction: column; gap: 80px; padding: 20px; }
         .laluan-row { display: flex; gap: 60px; padding: 80px 40px; border-radius: 30px; border: 2px solid #222; position: relative; }
         .baris-menang { background: rgba(0, 210, 255, 0.02); border-color: var(--utama); }
@@ -57,13 +58,28 @@
         .skor { width: 40px; height: 28px; text-align: center; background: #000; border: 1px solid #444; color: #fff; border-radius: 4px; font-weight: 900; }
         .seed-no { color: var(--utama); font-weight: 900; font-size: 0.9rem; min-width: 25px; background: rgba(0, 210, 255, 0.1); border-radius: 4px; text-align: center; }
 
-        /* ADMIN PANEL UI */
+        /* HIGHLIGHT SPECIAL MATCHES */
+        .grand-final { 
+            width: 280px !important;
+            border: 4px solid var(--emas) !important; 
+            transform: scale(1.15); 
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.4); 
+            z-index: 10;
+        }
+        .grand-final .match-no { background: var(--emas); color: #000; font-size: 11px; }
+        .grand-final .nama-display { font-size: 1rem; }
+
+        .loser-final-highlight {
+            border: 2px solid var(--kalah) !important;
+            box-shadow: 0 0 15px rgba(231, 76, 60, 0.3);
+        }
+        .loser-final-highlight .match-no { background: var(--kalah); color: #fff; }
+
+        /* ADMIN PANEL */
         #panelAdmin { display: none; position: fixed; top: 20px; right: 20px; width: 350px; max-height: 85vh; background: #1a1a1f; border: 2px solid var(--utama); border-radius: 20px; z-index: 1000; padding: 25px; overflow-y: auto; box-shadow: 0 10px 40px #000; }
         .admin-input-group { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
         .seed-label { background: var(--utama); color: #000; font-weight: 900; padding: 10px; border-radius: 8px; min-width: 30px; text-align: center; }
         .admin-input { flex: 1; padding: 12px; background: #000; border: 1px solid #333; color: #fff; border-radius: 8px; box-sizing: border-box; }
-        
-        /* Hidden controls for users */
         .admin-only { display: none; }
     </style>
 </head>
@@ -86,22 +102,17 @@
 
 <div id="panelAdmin">
     <h3 style="color:var(--utama); margin:0 0 15px 0;">Sistem Kawalan</h3>
-    
     <div id="authSection">
-        <p style="font-size: 12px; color: #888;">Sila masukkan kata laluan penganjur untuk mengedit data.</p>
         <input type="password" id="passInput" class="admin-input" placeholder="Kata Laluan" style="width:100%; margin-bottom:10px;">
         <button onclick="checkAuth()" class="btn-action" style="width:100%">LOG MASUK</button>
     </div>
-
     <div id="controlBox" class="admin-only">
         <label style="font-size:11px; color:#888;">JUMLAH PASUKAN</label>
         <input type="number" id="inputNumTeams" class="admin-input" value="8" style="width:100%; margin-bottom:10px;">
-        
         <div style="display:flex; gap:10px; margin-bottom:15px;">
             <button onclick="renderInputs()" class="btn-action" style="flex:1; font-size:0.65rem;">SET NAMA PASUKAN</button>
             <button onclick="resetTournament()" class="btn-action" style="flex:1; border-color:var(--kalah); color:var(--kalah); font-size:0.65rem;">RESET SKOR</button>
         </div>
-
         <div id="adminTeamInputs"></div>
         <button onclick="saveToFirebase()" class="btn-action" style="width:100%; background:var(--menang); color:#000; border:none; margin-top:15px;">SIMPAN & SYNC</button>
     </div>
@@ -132,11 +143,8 @@
     window.checkPersistentAdmin = () => {
         if(localStorage.getItem('adminStatus') === 'active') {
             window.isAdminMode = true;
-            // Tunjukkan semua elemen admin-only
-            document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'block');
+            document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'flex');
             document.getElementById('authSection').style.display = 'none';
-            // Butang logout diletakkan flex supaya cantik
-            document.getElementById('btnLogout').style.display = 'flex';
         }
     };
 
@@ -144,18 +152,11 @@
         if(document.getElementById('passInput').value === "admin123") {
             localStorage.setItem('adminStatus', 'active');
             location.reload();
-        } else { alert("Akses Ditolak: Kata laluan salah!"); }
+        } else { alert("Salah!"); }
     };
 
-    window.logoutAdmin = () => { 
-        localStorage.removeItem('adminStatus'); 
-        location.reload(); 
-    };
-
-    window.toggleAdmin = () => { 
-        const p = document.getElementById('panelAdmin'); 
-        p.style.display = (p.style.display === 'block') ? 'none' : 'block'; 
-    };
+    window.logoutAdmin = () => { localStorage.removeItem('adminStatus'); location.reload(); };
+    window.toggleAdmin = () => { const p = document.getElementById('panelAdmin'); p.style.display = (p.style.display === 'block') ? 'none' : 'block'; };
 
     onValue(dbRef, (snapshot) => {
         const data = snapshot.val();
@@ -169,14 +170,10 @@
     window.renderInputs = () => {
         const n = document.getElementById('inputNumTeams').value;
         const container = document.getElementById('adminTeamInputs');
-        container.innerHTML = `<p style="font-size:10px; color:var(--utama); margin-bottom:10px;">MASUKKAN NAMA MENGIKUT NO UNDIAN:</p>`;
+        container.innerHTML = `<p style="font-size:10px; color:var(--utama); margin-bottom:10px;">ISI NAMA MENGIKUT UNDIAN:</p>`;
         for(let i=0; i<n; i++) {
             let val = window.teamData[i]?.nama || "";
-            container.innerHTML += `
-                <div class="admin-input-group">
-                    <div class="seed-label">${i+1}</div>
-                    <input type="text" class="admin-input" id="input_t_${i}" value="${val}">
-                </div>`;
+            container.innerHTML += `<div class="admin-input-group"><div class="seed-label">${i+1}</div><input type="text" class="admin-input" id="input_t_${i}" value="${val}"></div>`;
         }
     };
 
@@ -186,14 +183,11 @@
         for(let i=0; i<n; i++) {
             teams[i] = { nama: document.getElementById(`input_t_${i}`)?.value || `T${i+1}` };
         }
-        set(dbRef, { n, teams, scores: {} }).then(() => {
-            alert("Data Berjaya Disimpan!");
-            location.reload();
-        });
+        set(dbRef, { n, teams, scores: {} }).then(() => { alert("Disimpan!"); location.reload(); });
     };
 
     window.resetTournament = () => {
-        if(confirm("AWAS: Ini akan memadam semua skor perlawanan! Teruskan?")) {
+        if(confirm("Padam skor pusingan ini?")) {
             update(dbRef, { scores: {} }).then(() => location.reload());
         }
     };
@@ -206,53 +200,56 @@
         const p2 = Math.pow(2, Math.ceil(Math.log2(window.nPasukan)));
         const rounds = Math.log2(p2);
 
-        // Bina Bracket
+        // Winner Rounds
         for(let r=0; r<rounds; r++) {
             let div = document.createElement('div'); div.className = 'pusingan';
             for(let m=0; m<Math.pow(2, rounds-r-1); m++) div.appendChild(createBox('W', r, m));
             bw.appendChild(div);
         }
 
+        // Loser Rounds
         const totalLR = (rounds - 1) * 2;
         for(let r=0; r < totalLR; r++) {
             let div = document.createElement('div'); div.className = 'pusingan';
             let mCount = Math.pow(2, Math.floor(((totalLR - 1) - r) / 2));
-            for(let m=0; m<mCount; m++) div.appendChild(createBox('L', r, m));
+            for(let m=0; m<mCount; m++) {
+                let box = createBox('L', r, m);
+                if(r === totalLR - 1) box.classList.add('loser-final-highlight');
+                div.appendChild(box);
+            }
             bl.appendChild(div);
         }
 
+        // Grand Final
         let divGF = document.createElement('div'); divGF.className = 'pusingan';
-        divGF.appendChild(createBox('GF', 0, 0)).classList.add('grand-final');
+        let gfBox = createBox('GF', 0, 0);
+        gfBox.classList.add('grand-final');
+        divGF.appendChild(gfBox);
         bw.appendChild(divGF);
 
-        // Isi Data Awal (Seed/Undian)
         const seeds = getSeeds(p2);
         for(let m=0; m < p2/2; m++) {
-            let s1 = seeds[m*2], s2 = seeds[m*2+1];
-            updateSlot(`W_0_${m}`, 1, s1 < window.nPasukan ? (window.teamData[s1]?.nama || `T${s1+1}`) : "BYE", s1);
-            updateSlot(`W_0_${m}`, 2, s2 < window.nPasukan ? (window.teamData[s2]?.nama || `T${s2+1}`) : "BYE", s2);
+            updateSlot(`W_0_${m}`, 1, seeds[m*2] < window.nPasukan ? (window.teamData[seeds[m*2]]?.nama || `T${seeds[m*2]+1}`) : "BYE", seeds[m*2]);
+            updateSlot(`W_0_${m}`, 2, seeds[m*2+1] < window.nPasukan ? (window.teamData[seeds[m*2+1]]?.nama || `T${seeds[m*2+1]+1}`) : "BYE", seeds[m*2+1]);
         }
 
-        // Masukkan Skor sedia ada
         for(let id in savedScores) {
             const input = document.getElementById(id);
             if(input) { input.value = savedScores[id]; kira(id.split('_sc')[0], false); }
         }
 
         autoBye();
-
-        // Kunci skor jika bukan admin
         document.querySelectorAll('.skor').forEach(el => {
             el.readOnly = !window.isAdminMode;
             el.style.pointerEvents = window.isAdminMode ? "auto" : "none";
-            el.style.border = window.isAdminMode ? "1px solid var(--utama)" : "1px solid #444";
         });
     }
 
     function createBox(j, r, m) {
         let id = `${j}_${r}_${m}`;
         let div = document.createElement('div'); div.className = 'kotak-perlawanan'; div.id = id;
-        div.innerHTML = `<div class="match-no">${j}${r+1}-M${m+1}</div>
+        let label = (j === 'GF') ? 'GRAND FINAL' : (j === 'L' && r === (Math.log2(Math.pow(2, Math.ceil(Math.log2(window.nPasukan))))-1)*2-1) ? 'LOSER FINAL' : `${j}${r+1}-M${m+1}`;
+        div.innerHTML = `<div class="match-no">${label}</div>
             <div class="slot-pasukan" id="${id}_s1"><span class="seed-no" id="${id}_sd1"></span><span class="nama-display" id="${id}_p1">...</span><input type="number" class="skor" id="${id}_sc1" oninput="window.kira('${id}', true)"></div>
             <div class="slot-pasukan" id="${id}_s2"><span class="seed-no" id="${id}_sd2"></span><span class="nama-display" id="${id}_p2">...</span><input type="number" class="skor" id="${id}_sc2" oninput="window.kira('${id}', true)"></div>`;
         return div;
