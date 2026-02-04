@@ -9,7 +9,7 @@
             --menang: #2ecc71; --kalah: #e74c3c; --utama: #00d2ff; 
             --emas: #ffd700; --bg: #0b0b0d; --kad: #1a1a1f; 
             --ws-hijau: #25D366; --garis: #333; 
-            --bg-menang: rgba(0, 210, 255, 0.04);
+            --bg-menang: rgba(46, 204, 113, 0.2); /* Hijau untuk pemenang */
             --bg-kalah: rgba(231, 76, 60, 0.04);
         }
 
@@ -47,15 +47,15 @@
         /* BRACKET LAYOUT */
         .tournament-layout { display: flex; flex-direction: column; gap: 60px; padding: 20px; }
         .laluan-row { display: flex; gap: 60px; padding: 100px 40px; border-radius: 30px; border: 2px solid #222; position: relative; min-width: 100%; }
-        .baris-menang { background: var(--bg-menang); border-color: var(--utama); align-items: stretch; }
-        .baris-kalah { background: var(--bg-kalah); border-color: var(--kalah); }
+        .baris-menang { background: rgba(0, 210, 255, 0.02); border-color: var(--utama); align-items: stretch; }
+        .baris-kalah { background: rgba(231, 76, 60, 0.02); border-color: var(--kalah); }
         .label-bracket { position: absolute; top: -15px; left: 30px; background: var(--bg); padding: 5px 20px; font-weight: 900; font-size: 0.8rem; border-radius: 50px; border: 2px solid; }
 
         /* PUSINGAN */
         .pusingan { display: flex; flex-direction: column; width: 220px; justify-content: center; position: relative; }
         .tajuk-pusingan { font-size: 0.7rem; font-weight: 900; text-align: center; padding: 6px; background: #000; border: 1px solid #333; border-radius: 4px; position: absolute; top: -50px; width: 100%; }
 
-        .kotak-perlawanan { background: var(--kad); border: 1px solid var(--garis); border-radius: 12px; position: relative; padding-top: 20px; margin-bottom: 5px; z-index: 2; transition: 0.3s; }
+        .kotak-perlawanan { background: var(--kad); border: 1px solid var(--garis); border-radius: 12px; position: relative; padding-top: 20px; margin-bottom: 5px; z-index: 2; transition: 0.3s; overflow: hidden; }
 
         /* CONNECTOR LINES */
         .pusingan:not(:last-child) .kotak-perlawanan::after { content: ""; position: absolute; right: -62px; top: 50%; width: 62px; height: 2px; background: var(--garis); z-index: 1; }
@@ -72,8 +72,8 @@
         .loser-final-highlight { border: 2px solid var(--kalah) !important; box-shadow: 0 0 15px rgba(231, 76, 60, 0.3); }
         .grand-final { border: 4px solid var(--emas) !important; transform: scale(1.05); box-shadow: 0 0 25px rgba(255, 215, 0, 0.4); }
 
-        .match-no { position: absolute; top: 0; width: 100%; background: #25252b; color: var(--utama); font-size: 9px; padding: 4px 0; text-align: center; font-weight: bold; border-radius: 11px 11px 0 0; }
-        .slot-pasukan { display: flex; gap: 8px; align-items: center; padding: 8px 12px; height: 35px; border-bottom: 1px solid #222; }
+        .match-no { position: absolute; top: 0; width: 100%; background: #25252b; color: var(--utama); font-size: 9px; padding: 4px 0; text-align: center; font-weight: bold; border-radius: 0; }
+        .slot-pasukan { display: flex; gap: 8px; align-items: center; padding: 8px 12px; height: 35px; border-bottom: 1px solid #222; transition: 0.3s; }
         .slot-pasukan:last-child { border-bottom: none; }
         .nama-display { flex: 1; font-size: 0.75rem; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #fff; }
         .skor { width: 35px; height: 25px; text-align: center; background: #000; border: 1px solid #444; color: #fff; border-radius: 4px; font-weight: 900; font-size: 0.8rem; }
@@ -121,6 +121,7 @@
         <button onclick="checkAuth()" style="width:100%; padding:10px; background:var(--utama); border:none; border-radius:6px; cursor:pointer; font-weight:bold;">LOG MASUK</button>
     </div>
     <div id="controlBox" style="display:none; margin-top:10px;">
+        <button onclick="logoutAdmin()" style="float:right; font-size:10px; background:none; border:1px solid #444; color:#888; padding:2px 8px; border-radius:4px; cursor:pointer;">LOGOUT</button>
         <label style="font-size: 11px; color: #888;">JUMLAH PASUKAN</label>
         <input type="number" id="inputNumTeams" class="admin-input" value="14" onchange="renderInputs()">
         <hr border="0" style="border-top:1px solid #333; margin: 15px 0;">
@@ -133,19 +134,28 @@
 <script>
     let nPasukan = 14;
     let teamData = {};
-    let isAdmin = false;
     let matchCounter = 1;
 
     function toggleAdmin() { const p = document.getElementById('panelAdmin'); p.style.display = p.style.display === 'block' ? 'none' : 'block'; }
 
+    // Fungsi Login dengan sessionStorage (Kekal sehingga tab ditutup)
     function checkAuth() { 
         if(document.getElementById('passInput').value === "admin123") { 
-            document.getElementById('loginSection').style.display = 'none';
-            document.getElementById('controlBox').style.display = 'block'; 
-            isAdmin = true; 
-            renderInputs(); 
-            document.querySelectorAll('.skor').forEach(el => el.removeAttribute('readonly'));
+            sessionStorage.setItem('isAdmin', 'true');
+            applyAdminMode();
         } else { alert("Kata laluan salah!"); } 
+    }
+
+    function applyAdminMode() {
+        document.getElementById('loginSection').style.display = 'none';
+        document.getElementById('controlBox').style.display = 'block'; 
+        renderInputs(); 
+        document.querySelectorAll('.skor').forEach(el => el.removeAttribute('readonly'));
+    }
+
+    function logoutAdmin() {
+        sessionStorage.removeItem('isAdmin');
+        location.reload();
     }
 
     function renderInputs() {
@@ -184,6 +194,11 @@
             teamData = data.teams; 
             jana(data.scores); 
         } else { jana({}); } 
+
+        // Check status login sedia ada
+        if(sessionStorage.getItem('isAdmin') === 'true') {
+            applyAdminMode();
+        }
     }
 
     function getSeeds(n) {
@@ -229,7 +244,6 @@
             let name1 = s1 < nPasukan ? teamData[s1]?.nama || `Pasukan ${s1+1}` : "BYE";
             let name2 = s2 < nPasukan ? teamData[s2]?.nama || `Pasukan ${s2+1}` : "BYE";
 
-            // Tambah nombor seed hanya pada paparan pusingan pertama
             updateSlot(`W_0_${m}`, 1, s1 < nPasukan ? `${s1+1}. ${name1}` : "BYE", s1 < nPasukan ? s1 : "BYE");
             updateSlot(`W_0_${m}`, 2, s2 < nPasukan ? `${s2+1}. ${name2}` : "BYE", s2 < nPasukan ? s2 : "BYE");
         }
@@ -284,30 +298,33 @@
         let sc1Val = document.getElementById(mid+'_sc1').value; 
         let sc2Val = document.getElementById(mid+'_sc2').value;
 
-        // Reset highlight asal
-        document.getElementById(mid+'_p1').style.color = '#fff';
-        document.getElementById(mid+'_p1').style.fontWeight = '700';
-        document.getElementById(mid+'_p2').style.color = '#fff';
-        document.getElementById(mid+'_p2').style.fontWeight = '700';
+        // Reset highlight
+        for(let s=1; s<=2; s++) {
+            let pEl = document.getElementById(`${mid}_p${s}`);
+            let sEl = document.getElementById(`${mid}_s${s}`);
+            pEl.style.color = '#fff';
+            pEl.style.fontWeight = '700';
+            sEl.style.background = 'transparent';
+        }
 
         if(sc1Val === "" || sc2Val === "" || parseInt(sc1Val) === parseInt(sc2Val)) return;
-        
+
         let v1 = parseInt(sc1Val), v2 = parseInt(sc2Val);
         let winSlot = v1 > v2 ? 1 : 2;
         let loseSlot = v1 > v2 ? 2 : 1;
 
-        // Highlight pemenang perlawanan
+        // HIGHLIGHT HIJAU & EMAS UNTUK PEMENANG
         document.getElementById(`${mid}_p${winSlot}`).style.color = 'var(--emas)';
         document.getElementById(`${mid}_p${winSlot}`).style.fontWeight = '900';
+        document.getElementById(`${mid}_s${winSlot}`).style.background = 'var(--bg-menang)';
 
-        // Bersihkan nama (buang nombor seed) untuk pusingan seterusnya
         let cleanName = (n) => n.replace(/^\d+\.\s+/, "");
         let winName = cleanName(document.getElementById(`${mid}_p${winSlot}`).innerText);
         let loseName = cleanName(document.getElementById(`${mid}_p${loseSlot}`).innerText);
-        
+
         let winPid = document.getElementById(`${mid}_s${winSlot}`).getAttribute('data-pid');
         let losePid = document.getElementById(`${mid}_s${loseSlot}`).getAttribute('data-pid');
-        
+
         let parts = mid.split('_'), j = parts[0], r = parseInt(parts[1]), m = parseInt(parts[2]);
 
         if(j === 'W') {
