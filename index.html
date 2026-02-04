@@ -10,11 +10,11 @@
         :root { 
             --menang: #2ecc71; --kalah: #e74c3c; --utama: #00d2ff; 
             --emas: linear-gradient(135deg, #ffd700, #b8860b);
-            --kuning-pekat: #ffcc00; /* Warna kuning pekat untuk nombor pasukan */
+            --kuning-pekat: #ffcc00; 
             --bg: #0b0b0d; --kad: #1a1a1f; 
             --garis: #333; 
             --glow-emas: 0 0 30px rgba(255, 215, 0, 0.4);
-            --bg-pemenang: rgba(46, 204, 113, 0.2);
+            --bg-pemenang: rgba(46, 204, 113, 0.15);
         }
 
         body { 
@@ -59,13 +59,13 @@
             text-transform: uppercase;
         }
 
-        .pusingan { display: flex; flex-direction: column; width: 220px; justify-content: center; gap: 20px; }
+        .pusingan { display: flex; flex-direction: column; width: 240px; justify-content: center; gap: 25px; }
         
         /* MATCH BOX */
         .kotak-perlawanan { background: var(--kad); border: 1px solid #333; border-radius: 14px; position: relative; padding-top: 25px; transition: 0.3s; }
         .match-no { 
-            position: absolute; top: 0; width: 100%; background: #25252b; color: #666; 
-            font-size: 9px; padding: 5px 0; text-align: center; font-weight: 800;
+            position: absolute; top: 0; width: 100%; background: #25252b; color: #888; 
+            font-size: 10px; padding: 5px 0; text-align: center; font-weight: 800; border-bottom: 1px solid #333;
         }
 
         .slot-pasukan { display: flex; gap: 10px; align-items: center; padding: 12px 15px; border-bottom: 1px solid #25252b; transition: 0.3s; }
@@ -76,38 +76,43 @@
             background: transparent; border: none; outline: none; width: 100%;
         }
 
-        .skor { width: 35px; height: 30px; text-align: center; background: #000; border: 1px solid #444; color: #fff; border-radius: 6px; font-weight: 900; font-size: 0.9rem; }
+        .skor { width: 35px; height: 32px; text-align: center; background: #000; border: 1px solid #444; color: #fff; border-radius: 6px; font-weight: 900; font-size: 1rem; }
         
-        /* HIGHLIGHT NOMBOR PASUKAN (KUNING PEKAT) */
+        /* KUNING PEKAT NOMBOR (TETAP NAMPAK) */
         .seed-no { 
             color: var(--kuning-pekat); 
             font-weight: 900; 
-            font-size: 0.85rem; 
-            min-width: 24px; 
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
-            border-right: 1px solid #333;
-            margin-right: 2px;
+            font-size: 0.75rem; 
+            min-width: 28px; 
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 204, 0, 0.1);
+            border: 1px solid rgba(255, 204, 0, 0.3);
+            border-radius: 4px;
         }
 
         /* AUTO-HIGHLIGHT PEMENANG */
         .slot-pasukan.pemenang { background: var(--bg-pemenang); }
         .slot-pasukan.pemenang .nama-display { color: var(--menang); font-weight: 900; }
-        .slot-pasukan.pemenang .skor { background: var(--menang); color: #000; border-color: var(--menang); }
+        .slot-pasukan.pemenang .skor { background: var(--menang); color: #000; border-color: var(--menang); box-shadow: 0 0 10px rgba(46, 204, 113, 0.4); }
 
         /* SPECIAL HIGHLIGHTS */
         .grand-final { 
-            width: 300px !important; border: 2px solid #ffd700 !important; 
+            width: 320px !important; border: 2px solid #ffd700 !important; 
             transform: scale(1.15); box-shadow: var(--glow-emas);
         }
         .grand-final .match-no { background: var(--emas); color: #000; font-weight: 900; }
+        .grand-final .nama-display { font-size: 1rem; }
 
         .loser-final {
             border: 2px solid var(--kalah) !important;
-            box-shadow: 0 0 20px rgba(231, 76, 60, 0.3);
+            box-shadow: 0 0 25px rgba(231, 76, 60, 0.4);
         }
         .loser-final .match-no { background: var(--kalah); color: #fff; }
 
-        /* ADMIN PANEL UI */
+        /* ADMIN PANEL */
         #panelAdmin { 
             display: none; position: fixed; top: 30px; right: 30px; width: 320px; 
             background: #111; border: 1px solid #444; border-radius: 20px; 
@@ -117,6 +122,7 @@
     </style>
 </head>
 <body onload="checkPersistentAdmin()">
+
 <div class="main-wrapper">
     <div class="header-container">
         <div class="tajuk-box"><h1>BWF BADMINTON FAMILY TOUR</h1></div>
@@ -135,19 +141,19 @@
 </div>
 
 <div id="panelAdmin">
-    <h2 style="margin-top:0; font-size:1.2rem;">ADMIN ACCESS</h2>
+    <h2 style="margin-top:0; font-size:1.2rem; color:var(--utama);">ADMIN ACCESS</h2>
     <div id="authSection">
         <input type="password" id="passInput" style="width:100%; padding:15px; background:#000; color:#fff; border:1px solid #333; border-radius:10px; margin-bottom:15px;" placeholder="Password">
         <button onclick="checkAuth()" class="btn-action" style="width:100%">LOG MASUK</button>
     </div>
     <div id="adminStatus" class="admin-only">
-        <p style="color:var(--menang); font-size:0.8rem; line-height:1.5;">✔ MOD ADMIN AKTIF<br>Edit nama di Pusingan 1 & skor terus pada bracket.</p>
+        <p style="color:var(--menang); font-size:0.8rem; line-height:1.5; background: rgba(46, 204, 113, 0.1); padding: 10px; border-radius: 8px;">✔ MOD ADMIN AKTIF<br>Taip nama di Round 1 & skor di mana-mana kotak.</p>
     </div>
 </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getDatabase, ref, set, onValue, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyBB6Su0uhNcKKoq9Qa_-RGb6cAZOmV2u-U",
@@ -177,7 +183,7 @@
         if(document.getElementById('passInput').value === "admin123") {
             localStorage.setItem('adminStatus', 'active');
             location.reload();
-        } else { alert("Kunci Salah!"); }
+        } else { alert("Akses Ditolak!"); }
     };
 
     window.logoutAdmin = () => { localStorage.removeItem('adminStatus'); location.reload(); };
@@ -185,24 +191,23 @@
 
     onValue(dbRef, (snapshot) => {
         const data = snapshot.val() || {};
-        window.nPasukan = 16;
         window.teamNames = data.teams || {};
         jana(data.scores || {});
     });
 
     window.saveAll = () => {
         let teams = {};
-        for(let i=0; i<window.nPasukan; i++) {
+        for(let i=0; i<16; i++) {
             const input = document.querySelector(`[data-seed-id="${i}"]`);
             teams[i] = { nama: input && input.value.trim() !== "" ? input.value : "BYE" };
         }
         let scores = {};
         document.querySelectorAll('.skor').forEach(s => { if(s.value !== "") scores[s.id] = s.value; });
-        set(dbRef, { n: 16, teams, scores }).then(() => alert("Data Disimpan!"));
+        set(dbRef, { n: 16, teams, scores }).then(() => alert("Berjaya Disimpan!"));
     };
 
     window.resetTournament = () => {
-        if(confirm("Padam semua skor dan nama?")) {
+        if(confirm("Padam semua data?")) {
             set(dbRef, { n: 16, teams: {}, scores: {} }).then(() => location.reload());
         }
     };
@@ -212,41 +217,40 @@
         bw.innerHTML = '<div class="label-bracket">Winner Bracket (Upper)</div>'; 
         bl.innerHTML = '<div class="label-bracket">Loser Bracket (Lower)</div>';
 
-        const p2 = 16;
-        const rounds = Math.log2(p2);
-
-        for(let r=0; r<rounds; r++) {
+        // Winner rounds
+        for(let r=0; r<4; r++) {
             let div = document.createElement('div'); div.className = 'pusingan';
-            for(let m=0; m<Math.pow(2, rounds-r-1); m++) div.appendChild(createBox('W', r, m));
+            for(let m=0; m<Math.pow(2, 3-r); m++) div.appendChild(createBox('W', r, m));
             bw.appendChild(div);
         }
 
-        const totalLR = (rounds - 1) * 2;
-        for(let r=0; r < totalLR; r++) {
+        // Loser rounds (6 rounds for 16 teams)
+        for(let r=0; r < 6; r++) {
             let div = document.createElement('div'); div.className = 'pusingan';
-            let mCount = Math.pow(2, Math.floor(((totalLR - 1) - r) / 2));
+            let mCount = Math.pow(2, Math.floor((5 - r) / 2));
             for(let m=0; m<mCount; m++) {
                 let box = createBox('L', r, m);
-                if(r === totalLR - 1) box.classList.add('loser-final');
+                if(r === 5) box.classList.add('loser-final');
                 div.appendChild(box);
             }
             bl.appendChild(div);
         }
 
+        // Grand Final
         let divGF = document.createElement('div'); divGF.className = 'pusingan';
         let gfBox = createBox('GF', 0, 0); gfBox.classList.add('grand-final');
         divGF.appendChild(gfBox); bw.appendChild(divGF);
 
-        const seeds = getSeeds(p2);
-        for(let m=0; m < p2/2; m++) {
+        const seeds = getSeeds(16);
+        for(let m=0; m < 8; m++) {
             let s1 = seeds[m*2], s2 = seeds[m*2+1];
-            updateSlot(`W_0_${m}`, 1, s1 < 16 ? (window.teamNames[s1]?.nama || "") : "BYE", s1);
-            updateSlot(`W_0_${m}`, 2, s2 < 16 ? (window.teamNames[s2]?.nama || "") : "BYE", s2);
+            updateSlot(`W_0_${m}`, 1, window.teamNames[s1]?.nama || "", s1);
+            updateSlot(`W_0_${m}`, 2, window.teamNames[s2]?.nama || "", s2);
         }
 
         for(let id in savedScores) {
             const input = document.getElementById(id);
-            if(input) { input.value = savedScores[id]; kira(id.split('_sc')[0], false); }
+            if(input) { input.value = savedScores[id]; kira(id.split('_sc')[0]); }
         }
 
         autoBye();
@@ -261,8 +265,8 @@
         let div = document.createElement('div'); div.className = 'kotak-perlawanan'; div.id = id;
         let lbl = (j === 'GF') ? 'GRAND FINAL' : (j === 'L' && r === 5) ? 'LOSER FINAL' : `${j}${r+1}-M${m+1}`;
         div.innerHTML = `<div class="match-no">${lbl}</div>
-            <div class="slot-pasukan" id="${id}_s1"><span class="seed-no" id="${id}_sd1"></span><input type="text" class="nama-display" id="${id}_p1" placeholder="..."><input type="number" class="skor" id="${id}_sc1" oninput="window.kira('${id}', true)"></div>
-            <div class="slot-pasukan" id="${id}_s2"><span class="seed-no" id="${id}_sd2"></span><input type="text" class="nama-display" id="${id}_p2" placeholder="..."><input type="number" class="skor" id="${id}_sc2" oninput="window.kira('${id}', true)"></div>`;
+            <div class="slot-pasukan" id="${id}_s1"><span class="seed-no" id="${id}_sd1"></span><input type="text" class="nama-display" id="${id}_p1" placeholder="..."><input type="number" class="skor" id="${id}_sc1" oninput="window.kira('${id}')"></div>
+            <div class="slot-pasukan" id="${id}_s2"><span class="seed-no" id="${id}_sd2"></span><input type="text" class="nama-display" id="${id}_p2" placeholder="..."><input type="number" class="skor" id="${id}_sc2" oninput="window.kira('${id}')"></div>`;
         return div;
     }
 
@@ -270,16 +274,23 @@
         const pEl = document.getElementById(`${mid}_p${slot}`);
         const sEl = document.getElementById(`${mid}_s${slot}`);
         const sdEl = document.getElementById(`${mid}_sd${slot}`);
-        if(pEl) { pEl.value = nama; if(mid.startsWith('W_0_')) pEl.setAttribute('data-seed-id', pid); }
+        
+        if(pEl) {
+            pEl.value = nama;
+            if(mid.startsWith('W_0_')) pEl.setAttribute('data-seed-id', pid);
+        }
         if(sEl) sEl.setAttribute('data-pid', pid);
-        if(sdEl) {
-            if(mid.startsWith('W_0_') && nama !== "BYE" && nama !== "") {
-                sdEl.innerText = (parseInt(pid) + 1).toString().padStart(2, '0'); // Contoh: 01, 02
-            } else { sdEl.innerText = ""; }
+        
+        // TETAP PAPAR NOMBOR UNTUK ROUND 1 W_0_
+        if(sdEl && mid.startsWith('W_0_')) {
+            sdEl.innerText = (parseInt(pid) + 1).toString().padStart(2, '0');
+            sdEl.style.display = "flex";
+        } else if(sdEl) {
+            sdEl.style.display = "none";
         }
     }
 
-    window.kira = (id, sync) => {
+    window.kira = (id) => {
         let sc1 = document.getElementById(id+'_sc1').value, sc2 = document.getElementById(id+'_sc2').value;
         const sl1 = document.getElementById(id+'_s1'), sl2 = document.getElementById(id+'_s2');
 
@@ -288,8 +299,8 @@
         let win = parseInt(sc1) > parseInt(sc2) ? 1 : 2;
         sl1.classList.toggle('pemenang', win === 1); sl2.classList.toggle('pemenang', win === 2);
 
-        let winN = document.getElementById(`${id}_p${win}`).value, winP = sl1.getAttribute('data-pid');
-        let losN = document.getElementById(`${id}_p${win===1?2:1}`).value, losP = sl2.getAttribute('data-pid');
+        let winN = document.getElementById(`${id}_p${win}`).value, winP = sl1.parentElement.querySelector(`#${id}_s${win}`).getAttribute('data-pid');
+        let losN = document.getElementById(`${id}_p${win===1?2:1}`).value, losP = sl1.parentElement.querySelector(`#${id}_s${win===1?2:1}`).getAttribute('data-pid');
 
         let p = id.split('_'); let r = parseInt(p[1]), m = parseInt(p[2]);
 
@@ -297,12 +308,9 @@
             let nextR = r + 1, nextM = Math.floor(m/2), nextS = (m % 2) + 1;
             if(document.getElementById(`W_${nextR}_${nextM}`)) updateSlot(`W_${nextR}_${nextM}`, nextS, winN, winP);
             else updateSlot('GF_0_0', 1, winN, winP);
-            
-            let loserRound = r * 2;
-            updateSlot(`L_${loserRound}_${m}`, 2, losN, losP);
+            updateSlot(`L_${r*2}_${m}`, 2, losN, losP);
         } else if(p[0] === 'L') {
-            let total = 6; 
-            if(r < total-1) {
+            if(r < 5) {
                 let nextR = r+1, nextM = (r%2===0)?m:Math.floor(m/2), nextS = (r%2===0)?1:(m%2)+1;
                 updateSlot(`L_${nextR}_${nextM}`, nextS, winN, winP);
             } else updateSlot('GF_0_0', 2, winN, winP);
@@ -313,8 +321,8 @@
         document.querySelectorAll('.kotak-perlawanan').forEach(box => {
             let p1 = document.getElementById(box.id+'_p1').value, p2 = document.getElementById(box.id+'_p2').value;
             let sc1 = document.getElementById(box.id+'_sc1'), sc2 = document.getElementById(box.id+'_sc2');
-            if((p1 === "BYE" || p1 === "") && p2 !== "" && p2 !== "BYE" && sc1.value === "") { sc1.value=0; sc2.value=21; kira(box.id, false); }
-            else if((p2 === "BYE" || p2 === "") && p1 !== "" && p1 !== "BYE" && sc2.value === "") { sc1.value=21; sc2.value=0; kira(box.id, false); }
+            if(p1 === "BYE" && p2 !== "" && p2 !== "BYE" && sc1.value === "") { sc1.value=0; sc2.value=21; kira(box.id); }
+            else if(p2 === "BYE" && p1 !== "" && p1 !== "BYE" && sc2.value === "") { sc1.value=21; sc2.value=0; kira(box.id); }
         });
     }
 
