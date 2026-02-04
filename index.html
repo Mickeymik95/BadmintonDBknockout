@@ -14,6 +14,7 @@
             --bg: #0b0b0d; --kad: #1a1a1f; 
             --garis: #333; 
             --glow-emas: 0 0 30px rgba(255, 215, 0, 0.4);
+            --glow-loser: 0 0 25px rgba(231, 76, 60, 0.3);
             --bg-pemenang: rgba(46, 204, 113, 0.15);
         }
 
@@ -113,8 +114,19 @@
         .slot-pasukan.pemenang .nama-display { color: var(--menang); }
         .slot-pasukan.pemenang .skor { background: var(--menang); color: #000; border-color: var(--menang); box-shadow: 0 0 15px rgba(46, 204, 113, 0.5); }
 
+        /* HIGHLIGHTS */
         .grand-final { width: 320px !important; border: 3px solid #ffd700 !important; transform: scale(1.05); box-shadow: var(--glow-emas); z-index: 5; }
         .grand-final .match-no { background: var(--emas); color: #000; font-size: 14px; }
+
+        .loser-final-highlight { 
+            border: 3px solid var(--kalah) !important; 
+            box-shadow: var(--glow-loser);
+            transform: scale(1.02);
+        }
+        .loser-final-highlight .match-no {
+            background: var(--kalah);
+            color: #fff;
+        }
 
         #panelAdmin { display: none; position: fixed; top: 30px; right: 30px; width: 320px; background: #111; border: 1px solid #444; border-radius: 20px; z-index: 1000; padding: 30px; box-shadow: 0 30px 60px rgba(0,0,0,0.8); }
         .admin-only { display: none; }
@@ -206,7 +218,6 @@
 
     window.saveAll = () => {
         let teams = {};
-        // Membaca nama pasukan terus daripada Winner Bracket Round 1
         for(let m=0; m<8; m++) {
             const p1 = document.getElementById(`W_0_${m}_p1`).value.trim();
             const p2 = document.getElementById(`W_0_${m}_p2`).value.trim();
@@ -242,22 +253,23 @@
         bw.innerHTML = '<div class="label-bracket">Winner Bracket (Upper)</div>'; 
         bl.innerHTML = '<div class="label-bracket">Loser Bracket (Lower)</div>';
 
-        // Winner Bracket
         for(let r=0; r<4; r++) {
             let div = document.createElement('div'); div.className = 'pusingan';
             for(let m=0; m<Math.pow(2, 3-r); m++) div.appendChild(createBox('W', r, m));
             bw.appendChild(div);
         }
-        // Grand Final (Dimasukkan ke dalam pusingan baru dalam Winner Bracket)
         let divGF = document.createElement('div'); divGF.className = 'pusingan';
         divGF.appendChild(createBox('GF', 0, 0)); 
         bw.appendChild(divGF);
 
-        // Loser Bracket
         const loserMatches = [4, 4, 2, 2, 1, 1];
         for(let r=0; r < 6; r++) {
             let div = document.createElement('div'); div.className = 'pusingan';
-            for(let m=0; m < loserMatches[r]; m++) div.appendChild(createBox('L', r, m));
+            for(let m=0; m < loserMatches[r]; m++) {
+                let box = createBox('L', r, m);
+                if(r === 5) box.classList.add('loser-final-highlight');
+                div.appendChild(box);
+            }
             bl.appendChild(div);
         }
 
@@ -272,7 +284,6 @@
             if(input) input.value = savedScores[id];
         }
 
-        // Kira semula semua
         const flow = ['W_0','W_1','W_2','W_3','L_0','L_1','L_2','L_3','L_4','L_5','GF_0'];
         flow.forEach(f => {
             document.querySelectorAll(`[id^="${f}_"]`).forEach(box => {
@@ -293,8 +304,7 @@
         setTimeout(() => {
             const bw = document.getElementById('barisW');
             const bl = document.getElementById('barisL');
-            bw.style.minWidth = "0"; 
-            bl.style.minWidth = "0";
+            bw.style.minWidth = "0"; bl.style.minWidth = "0";
             const max = Math.max(bw.scrollWidth, bl.scrollWidth);
             bw.style.minWidth = max + "px";
             bl.style.minWidth = max + "px";
