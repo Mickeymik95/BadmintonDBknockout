@@ -26,15 +26,28 @@
             width: 100%; max-width: 1200px; box-sizing: border-box;
         }
 
-        .header-top { display: flex; align-items: center; justify-content: space-between; width: 100%; margin-bottom: 25px; gap: 30px; }
+        .header-top { display: flex; align-items: center; justify-content: space-between; width: 100%; margin-bottom: 15px; gap: 30px; }
         .logo-box img { height: 130px; width: 130px; border-radius: 25px; filter: drop-shadow(0 0 15px var(--utama)); object-fit: cover; }
 
-        .btn-admin-besar { 
-            height: 130px; width: 130px; border-radius: 25px; border: 4px solid var(--utama); 
-            background: rgba(0, 210, 255, 0.1); color: var(--utama); cursor: pointer; 
-            font-weight: 900; font-size: 0.9rem; text-transform: uppercase; transition: 0.3s;
+        /* BUTANG ADMIN BARU (BAWAH TAJUK) */
+        .btn-admin-pusat {
+            background: var(--utama);
+            color: #000;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 50px;
+            font-weight: 900;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: 0.3s;
+            text-transform: uppercase;
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.4);
         }
-        .btn-admin-besar:hover { background: var(--utama); color: #000; box-shadow: 0 0 30px var(--utama); transform: scale(1.05); }
+        .btn-admin-pusat:hover {
+            transform: scale(1.1);
+            background: var(--emas);
+            box-shadow: 0 0 25px var(--emas);
+        }
 
         .tajuk-box h1 { font-size: 2.5rem; margin: 0; background: linear-gradient(130deg, #00d2ff, #2ecc71, #e74c3c, #ffd700); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; text-align: center; }
 
@@ -78,18 +91,15 @@
         .slot-pasukan:last-child { border-bottom: none; }
         .nama-display { flex: 1; font-size: 0.9rem; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         
-        /* LOGO DIPERBESAR */
         .p-logo { width: 32px; height: 32px; border-radius: 6px; background: #333; object-fit: cover; border: 1px solid #444; }
 
         .skor { width: 40px; height: 32px; text-align: center; background: #000; border: 1px solid #444; color: #fff; border-radius: 5px; font-weight: 900; font-size: 1rem; }
         .skor-menang { background: var(--menang) !important; color: #000 !important; border: none; }
         .skor-kalah { background: var(--kalah) !important; color: #fff !important; border: none; }
 
-        /* FINAL LB HIGHLIGHTS BIRU */
         .final-lb-box { border: 3px solid var(--biru-final) !important; box-shadow: 0 0 20px rgba(0, 136, 255, 0.4); }
         .final-lb-box .match-no { background: var(--biru-final); color: #fff; }
 
-        /* GRAND FINAL LEBAR & TEBAL */
         .pusingan-gf { width: 480px !important; }
         .grand-final { 
             border: 6px solid var(--emas) !important; 
@@ -101,7 +111,6 @@
         .grand-final .nama-display { font-size: 1.15rem; color: var(--emas); }
         .grand-final .p-logo { width: 40px; height: 40px; }
 
-        /* ADMIN PANEL POPUP */
         #panelAdmin { display: none; position: fixed; top: 20px; right: 20px; width: 340px; max-height: 85vh; background: #1a1a1f; border: 2px solid var(--utama); border-radius: 20px; z-index: 1000; padding: 25px; overflow-y: auto; box-shadow: 0 20px 60px #000; }
         .admin-input { width: 100%; padding: 12px; margin-bottom: 10px; background: #000; border: 1px solid #333; color: #fff; border-radius: 8px; box-sizing: border-box; }
         .btn-save { width: 100%; padding: 15px; background: var(--menang); border: none; font-weight: bold; cursor: pointer; margin-top: 15px; border-radius: 10px; color: #000; font-size: 1rem; }
@@ -116,8 +125,10 @@
             <div class="tajuk-box">
                 <h1>BWF BADMINTON FAMILY TOUR SIRI II</h1>
             </div>
-            <div class="admin-box"><button class="btn-admin-besar" onclick="toggleAdmin()">PANEL<br>ADMIN</button></div>
+            <div class="logo-box"><img src="logo2.jpeg" onerror="this.src='https://via.placeholder.com/130'"></div>
         </div>
+
+        <button class="btn-admin-pusat" onclick="toggleAdmin()">⚙️ PANEL PENGURUSAN</button>
 
         <div class="admin-header-grid">
             <a href="https://wa.me/60149236577" target="_blank" class="admin-ws-card">
@@ -249,7 +260,7 @@
         let listContainer = document.getElementById('displayPenyertaan');
         listContainer.innerHTML = "";
         for(let i=0; i<nPasukan; i++) {
-            let t = teamData[i] || { nama: `Pasukan ${i+1}`, logo: '' };
+            let t = teamData[i] || { nama: teamData[i]?.nama || `Pasukan ${i+1}`, logo: teamData[i]?.logo || '' };
             listContainer.innerHTML += `
                 <div class="kad-pasukan">
                     <div class="no-p">${i+1}</div>
