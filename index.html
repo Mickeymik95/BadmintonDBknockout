@@ -8,14 +8,19 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
 
         :root { 
-            --menang: #2ecc71; --kalah: #e74c3c; --utama: #00d2ff; 
+            --menang: #2ecc71; 
+            --kalah: #ff007f; /* Pink Terang */
+            --utama: #ff9f43; /* Orange Terang */
+            --aksen: #00fbff; /* Cyan */
             --emas: linear-gradient(135deg, #ffd700, #b8860b);
-            --bg: #0b0b0d; --kad: #1a1a1f; 
+            --bg: #0b0b0d; 
+            --kad: #1a1a1f; 
             --garis: #333; 
             --glow-emas: 0 0 40px rgba(255, 215, 0, 0.5);
-            --glow-loser: 0 0 25px rgba(231, 76, 60, 0.3);
-            
-            /* Warna Laluan Juara (Soft) - Hanya untuk Top 3 */
+            --glow-pink: 0 0 25px rgba(255, 0, 127, 0.3);
+            --glow-orange: 0 0 25px rgba(255, 159, 67, 0.3);
+
+            /* Warna Laluan Juara */
             --soft-emas: rgba(255, 215, 0, 0.2);
             --soft-perak: rgba(192, 192, 192, 0.2);
             --soft-gangsa: rgba(205, 127, 50, 0.25);
@@ -31,7 +36,7 @@
 
         .header-container {
             display: flex; flex-direction: column; align-items: center;
-            background: radial-gradient(circle at center, rgba(0, 210, 255, 0.05) 0%, rgba(0,0,0,0) 70%);
+            background: radial-gradient(circle at center, rgba(255, 159, 67, 0.05) 0%, rgba(0,0,0,0) 70%);
             padding: 60px 20px;
             width: 100%; max-width: 1400px; margin-bottom: 20px;
         }
@@ -40,7 +45,7 @@
         .tajuk-box h1 { 
             font-size: 5rem; margin: 0; 
             font-weight: 900; text-transform: uppercase; line-height: 1;
-            background: linear-gradient(to right, #00d2ff 20%, #fff 40%, #fff 60%, #00d2ff 80%);
+            background: linear-gradient(to right, var(--utama) 20%, #fff 40%, #fff 60%, var(--kalah) 80%);
             background-size: 200% auto;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -74,10 +79,12 @@
             background: rgba(255,255,255,0.01); width: max-content; box-sizing: border-box; min-height: 200px;
         }
 
-        #barisW { border: 2px solid rgba(0, 210, 255, 0.3); box-shadow: inset 0 0 50px rgba(0, 210, 255, 0.05); padding-bottom: 180px; }
+        /* WINNER BRACKET - ORANGE THEME */
+        #barisW { border: 2px solid rgba(255, 159, 67, 0.3); box-shadow: inset 0 0 50px rgba(255, 159, 67, 0.05); padding-bottom: 180px; }
         #barisW .label-bracket { background: var(--utama); color: #000; }
 
-        #barisL { border: 2px solid rgba(231, 76, 60, 0.3); box-shadow: inset 0 0 50px rgba(231, 76, 60, 0.05); }
+        /* LOSER BRACKET - PINK THEME */
+        #barisL { border: 2px solid rgba(255, 0, 127, 0.3); box-shadow: inset 0 0 50px rgba(255, 0, 127, 0.05); }
         #barisL .label-bracket { background: var(--kalah); color: #fff; }
 
         #podiumFinal {
@@ -100,28 +107,34 @@
 
         .pusingan { display: flex; flex-direction: column; width: 280px; justify-content: center; gap: 40px; }
 
-        .kotak-perlawanan { background: var(--kad); border: 1px solid #333; border-radius: 14px; position: relative; padding-top: 30px; }
+        /* KOTAK MATCH - ORANGE BORDER */
+        .kotak-perlawanan { 
+            background: var(--kad); 
+            border: 2px solid var(--utama); 
+            border-radius: 14px; 
+            position: relative; 
+            padding-top: 30px;
+            box-shadow: var(--glow-orange);
+        }
+        
         .match-no { 
-            position: absolute; top: 0; width: 100%; background: #25252b; color: #aaa; 
-            font-size: 12px; padding: 6px 0; text-align: center; font-weight: 900; border-bottom: 1px solid #333; border-radius: 14px 14px 0 0;
+            position: absolute; top: 0; width: 100%; background: var(--utama); color: #000; 
+            font-size: 11px; padding: 5px 0; text-align: center; font-weight: 900; border-radius: 12px 12px 0 0;
         }
 
         .slot-pasukan { display: flex; gap: 10px; align-items: center; padding: 15px 18px; border-bottom: 1px solid #25252b; transition: all 0.4s ease; }
         .slot-pasukan:last-child { border-bottom: none; }
 
         .nama-display { flex: 1; font-size: 1.1rem; font-weight: 800; color: #eee; background: transparent; border: none; outline: none; width: 100%; }
-        
-        /* SKOR ASAL */
+
         .skor { width: 45px; height: 40px; text-align: center; background: #000; border: 1px solid #444; color: #fff; border-radius: 8px; font-weight: 900; font-size: 1.3rem; transition: 0.3s; outline: none; }
-        
-        /* Nombor Biru Terang Pusingan 1 */
+
         .seed-no { 
-            color: #00fbff; font-weight: 900; font-size: 0.9rem; min-width: 32px; height: 24px; 
+            color: var(--aksen); font-weight: 900; font-size: 0.9rem; min-width: 32px; height: 24px; 
             display: none; align-items: center; justify-content: center; 
             background: rgba(0, 251, 255, 0.1); border: 1px solid rgba(0, 251, 255, 0.4); border-radius: 4px; 
         }
 
-        /* SKOR PEMENANG SAHAJA JADI HIJAU (NAMA KEKAL BIASA) */
         .slot-pasukan.pemenang .skor { 
             background: var(--menang) !important; 
             color: #000 !important; 
@@ -129,20 +142,19 @@
             box-shadow: 0 0 10px rgba(46, 204, 113, 0.4);
         }
 
-        /* LALUAN PINGAT TOP 3 (NAMA BERWARNA DISINI SAHAJA) */
+        /* LALUAN PINGAT TOP 3 */
         .path-emas { background: var(--soft-emas) !important; border-left: 4px solid #ffd700; }
         .path-emas .nama-display { color: #ffd700 !important; }
-        
         .path-perak { background: var(--soft-perak) !important; border-left: 4px solid #c0c0c0; }
         .path-perak .nama-display { color: #c0c0c0 !important; }
-
         .path-gangsa { background: var(--soft-gangsa) !important; border-left: 4px solid #cd7f32; }
         .path-gangsa .nama-display { color: #ff9f43 !important; }
 
-        .grand-final { width: 320px !important; border: 3px solid #ffd700 !important; transform: scale(1.05); box-shadow: var(--glow-emas); z-index: 5; }
+        /* GRAND FINAL & LOSER FINAL THEMES */
+        .grand-final { width: 320px !important; border: 4px solid #ffd700 !important; transform: scale(1.05); box-shadow: var(--glow-emas); z-index: 5; }
         .grand-final .match-no { background: var(--emas); color: #000; font-size: 14px; }
 
-        .loser-final-highlight { border: 3px solid var(--kalah) !important; box-shadow: var(--glow-loser); transform: scale(1.02); }
+        .loser-final-highlight { border: 3px solid var(--kalah) !important; box-shadow: var(--glow-pink); transform: scale(1.02); }
         .loser-final-highlight .match-no { background: var(--kalah); color: #fff; }
 
         #panelAdmin { display: none; position: fixed; top: 30px; right: 30px; width: 320px; background: #111; border: 1px solid #444; border-radius: 20px; z-index: 1000; padding: 30px; box-shadow: 0 30px 60px rgba(0,0,0,0.8); }
@@ -277,7 +289,6 @@
             set(dbRef, { n: 16, teams: window.teamNames, scores: {} }).then(() => location.reload());
         }
     };
-
     window.resetTournament = () => {
         if(confirm("Reset semua data?")) {
             set(dbRef, { n: 16, teams: {}, scores: {} }).then(() => location.reload());
@@ -288,7 +299,7 @@
         let id = `${j}_${r}_${m}`;
         let div = document.createElement('div'); div.className = 'kotak-perlawanan'; div.id = id;
         if(j==='GF') div.classList.add('grand-final');
-        
+
         let lbl = (j === 'GF') ? `MATCH ${matchNum} - GRAND FINAL` : 
                   (j === 'L' && r === 5) ? `MATCH ${matchNum} - LOSER FINAL` : 
                   `MATCH ${matchNum}`;
@@ -375,7 +386,7 @@
         const sdEl = document.getElementById(`${mid}_sd${slot}`);
         if(pEl) pEl.value = nama;
         if(sEl) sEl.setAttribute('data-pid', pid);
-        
+
         if(sdEl && mid.startsWith('W_0_')) {
             sdEl.innerText = (parseInt(pid) + 1).toString().padStart(2, '0');
             sdEl.style.display = "flex";
