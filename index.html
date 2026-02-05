@@ -13,7 +13,6 @@
             --bg: #0b0b0d; --kad: #1a1a1f; 
             --garis: #333; 
             --glow-emas: 0 0 40px rgba(255, 215, 0, 0.5);
-            --glow-loser: 0 0 25px rgba(231, 76, 60, 0.3);
             --soft-emas: rgba(255, 215, 0, 0.2);
             --soft-perak: rgba(192, 192, 192, 0.2);
             --soft-gangsa: rgba(205, 127, 50, 0.25);
@@ -23,78 +22,79 @@
             font-family: 'Inter', sans-serif; 
             background: var(--bg); color: #fff; padding: 0; margin: 0; 
             letter-spacing: -0.02em;
-            overflow-x: hidden; /* Wajib untuk elakkan skrol kiri-kanan */
+            overflow-x: hidden;
         }
 
         .main-wrapper { 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            width: 100%; 
-            padding-bottom: 100px;
+            display: flex; flex-direction: column; align-items: center; 
+            width: 100%; padding-bottom: 100px;
         }
 
         .header-container {
             display: flex; flex-direction: column; align-items: center;
             background: radial-gradient(circle at center, rgba(0, 210, 255, 0.05) 0%, rgba(0,0,0,0) 70%);
-            padding: 60px 20px;
-            width: 100%; max-width: 1400px; margin-bottom: 20px;
-            text-align: center;
+            padding: 50px 20px; width: 100%; text-align: center;
         }
 
         .tajuk-box h1 { 
-            font-size: 5rem; margin: 0; 
-            font-weight: 900; text-transform: uppercase; line-height: 1;
-            background: linear-gradient(to right, #00d2ff 20%, #fff 40%, #fff 60%, #00d2ff 80%);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: 4rem; margin: 0; font-weight: 900; text-transform: uppercase;
+            background: linear-gradient(to right, #00d2ff, #fff, #00d2ff);
+            background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             animation: shine 4s linear infinite;
         }
-        .tajuk-box p { font-size: 1.5rem; color: #888; margin-top: 10px; letter-spacing: 0.5rem; text-transform: uppercase; font-weight: 700; }
 
-        /* --- BAHAGIAN AUTO-FIT --- */
+        .header-actions-grid { display: flex; gap: 10px; margin-top: 25px; }
+
+        /* --- CONTAINER UTAMA BRACKET --- */
         .tournament-layout { 
-            display: flex; 
-            flex-direction: column; 
-            gap: 80px; 
-            padding: 40px; 
-            align-items: flex-start; 
-            transform-origin: top left; /* Titik tetap di kiri atas */
-            transition: transform 0.1s ease;
-            width: max-content; 
+            display: flex; flex-direction: column; gap: 60px; padding: 40px; 
+            align-items: flex-start; transform-origin: top left;
+            width: max-content; transition: transform 0.2s ease;
         }
 
         .laluan-row { 
-            display: flex; gap: 50px; padding: 100px 80px; border-radius: 40px; position: relative; 
-            background: rgba(255,255,255,0.01); width: max-content; box-sizing: border-box; min-height: 200px;
+            display: flex; gap: 50px; padding: 90px 60px; border-radius: 40px; position: relative; 
+            background: rgba(255,255,255,0.02); width: max-content;
         }
 
-        #barisW { border: 2px solid rgba(0, 210, 255, 0.3); box-shadow: inset 0 0 50px rgba(0, 210, 255, 0.05); padding-bottom: 180px; }
-        #barisL { border: 2px solid rgba(231, 76, 60, 0.3); box-shadow: inset 0 0 50px rgba(231, 76, 60, 0.05); }
+        #barisW { border: 2px solid rgba(0, 210, 255, 0.3); margin-bottom: 20px; }
+        #barisL { border: 2px solid rgba(231, 76, 60, 0.3); }
 
-        /* Kekalkan gaya asal yang lain */
-        .label-bracket { position: absolute; top: -20px; left: 40px; padding: 10px 35px; font-weight: 900; font-size: 1rem; border-radius: 50px; text-transform: uppercase; z-index: 10; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+        .label-bracket { 
+            position: absolute; top: -18px; left: 40px; padding: 8px 25px; 
+            font-weight: 900; border-radius: 50px; text-transform: uppercase; font-size: 0.9rem;
+        }
         #barisW .label-bracket { background: var(--utama); color: #000; }
         #barisL .label-bracket { background: var(--kalah); color: #fff; }
 
         .pusingan { display: flex; flex-direction: column; width: 280px; justify-content: center; gap: 40px; }
-        .kotak-perlawanan { background: var(--kad); border: 1px solid #333; border-radius: 14px; position: relative; padding-top: 30px; }
-        .match-no { position: absolute; top: 0; width: 100%; background: #25252b; color: #aaa; font-size: 12px; padding: 6px 0; text-align: center; font-weight: 900; border-bottom: 1px solid #333; border-radius: 14px 14px 0 0; }
-        .slot-pasukan { display: flex; gap: 10px; align-items: center; padding: 15px 18px; border-bottom: 1px solid #25252b; }
-        .nama-display { flex: 1; font-size: 1.1rem; font-weight: 800; color: #eee; background: transparent; border: none; outline: none; }
-        .skor { width: 45px; height: 40px; text-align: center; background: #000; border: 1px solid #444; color: #fff; border-radius: 8px; font-weight: 900; font-size: 1.3rem; }
+        .kotak-perlawanan { background: var(--kad); border: 1px solid #333; border-radius: 12px; position: relative; padding-top: 30px; }
         
-        .slot-pasukan.pemenang .skor { background: var(--menang) !important; color: #000 !important; border-color: var(--menang) !important; }
-        
-        #podiumFinal { position: absolute; bottom: 45px; left: 50%; transform: translateX(-50%); display: none; background: #1a1a1f; border: 2px solid #ffd700; padding: 30px 60px; border-radius: 30px; box-shadow: var(--glow-emas); z-index: 100; min-width: 500px; text-align: center; }
-        .podium-flex { display: flex; justify-content: center; align-items: flex-end; gap: 40px; }
-        .pod-name { font-weight: 900; font-size: 1.5rem; text-transform: uppercase; }
+        .match-no { 
+            position: absolute; top: 0; width: 100%; background: #25252b; color: #888; 
+            font-size: 11px; padding: 5px 0; text-align: center; font-weight: 900; border-radius: 12px 12px 0 0;
+        }
 
-        .header-actions-grid { display: flex; justify-content: center; gap: 15px; margin-top: 35px; }
-        .btn-action { height: 50px; padding: 0 30px; border-radius: 50px; border: 1px solid var(--garis); background: rgba(255,255,255,0.05); color: #fff; cursor: pointer; font-weight: 700; font-size: 0.85rem; text-transform: uppercase; }
+        .slot-pasukan { display: flex; align-items: center; padding: 12px 15px; border-bottom: 1px solid #25252b; gap: 10px; }
+        .nama-display { flex: 1; font-weight: 800; color: #eee; background: transparent; border: none; outline: none; font-size: 1rem; }
+        .skor { width: 40px; height: 35px; text-align: center; background: #000; border: 1px solid #444; color: #fff; border-radius: 6px; font-weight: 900; }
+
+        .slot-pasukan.pemenang .skor { background: var(--menang) !important; color: #000 !important; }
+
+        #podiumFinal { 
+            position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); display: none;
+            background: #1a1a1f; border: 2px solid #ffd700; padding: 25px 50px; border-radius: 25px; 
+            box-shadow: var(--glow-emas); text-align: center; min-width: 400px;
+        }
+        .podium-flex { display: flex; justify-content: center; align-items: flex-end; gap: 30px; }
+        .pod-name { font-weight: 900; font-size: 1.2rem; }
+
+        .btn-action { 
+            height: 45px; padding: 0 25px; border-radius: 50px; border: 1px solid var(--garis); 
+            background: rgba(255,255,255,0.05); color: #fff; cursor: pointer; font-weight: 700;
+        }
+        #panelAdmin { display: none; position: fixed; top: 20px; right: 20px; width: 280px; background: #111; padding: 20px; border-radius: 15px; z-index: 1000; border: 1px solid #444; }
         .admin-only { display: none; }
-        #panelAdmin { display: none; position: fixed; top: 30px; right: 30px; width: 320px; background: #111; border: 1px solid #444; border-radius: 20px; z-index: 1000; padding: 30px; }
         @keyframes shine { to { background-position: 200% center; } }
     </style>
 </head>
@@ -103,37 +103,37 @@
 <div class="main-wrapper">
     <div class="header-container">
         <div class="tajuk-box">
-            <h1>KEJOHANAN BADMINTON KELUARGA²</h1>
-            <p>• SIRI 2 • 15 FEBRUARI 2026 •</p>
-            <div id="syncToast" style="color:var(--menang); opacity:0; transition:0.5s;">✓ DATA DISINKRON!</div>
+            <h1>BADMINTON KELUARGA²</h1>
+            <p style="color:#888; letter-spacing:5px;">• SIRI 2 • 2026 •</p>
+            <div id="syncToast" style="opacity:0; color:var(--menang); font-weight:900;">✓ DISINKRON</div>
         </div>
         <div class="header-actions-grid">
-            <button class="btn-action" onclick="toggleAdmin()">⚙️ PANEL ADMIN</button>
-            <button id="btnSave" class="btn-action admin-only" style="background:var(--utama); color:#000;" onclick="saveAll()">💾 SIMPAN DATA</button>
+            <button class="btn-action" onclick="toggleAdmin()">⚙️ ADMIN</button>
+            <button id="btnSave" class="btn-action admin-only" style="background:var(--utama); color:#000;" onclick="saveAll()">💾 SIMPAN</button>
             <button id="btnLogout" class="btn-action admin-only" onclick="logoutAdmin()">🚪 KELUAR</button>
         </div>
     </div>
 
     <div class="tournament-layout" id="tournamentLayout">
         <div id="barisW" class="laluan-row">
-            <div class="label-bracket">Winner Bracket (Upper)</div>
+            <div class="label-bracket">Winner Bracket</div>
             <div id="podiumFinal">
                 <div class="podium-flex">
-                    <div class="podium-item">🥈<br><span class="pod-name" id="res_2">-</span></div>
-                    <div class="podium-item" style="transform: scale(1.2);">🥇<br><span class="pod-name" id="res_1" style="color:#ffd700;">-</span></div>
-                    <div class="podium-item">🥉<br><span class="pod-name" id="res_3">-</span></div>
+                    <div class="podium-item">🥈<br><span id="res_2">-</span></div>
+                    <div class="podium-item" style="transform:scale(1.2);">🥇<br><span id="res_1" style="color:#ffd700;">-</span></div>
+                    <div class="podium-item">🥉<br><span id="res_3">-</span></div>
                 </div>
             </div>
         </div>
         <div id="barisL" class="laluan-row">
-            <div class="label-bracket">Loser Bracket (Lower)</div>
+            <div class="label-bracket">Loser Bracket</div>
         </div>
     </div>
 </div>
 
 <div id="panelAdmin">
-    <input type="password" id="passInput" placeholder="Password" style="width:100%; padding:15px; margin-bottom:15px; background:#000; color:#fff; border:1px solid #333; border-radius:10px;">
-    <button onclick="checkAuth()" class="btn-action" style="width:100%">LOG MASUK</button>
+    <input type="password" id="passInput" placeholder="Password" style="width:100%; padding:10px; margin-bottom:10px; background:#000; color:#fff; border:1px solid #333;">
+    <button onclick="checkAuth()" class="btn-action" style="width:100%">LOGIN</button>
 </div>
 
 <script type="module">
@@ -152,42 +152,33 @@
     const db = getDatabase(app);
     const dbRef = ref(db, 'tournament_data');
 
-    // --- LOGIK AUTO FIT (PEMBETULAN KIRI TIDAK TERPOTONG) ---
+    // --- FUNGSI AUTO FIT (ANTI-POTONG) ---
     function autoFit() {
         const layout = document.getElementById('tournamentLayout');
-        if (!layout) return;
-
-        const screenWidth = window.innerWidth - 40; // Margin 20px kiri kanan
+        const screenWidth = window.innerWidth - 40;
         const contentWidth = layout.offsetWidth;
 
         if (contentWidth > screenWidth) {
             const scale = screenWidth / contentWidth;
             layout.style.transform = `scale(${scale})`;
-            
-            // Kira jarak untuk menengahkan semula bracket yang di-scale dari left
-            const actualScaledWidth = contentWidth * scale;
-            const leftMargin = (window.innerWidth - actualScaledWidth) / 2;
+            const leftMargin = (window.innerWidth - (contentWidth * scale)) / 2;
             layout.style.marginLeft = `${leftMargin}px`;
-            
-            // Elakkan ruang putih besar di bawah
             layout.style.marginBottom = `-${contentWidth * (1 - scale)}px`;
         } else {
             layout.style.transform = `scale(1)`;
             layout.style.marginLeft = `auto`;
             layout.style.marginRight = `auto`;
-            layout.style.marginBottom = `0px`;
         }
     }
 
     window.addEventListener('resize', autoFit);
-
     window.isAdminMode = false;
     window.teamNames = {};
 
     window.checkPersistentAdmin = () => {
         if(localStorage.getItem('adminStatus') === 'active') {
             window.isAdminMode = true;
-            document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'flex');
+            document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'block');
             document.getElementById('panelAdmin').style.display = 'none';
         }
     };
@@ -211,8 +202,8 @@
     function jana(savedScores) {
         const bw = document.getElementById('barisW'); const bl = document.getElementById('barisL');
         const podium = document.getElementById('podiumFinal');
-        bw.innerHTML = '<div class="label-bracket">Winner Bracket (Upper)</div>';
-        bl.innerHTML = '<div class="label-bracket">Loser Bracket (Lower)</div>';
+        bw.innerHTML = '<div class="label-bracket">Winner Bracket</div>';
+        bl.innerHTML = '<div class="label-bracket">Loser Bracket</div>';
         bw.appendChild(podium);
 
         let winOffsets = [1, 9, 13, 15];
@@ -244,13 +235,20 @@
             document.querySelectorAll(`[id^="${f}_"]`).forEach(box => { if(box.id && box.id.split('_').length === 3) window.kira(box.id); });
         });
 
-        setTimeout(autoFit, 300);
+        // AUTO BYE & FIT
+        document.querySelectorAll('.kotak-perlawanan').forEach(box => {
+            let p1 = document.getElementById(box.id+'_p1').value, p2 = document.getElementById(box.id+'_p2').value;
+            if(p1 === "BYE") { document.getElementById(box.id+'_sc1').value=0; document.getElementById(box.id+'_sc2').value=21; window.kira(box.id); }
+            if(p2 === "BYE") { document.getElementById(box.id+'_sc1').value=21; document.getElementById(box.id+'_sc2').value=0; window.kira(box.id); }
+        });
+
+        setTimeout(autoFit, 400);
     }
 
     function createBox(j, r, m, num) {
         let id = `${j}_${r}_${m}`;
         let div = document.createElement('div'); div.className = 'kotak-perlawanan'; div.id = id;
-        div.innerHTML = `<div class="match-no">MATCH ${num}</div>
+        div.innerHTML = `<div class="match-no">M${num}</div>
             <div class="slot-pasukan" id="${id}_s1"><input type="text" class="nama-display" id="${id}_p1" readonly><input type="number" class="skor" id="${id}_sc1" oninput="window.kira('${id}')"></div>
             <div class="slot-pasukan" id="${id}_s2"><input type="text" class="nama-display" id="${id}_p2" readonly><input type="number" class="skor" id="${id}_sc2" oninput="window.kira('${id}')"></div>`;
         return div;
