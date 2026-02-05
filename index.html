@@ -24,102 +24,95 @@
             letter-spacing: -0.02em;
         }
 
-        /* --- LOGIK RESPONSIVE MEDIA QUERY --- */
-        
-        /* Untuk Laptop & Tablet (Tiada Skrol) */
-        @media (min-width: 1024px) {
+        /* --- SISTEM ANTI-POTONG (MEDIA QUERY) --- */
+        @media (min-width: 1025px) {
             body { overflow-x: hidden; }
             .tournament-layout { 
-                transform: scale(0.6); /* Kecilkan saiz keseluruhan */
-                transform-origin: top center;
+                transform: scale(0.65); 
+                transform-origin: top center; 
+                width: 155%; /* Ruang tambahan supaya kiri tak hilang */
                 margin-top: -100px;
-                width: 160%; /* Beri ruang lebar supaya tidak potong kiri */
             }
             .main-wrapper { align-items: center; }
         }
 
-        /* Untuk Telefon (Boleh Skrol) */
-        @media (max-width: 1023px) {
+        @media (max-width: 1024px) {
             body { overflow-x: auto; }
             .main-wrapper { align-items: flex-start; }
-            .tournament-layout { 
-                transform: scale(1); 
-                padding: 40px 20px;
-                width: max-content; 
-            }
+            .tournament-layout { transform: scale(1); padding: 40px; width: max-content; }
         }
 
-        /* --- STYLE VISUAL --- */
-        .main-wrapper { display: flex; flex-direction: column; width: 100%; padding-bottom: 150px; }
-
+        /* --- STYLE HEADER & BUTANG --- */
+        .main-wrapper { display: flex; flex-direction: column; width: 100%; padding-bottom: 200px; }
         .header-container {
             display: flex; flex-direction: column; align-items: center;
             background: radial-gradient(circle at center, rgba(0, 210, 255, 0.05) 0%, rgba(0,0,0,0) 70%);
             padding: 60px 20px; text-align: center; width: 100%;
         }
-
         .tajuk-box h1 { 
             font-size: 4.5rem; margin: 0; font-weight: 900; text-transform: uppercase;
             background: linear-gradient(to right, #00d2ff, #fff, #00d2ff);
             background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             animation: shine 4s linear infinite;
         }
+        @keyframes shine { to { background-position: 200% center; } }
 
-        .header-actions-grid { display: flex; justify-content: center; gap: 15px; margin-top: 35px; }
-        
+        .header-actions-grid { display: flex; gap: 15px; margin-top: 30px; justify-content: center; flex-wrap: wrap; }
         .btn-action { 
-            height: 50px; padding: 0 30px; border-radius: 50px; border: 1px solid var(--garis); 
-            background: rgba(255,255,255,0.05); color: #fff; cursor: pointer; 
-            font-weight: 700; font-size: 0.85rem; text-transform: uppercase; transition: 0.3s;
+            height: 48px; padding: 0 25px; border-radius: 50px; border: 1px solid var(--garis); 
+            background: rgba(255,255,255,0.05); color: #fff; cursor: pointer; font-weight: 700;
+            text-transform: uppercase; font-size: 0.8rem; transition: 0.3s;
         }
         .btn-action:hover { background: #fff; color: #000; }
+        .btn-save { background: var(--utama) !important; color: #000 !important; border: none; }
 
+        /* --- BRACKET STYLE --- */
         .laluan-row { 
             display: flex; gap: 50px; padding: 100px 80px; border-radius: 40px; position: relative; 
-            background: rgba(255,255,255,0.01); width: max-content; border: 2px solid rgba(255,255,255,0.05);
-            margin-bottom: 50px;
+            background: rgba(255,255,255,0.01); width: max-content; margin-bottom: 60px;
         }
-
-        #barisW { border-color: rgba(0, 210, 255, 0.3); }
-        #barisL { border-color: rgba(231, 76, 60, 0.3); }
+        #barisW { border: 2px solid rgba(0, 210, 255, 0.3); }
+        #barisL { border: 2px solid rgba(231, 76, 60, 0.3); }
 
         .label-bracket { 
             position: absolute; top: -20px; left: 40px; padding: 10px 35px; 
-            font-weight: 900; border-radius: 50px; text-transform: uppercase; z-index: 10;
+            font-weight: 900; border-radius: 50px; text-transform: uppercase;
         }
         #barisW .label-bracket { background: var(--utama); color: #000; }
         #barisL .label-bracket { background: var(--kalah); color: #fff; }
 
         .pusingan { display: flex; flex-direction: column; width: 280px; justify-content: center; gap: 40px; }
         .kotak-perlawanan { background: var(--kad); border: 1px solid #333; border-radius: 14px; position: relative; padding-top: 30px; }
-        
         .match-no { 
             position: absolute; top: 0; width: 100%; background: #25252b; color: #aaa; 
-            font-size: 12px; padding: 6px 0; text-align: center; font-weight: 900; border-radius: 14px 14px 0 0;
+            font-size: 11px; padding: 6px 0; text-align: center; font-weight: 900; border-radius: 14px 14px 0 0;
         }
+
+        /* --- KOTAK KHAS (GRAND FINAL & LOSER FINAL) --- */
+        .grand-final { border: 3px solid #ffd700 !important; box-shadow: var(--glow-emas); transform: scale(1.1); }
+        .grand-final .match-no { background: var(--emas); color: #000; }
+        .loser-final-highlight { border: 2px solid var(--kalah) !important; box-shadow: 0 0 20px rgba(231,76,60,0.3); }
 
         .slot-pasukan { display: flex; gap: 10px; align-items: center; padding: 15px 18px; border-bottom: 1px solid #25252b; }
         .nama-display { flex: 1; font-size: 1.1rem; font-weight: 800; color: #eee; background: transparent; border: none; outline: none; }
-        .skor { width: 45px; height: 40px; text-align: center; background: #000; border: 1px solid #444; color: #fff; border-radius: 8px; font-weight: 900; font-size: 1.3rem; }
-
+        .skor { width: 45px; height: 40px; text-align: center; background: #000; border: 1px solid #444; color: #fff; border-radius: 8px; font-weight: 900; font-size: 1.2rem; }
         .pemenang .skor { background: var(--menang) !important; color: #000 !important; }
 
-        /* Path Highlighting */
+        /* Path Highlighting Colors */
         .path-emas { background: var(--soft-emas) !important; border-left: 4px solid #ffd700; }
         .path-perak { background: var(--soft-perak) !important; border-left: 4px solid #c0c0c0; }
         .path-gangsa { background: var(--soft-gangsa) !important; border-left: 4px solid #cd7f32; }
 
         #podiumFinal { 
-            position: absolute; bottom: 45px; left: 50%; transform: translateX(-50%); display: none;
-            background: #1a1a1f; border: 2px solid #ffd700; padding: 30px 60px; border-radius: 30px; 
+            position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); display: none;
+            background: #1a1a1f; border: 2px solid #ffd700; padding: 25px 50px; border-radius: 25px; 
             box-shadow: var(--glow-emas); min-width: 450px; text-align: center; z-index: 100;
         }
-        .podium-flex { display: flex; justify-content: center; align-items: flex-end; gap: 40px; }
-        .pod-name { font-weight: 900; font-size: 1.5rem; text-transform: uppercase; }
+        .podium-flex { display: flex; justify-content: center; align-items: flex-end; gap: 30px; }
+        .pod-name { font-weight: 900; font-size: 1.4rem; text-transform: uppercase; margin-top: 5px; }
 
-        #panelAdmin { display: none; position: fixed; top: 20px; right: 20px; width: 300px; background: #111; padding: 25px; border-radius: 20px; z-index: 1000; border: 1px solid #444; }
+        #panelAdmin { display: none; position: fixed; top: 20px; right: 20px; width: 300px; background: #111; padding: 25px; border-radius: 20px; z-index: 1000; border: 1px solid #444; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
         .admin-only { display: none; }
-        @keyframes shine { to { background-position: 200% center; } }
     </style>
 </head>
 <body onload="checkPersistentAdmin()">
@@ -128,20 +121,22 @@
     <div class="header-container">
         <div class="tajuk-box">
             <h1>BADMINTON KELUARGA²</h1>
-            <p style="color:#888; letter-spacing:8px;">• SIRI 2 • 2026 •</p>
-            <div id="syncToast" style="opacity:0; color:var(--menang); font-weight:900;">✓ DISINKRON!</div>
+            <p style="color:#888; letter-spacing:8px; font-weight:700;">• SIRI 2 • 2026 •</p>
+            <div id="syncToast" style="opacity:0; color:var(--menang); font-weight:900; margin-top:10px;">✓ DATA DISINKRON!</div>
         </div>
         <div class="header-actions-grid">
             <button class="btn-action" onclick="toggleAdmin()">⚙️ ADMIN</button>
-            <button id="btnSave" class="btn-action admin-only" style="background:var(--utama); color:#000;" onclick="saveAll()">💾 SIMPAN</button>
+            <button id="btnSave" class="btn-action admin-only btn-save" onclick="saveAll()">💾 SIMPAN</button>
+            <button id="btnResetSkor" class="btn-action admin-only" style="color:#f39c12; border-color:#f39c12;" onclick="resetSkor()">🔄 RESET SKOR</button>
             <button id="btnLogout" class="btn-action admin-only" onclick="logoutAdmin()">🚪 KELUAR</button>
         </div>
     </div>
 
-    <div class="tournament-layout" id="tournamentLayout">
+    <div class="tournament-layout">
         <div id="barisW" class="laluan-row">
             <div class="label-bracket">Winner Bracket</div>
             <div id="podiumFinal">
+                <div style="font-size:0.7rem; color:#ffd700; letter-spacing:3px; margin-bottom:15px; font-weight:900;">KEPUTUSAN RASMI</div>
                 <div class="podium-flex">
                     <div class="podium-item">🥈<br><span class="pod-name" id="res_2">-</span></div>
                     <div class="podium-item" style="transform: scale(1.2);">🥇<br><span class="pod-name" id="res_1" style="color:#ffd700;">-</span></div>
@@ -156,8 +151,9 @@
 </div>
 
 <div id="panelAdmin">
+    <h3 style="margin-top:0; color:var(--utama);">Akses Admin</h3>
     <input type="password" id="passInput" placeholder="Password" style="width:100%; padding:12px; margin-bottom:15px; background:#000; color:#fff; border:1px solid #333; border-radius:10px;">
-    <button onclick="checkAuth()" class="btn-action" style="width:100%">LOGIN</button>
+    <button onclick="checkAuth()" class="btn-action" style="width:100%">LOG MASUK</button>
 </div>
 
 <script type="module">
@@ -210,27 +206,34 @@
         bl.innerHTML = '<div class="label-bracket">Loser Bracket</div>';
         bw.appendChild(podium);
 
-        // Winner Bracket r=0 to 3
-        let winMatchOffsets = [1, 9, 13, 15];
+        // Winner Bracket
+        let winOffsets = [1, 9, 13, 15];
         for(let r=0; r<4; r++) {
             let div = document.createElement('div'); div.className = 'pusingan';
-            for(let m=0; m<Math.pow(2, 3-r); m++) div.appendChild(createBox('W', r, m, winMatchOffsets[r]+m));
+            for(let m=0; m<Math.pow(2, 3-r); m++) {
+                let box = createBox('W', r, m, winOffsets[r]+m);
+                div.appendChild(box);
+            }
             bw.appendChild(div);
         }
         // Grand Final
         let divGF = document.createElement('div'); divGF.className = 'pusingan';
-        divGF.appendChild(createBox('GF', 0, 0, 30)); bw.appendChild(divGF);
+        let gfBox = createBox('GF', 0, 0, 30); gfBox.classList.add('grand-final');
+        divGF.appendChild(gfBox); bw.appendChild(divGF);
 
-        // Loser Bracket r=0 to 5
-        let losMatchOffsets = [16, 20, 24, 26, 28, 29];
+        // Loser Bracket
+        let losOffsets = [16, 20, 24, 26, 28, 29];
         let losCounts = [4, 4, 2, 2, 1, 1];
         for(let r=0; r<6; r++) {
             let div = document.createElement('div'); div.className = 'pusingan';
-            for(let m=0; m<losCounts[r]; m++) div.appendChild(createBox('L', r, m, losMatchOffsets[r]+m));
+            for(let m=0; m<losCounts[r]; m++) {
+                let box = createBox('L', r, m, losOffsets[r]+m);
+                if(r===5) box.classList.add('loser-final-highlight');
+                div.appendChild(box);
+            }
             bl.appendChild(div);
         }
 
-        // Seeds
         const seeds = [0, 15, 7, 8, 3, 12, 4, 11, 1, 14, 6, 9, 2, 13, 5, 10];
         for(let m=0; m<8; m++) {
             updateSlot(`W_0_${m}`, 1, window.teamNames[seeds[m*2]]?.nama || "", seeds[m*2]);
@@ -239,21 +242,18 @@
 
         for(let id in savedScores) { if(document.getElementById(id)) document.getElementById(id).value = savedScores[id]; }
 
-        // Trigger logic calculation
         ['W_0','W_1','W_2','W_3','L_0','L_1','L_2','L_3','L_4','L_5','GF_0'].forEach(f => {
-            document.querySelectorAll(`[id^="${f}_"]`).forEach(box => {
-                if(box.id && box.id.split('_').length === 3) window.kira(box.id);
-            });
+            document.querySelectorAll(`[id^="${f}_"]`).forEach(box => { if(box.id && box.id.split('_').length === 3) window.kira(box.id); });
         });
 
-        // Auto-Bye Logic
+        // Auto-Bye
         document.querySelectorAll('.kotak-perlawanan').forEach(box => {
             let p1 = document.getElementById(box.id+'_p1').value, p2 = document.getElementById(box.id+'_p2').value;
-            if(p1 === "BYE" && p2 !== "") { document.getElementById(box.id+'_sc1').value=0; document.getElementById(box.id+'_sc2').value=21; window.kira(box.id); }
-            if(p2 === "BYE" && p1 !== "") { document.getElementById(box.id+'_sc1').value=21; document.getElementById(box.id+'_sc2').value=0; window.kira(box.id); }
+            let s1 = document.getElementById(box.id+'_sc1'), s2 = document.getElementById(box.id+'_sc2');
+            if(p1 === "BYE" && s1.value==="") { s1.value=0; s2.value=21; window.kira(box.id); }
+            if(p2 === "BYE" && s2.value==="") { s1.value=21; s2.value=0; window.kira(box.id); }
         });
-        
-        // Final style locking
+
         document.querySelectorAll('.nama-display, .skor').forEach(el => {
             const isR1 = el.id.startsWith('W_0_');
             el.readOnly = el.classList.contains('nama-display') ? !(window.isAdminMode && isR1) : !window.isAdminMode;
@@ -274,6 +274,13 @@
         const s = document.getElementById(`${mid}_s${slot}`);
         if(p) p.value = nama || "...";
         if(s) s.setAttribute('data-pid', pid);
+    }
+
+    function applyFinalColors(nama, cls) {
+        if(!nama || nama==="..." || nama==="BYE") return;
+        document.querySelectorAll('.slot-pasukan').forEach(s => {
+            if(s.querySelector('.nama-display').value === nama) s.classList.add(cls);
+        });
     }
 
     window.kira = (id) => {
@@ -301,10 +308,12 @@
             } else {
                 updateSlot('GF_0_0', 2, winN, winP);
                 document.getElementById('res_3').innerText = losN;
+                applyFinalColors(losN, 'path-gangsa');
             }
         } else if(p[0]==='GF') {
             document.getElementById('res_1').innerText = winN; document.getElementById('res_2').innerText = losN;
             document.getElementById('podiumFinal').style.display = 'block';
+            applyFinalColors(winN, 'path-emas'); applyFinalColors(losN, 'path-perak');
         }
     };
 
@@ -320,6 +329,12 @@
             document.getElementById('syncToast').style.opacity = 1; 
             setTimeout(()=> document.getElementById('syncToast').style.opacity = 0, 2000);
         });
+    };
+
+    window.resetSkor = () => {
+        if(confirm("Padam semua skor? Nama pemain akan dikekalkan.")) {
+            set(dbRef, {teams: window.teamNames, scores: {}}).then(() => location.reload());
+        }
     };
 </script>
 </body>
