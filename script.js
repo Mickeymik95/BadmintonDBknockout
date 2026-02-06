@@ -335,7 +335,6 @@ function jana(savedScores, savedMatchLabels) {
             if(box.classList.contains('kotak-perlawanan')) window.kira(box.id);
         });
     });
-
     autoBye();
     penyelarasanLebar();
 
