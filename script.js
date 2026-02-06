@@ -338,20 +338,41 @@ function jana(savedScores, savedMatchLabels) {
     autoBye();
     penyelarasanLebar();
 
-   // Mengunci semua nama-display supaya tidak boleh diedit di dalam bracket
+  // --- Letakkan ini di bahagian paling bawah dalam fungsi jana() ---
+
+// 1. Kunci SEMUA nama dalam bracket (Winner/Loser/GF)
 document.querySelectorAll('.nama-display').forEach(el => {
     el.readOnly = true; 
-    el.style.cursor = "default"; // Menunjukkan ia tidak boleh diklik
+    el.style.pointerEvents = "none"; // Halang klik terus
+    el.style.background = "transparent"; 
 });
 
-// Pastikan hanya input skor yang boleh diedit jika Admin Mode aktif
-document.querySelectorAll('.skor').forEach(el => {
-    el.readOnly = !window.isAdminMode;
+// 2. Kunci label Match (P1, P2, dll)
+document.querySelectorAll('.match-top-input').forEach(el => {
+    el.readOnly = true;
+    el.style.pointerEvents = "none";
 });
-    if(window.isAdminMode) {
-        populatePesertaInputs();
-        updatePesertaInputDisplay();
+
+// 3. Kawalan Input Skor
+document.querySelectorAll('.skor').forEach(el => {
+    if (window.isAdminMode) {
+        el.readOnly = false;
+        el.style.pointerEvents = "auto";
+        el.style.border = "1px solid #444"; // Nampak boleh edit
+    } else {
+        el.readOnly = true;
+        el.style.pointerEvents = "none";
+        el.style.border = "none"; // Nampak bersih
     }
+});
+
+// 4. Input Nama di Panel Admin (Hanya ini yang boleh diedit oleh Admin)
+if(window.isAdminMode) {
+    document.querySelectorAll('#pesertaInputSection input').forEach(el => {
+        el.readOnly = false;
+        el.style.pointerEvents = "auto";
+    });
+}
 }
 
 // Modified: Seed-no now positioned OUTSIDE the slot-pasukan container (via CSS positioning)
