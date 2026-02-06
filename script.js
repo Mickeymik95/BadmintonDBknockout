@@ -182,28 +182,25 @@ window.resetTournament = () => {
 // Modified: Match numbers now display as P1-P8 instead of 1-8
 function createBox(j, r, m, matchNum) {
     let id = `${j}_${r}_${m}`;
-
-    // Create wrapper that holds the kotak-perlawanan
     const wrapper = document.createElement('div');
     wrapper.className = 'match-wrapper';
 
-    // kotak-perlawanan element
     let box = document.createElement('div');
     box.className = 'kotak-perlawanan';
     box.id = id;
-    if(j === 'GF') box.classList.add('grand-final');
 
-    // Match label input area: leave blank by default for all matches
-    // Keep defaults only for special finals:
-    // - Lower bracket final (L r=5): P29 final loser bracket
-    // - Grand final (GF): P30 Grand final
+    // Tentukan label secara automatik atau manual
     let matchValue = '';
-    if(j === 'GF') { matchValue = 'P30 Grand final'; box.classList.add('grand-final'); }
-    else if(j === 'L' && r === 5) { matchValue = 'P29 final loser bracket'; }
+    if(j === 'GF') matchValue = 'P30 GRAND FINAL';
+    else if(j === 'L' && r === 5) matchValue = 'P29 FINAL LOSER';
+    else {
+        // Jika anda mahu ia tunjuk P1, P2 secara automatik mengikut matchNum:
+        matchValue = `P${matchNum}`; 
+    }
 
-    // Insert top input and seed-no inside each slot, to the left of avatar
+    // TAMBAH 'disabled' pada input match-top-input
     box.innerHTML = `
-        <input type="text" class="match-top-input" id="${id}_label" placeholder="" />
+        <input type="text" class="match-top-input" id="${id}_label" value="${matchValue}" disabled />
         <div class="slot-pasukan" id="${id}_s1">
             <span class="seed-no" id="${id}_sd1" style="display:none"></span>
             <div class="avatar" id="${id}_av1"></div>
@@ -342,15 +339,16 @@ function jana(savedScores, savedMatchLabels) {
     autoBye();
     penyelarasanLebar();
 
-    document.querySelectorAll('.skor, .nama-display, .match-top-input').forEach(el => {
-        if(el.classList.contains('nama-display')) {
-            const isRound1 = el.id.startsWith('W_0_');
-            el.readOnly = !(window.isAdminMode && isRound1);
-        } else {
-            el.readOnly = !window.isAdminMode;
-        }
-    });
-    
+   // Mengunci semua nama-display supaya tidak boleh diedit di dalam bracket
+document.querySelectorAll('.nama-display').forEach(el => {
+    el.readOnly = true; 
+    el.style.cursor = "default"; // Menunjukkan ia tidak boleh diklik
+});
+
+// Pastikan hanya input skor yang boleh diedit jika Admin Mode aktif
+document.querySelectorAll('.skor').forEach(el => {
+    el.readOnly = !window.isAdminMode;
+});
     if(window.isAdminMode) {
         populatePesertaInputs();
         updatePesertaInputDisplay();
