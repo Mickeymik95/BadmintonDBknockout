@@ -102,20 +102,31 @@
 
         .kotak-perlawanan { background: var(--kad); border: 1px solid #333; border-radius: 14px; position: relative; padding-top: 30px; }
 
-        .match-no { 
-            position: absolute; top: 0; width: 100%; background: #25252b; 
-            color: var(--pink-terang) !important; 
-            font-size: 15px; padding: 8px 0; text-align: center; font-weight: 500; 
-            border-bottom: 1px solid #333; border-radius: 14px 14px 0 0;
-            text-shadow: 0 0 5px rgba(255, 0, 127, 0.3);
-            display: flex; justify-content: center; align-items: center;
-        }
+        /* Warna Ungu Terang untuk Nombor Perlawanan */
+.match-no { 
+    position: absolute; top: 0; width: 100%; 
+    background: #25252b; 
+    color: #bc13fe !important; /* Ungu Terang / Vivid Purple */
+    font-size: 15px; padding: 8px 0; text-align: center; font-weight: 900; 
+    border-bottom: 1px solid #333; border-radius: 14px 14px 0 0;
+    /* Kesan Glow Neon Ungu */
+    text-shadow: 0 0 10px rgba(188, 19, 254, 0.7), 0 0 20px rgba(188, 19, 254, 0.4);
+    display: flex; justify-content: center; align-items: center;
+}
 
-        .match-input {
-            background: transparent; border: none; color: inherit; 
-            font-family: inherit; font-weight: 900; text-align: center; 
-            width: 100%; outline: none; text-transform: uppercase;
-        }
+/* Pastikan input dalam bar tersebut juga ikut warna ungu */
+.match-input {
+    background: transparent; border: none; 
+    color: #bc13fe !important; /* Ungu Terang */
+    font-family: inherit; font-weight: 900; text-align: center; 
+    width: 100%; outline: none; text-transform: uppercase;
+}
+.match-input {
+    background: transparent; border: none; 
+    color: #bc13fe !important; /* Ungu Terang */
+    font-family: inherit; font-weight: 900; text-align: center; 
+    width: 100%; outline: none; text-transform: uppercase;
+}
 
         .slot-pasukan { display: flex; gap: 10px; align-items: center; padding: 15px 18px; border-bottom: 1px solid #25252b; transition: all 0.4s ease; }
         .slot-pasukan:last-child { border-bottom: none; }
