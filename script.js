@@ -293,10 +293,14 @@ function jana(savedScores, savedMatchLabels) {
         bw.appendChild(div);
     }
 
-    let divGF = document.createElement('div'); 
-    divGF.className = 'pusingan';
-    divGF.appendChild(createBox('GF', 0, 0, 30)); 
-    bw.appendChild(divGF);
+   let divGF = document.createElement('div'); 
+divGF.className = 'pusingan';
+// Kita panggil createBox, kemudian simpan dalam variable 'gfWrapper'
+let gfWrapper = createBox('GF', 0, 0, 30); 
+// Kita cari kotak di dalamnya dan tambah class 'grand-final'
+gfWrapper.querySelector('.kotak-perlawanan').classList.add('grand-final');
+divGF.appendChild(gfWrapper); 
+bw.appendChild(divGF);
 
     const loserMatchesCount = [4, 4, 2, 2, 1, 1];
     let losMatchOffsets = [16, 20, 24, 26, 28, 29];
