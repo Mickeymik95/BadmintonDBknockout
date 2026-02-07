@@ -86,44 +86,58 @@ window.logoutAdmin = () => { localStorage.removeItem('adminStatus'); location.re
 window.toggleAdmin = () => { const p = document.getElementById('panelAdmin'); p.style.display = (p.style.display === 'block') ? 'none' : 'block'; };
 
 onValue(dbRef, (snapshot) => {
-    const data = snapshot.val() || {};
-    window.teamNames = data.teams || {};
+    const data = snapshot.val();
+    if (!data || !data.teams) return; // Jika database kosong, jangan buat apa-apa
+
+    window.teamNames = data.teams;
     
-    // Jana bracket sahaja
+    // Jana bracket
     jana(data.scores || {}, data.matchLabels || {});
     
-    // JANGAN panggil populatePesertaInputs() di sini secara automatik 
-    // supaya susunan input dalam panel admin kekal seperti yang anda tulis.
+    // Hanya update display input jika admin tengah buka panel
+    if(window.isAdminMode) {
+        updatePesertaInputDisplay();
+    }
 });
 
 window.saveAll = () => {
+    // 1. Semak jika panel admin wujud dan sudah diisi
+    const inputSection = document.getElementById('pesertaInputSection');
+    if(!inputSection || inputSection.children.length === 0) {
+        alert("AMARAN: Panel input belum dimuatkan sepenuhnya. Simpanan dibatalkan untuk mengelakkan data hilang.");
+        return;
+    }
+
     let teams = {};
-    
-    // 1. Ambil data dari 16 input secara "Direct Mapping"
-    // Kita cari input mana yang ada nombor seed tertentu
+    let hasData = false;
+
     for(let seedTarget = 1; seedTarget <= 16; seedTarget++) {
         let found = false;
-        
         for(let i = 0; i < 16; i++) {
             const seedInput = document.getElementById(`admin_seed${i}`);
             const pInput = document.getElementById(`admin_p${i}`);
             const pAvatarInput = document.getElementById(`admin_av${i}`);
             
             if(seedInput && parseInt(seedInput.value) === seedTarget) {
-                // Simpan ke dalam index bracket (0-15) mengikut Target Seed
+                const namaValue = pInput.value.trim();
+                // Jika ada sekurang-kurangnya satu nama yang bukan kosong
+                if(namaValue !== "") hasData = true; 
+
                 teams[seedTarget - 1] = {
-                    nama: pInput.value.trim() === "" ? "BYE" : pInput.value.trim(),
+                    nama: namaValue === "" ? "BYE" : namaValue,
                     avatar: pAvatarInput.value.trim()
                 };
                 found = true;
                 break;
             }
         }
-        
-        // Jika nombor seed itu tak wujud/tertinggal, letak BYE
-        if(!found) {
-            teams[seedTarget - 1] = { nama: "BYE", avatar: "" };
-        }
+        if(!found) teams[seedTarget - 1] = { nama: "BYE", avatar: "" };
+    }
+
+    // 2. Pengesahan kedua: Jangan simpan jika SEMUA slot adalah kosong/BYE 
+    // kecuali admin memang sengaja mahu kosongkan.
+    if(!hasData && !confirm("Semua nama kosong. Anda pasti mahu mengosongkan database?")) {
+        return;
     }
 
     let scores = {};
@@ -132,14 +146,12 @@ window.saveAll = () => {
     let matchLabels = {};
     document.querySelectorAll('.match-top-input').forEach(mi => { if(mi.value && mi.value.trim() !== '') matchLabels[mi.id] = mi.value.trim(); });
 
-    // SIMPAN KE FIREBASE
+    // 3. Gunakan update() berbanding set() untuk lebih selamat jika perlu
     set(dbRef, { n: 16, teams, scores, matchLabels }).then(() => {
         const toast = document.getElementById('syncToast');
         toast.style.opacity = "1";
         setTimeout(() => { toast.style.opacity = "0"; }, 3000);
-        // PENTING: Jangan panggil populatePesertaInputs() di sini supaya 
-        // kedudukan input nama/link dalam panel admin tidak berubah (kekal statik).
-    });
+    }).catch(err => alert("Gagal simpan: " + err));
 };
 
 window.resetSkor = async () => {
