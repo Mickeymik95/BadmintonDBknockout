@@ -336,7 +336,6 @@ body {
 .peserta-input-group input::placeholder { color: #666; }
 
 .kotak-perlawanan:has(.pemenang) .slot-pasukan:not(.pemenang) .nama-display {
-    text-decoration: line-through;
     text-decoration-color: #ff0000;
     text-decoration-thickness: 4px;
     color: #666 !important;
