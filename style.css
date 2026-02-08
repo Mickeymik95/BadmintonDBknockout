@@ -547,3 +547,24 @@ body.admin-active .round-seq-input {
     pointer-events: auto !important;
     opacity: 1 !important;
 }
+/* MERAH: Match belum mula (Skor 0-0) */
+.kotak-belum-selesai {
+    border: 3px solid #ff4d4d !important;
+    animation: pulseMerah 1s infinite alternate;
+}
+
+/* BIRU: Match sedang berlangsung (Dah ada skor) */
+.kotak-aktif {
+    border: 3px solid #00d2ff !important;
+    animation: borderBlink 1s infinite alternate;
+}
+
+@keyframes pulseMerah {
+    0% { box-shadow: 0 0 5px #ff4d4d; border-color: #ff4d4d; }
+    100% { box-shadow: 0 0 15px #ffb3b3; border-color: #ffb3b3; }
+}
+
+@keyframes borderBlink {
+    0% { box-shadow: 0 0 5px #00d2ff; border-color: #00d2ff; }
+    100% { box-shadow: 0 0 15px #ffffff; border-color: #ffffff; }
+}

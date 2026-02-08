@@ -105,20 +105,20 @@ window.toggleAdmin = () => { const p = document.getElementById('panelAdmin'); p.
 // --- GANTI BLOK onValue ANDA DENGAN INI ---
 
 onValue(dbRef, (snapshot) => {
-    const data = snapshot.val();
-    if (!data || !data.teams) return;
-
-    window.teamNames = data.teams;
+    const data = snapshot.val() || {}; // Gunakan objek kosong jika data null
+    
+    // Pastikan teamNames sentiasa ada data asas
+    window.teamNames = data.teams || {};
 
     // SEMAK: Adakah kursor sedang berada dalam kotak input?
     const sedangFokus = document.activeElement.tagName === 'INPUT';
 
-    // Jika Admin TAK tengah menaip, barulah kita lukis semula (refresh) bracket
+    // Lukis semula bracket walaupun data.teams kosong
     if (!sedangFokus) {
+        // Hantar data kosong ( {} ) jika data belum wujud di Firebase
         jana(data.scores || {}, data.matchLabels || {}, data.roundSequence || {});
     } 
     
-    // Update highlight (berkelip-kelip) tetap jalan tanpa ganggu input
     window.updateMatchHighlights();
 });
 
@@ -212,15 +212,30 @@ window.saveAll = () => {
 };  
 
 window.resetSkor = async () => {
-    if(confirm("Reset semua skor sahaja? Nama & Nombor Match akan dikekalkan.")) {
-        const snapshot = await get(dbRef);
-        const data = snapshot.val() || {};
-        set(dbRef, { 
-            n: 16, 
-            teams: data.teams || {}, 
-            scores: {}, 
-            matchNumbers: data.matchNumbers || {} 
-        }).then(() => location.reload());
+    // Mesej amaran yang lebih jelas
+    if(confirm("Reset semua skor sahaja? Nama Peserta, Nombor Match dan Sequence (P) akan DIKEKALKAN.")) {
+        try {
+            // 1. Ambil data terkini dari Firebase dahulu
+            const snapshot = await get(dbRef);
+            const data = snapshot.val() || {};
+
+            // 2. Hantar semula data, tetapi kosongkan bahagian 'scores' sahaja
+            // Kita kekalkan teams, matchNumbers, dan roundSequence
+            await set(dbRef, { 
+                n: 16, 
+                teams: data.teams || {}, 
+                matchNumbers: data.matchNumbers || {},
+                roundSequence: data.roundSequence || {}, // Ini untuk kekalkan P1, P2 dsb
+                scores: {}, // Skor disetkan kepada kosong
+                matchLabels: data.matchLabels || {}
+            });
+
+            alert("Skor berjaya di-reset. Data lain dikekalkan.");
+            location.reload();
+        } catch (error) {
+            console.error("Ralat reset skor:", error);
+            alert("Gagal reset skor. Sila semak sambungan internet atau console.");
+        }
     }
 };
 
@@ -495,9 +510,19 @@ window.kira = (id) => {
     let sc2 = document.getElementById(id+'_sc2').value;
     const sl1 = document.getElementById(id+'_s1');
     const sl2 = document.getElementById(id+'_s2');
+    const box = document.getElementById(id); // Ambil elemen kotak perlawanan
 
     const p1 = document.getElementById(id + '_p1').value;
     const p2 = document.getElementById(id + '_p2').value;
+
+    // --- LOGIK MERAH BERKELIP (EFEK BELUM SELESAI) ---
+    // Jika skor kosong ATAU kedua-duanya 0, tambah class merah. 
+    // Kecuali jika kedua-duanya BYE (biasanya auto-complete).
+    if (((sc1 === "" || sc2 === "") || (parseInt(sc1) === 0 && parseInt(sc2) === 0)) && !(p1 === "BYE" && p2 === "BYE")) {
+        box.classList.add('kotak-belum-selesai');
+    } else {
+        box.classList.remove('kotak-belum-selesai');
+    }
 
     // 1. Validasi Input
     if(sc1 === "" || sc2 === "") return;
@@ -535,24 +560,19 @@ window.kira = (id) => {
             updateSlot('GF_0_0', 2, winN, winP);
         }
     } 
-    // 4. LOGIK PODIUM (GF) - DIKEMASKINI UNTUK ID ANDA
+    // 4. LOGIK PODIUM (GF)
     else if(p[0] === 'GF') {
         const podium = document.getElementById('podiumFinal');
         if(podium) {
             podium.style.display = 'block';
-            
-            // Masukkan Juara (🥇)
             const res1 = document.getElementById('res_1');
             if(res1) res1.innerText = winN;
             updateAvatar('pod', 1, winN, (window.teamNames[winP]?.avatar || ''));
 
-            // Masukkan Naib Juara (🥈)
             const res2 = document.getElementById('res_2');
             if(res2) res2.innerText = losN;
             updateAvatar('pod', 2, losN, (window.teamNames[losP]?.avatar || ''));
 
-            // Masukkan Tempat Ke-3 (🥉)
-            // Diambil secara automatik dari yang kalah di Loser Final (L_5_0)
             const l5Box = document.getElementById('L_5_0');
             if(l5Box) {
                 const sL1 = document.getElementById('L_5_0_sc1').value;
@@ -561,7 +581,6 @@ window.kira = (id) => {
                     const isWin1 = parseInt(sL1) > parseInt(sL2);
                     const t3Nama = isWin1 ? document.getElementById('L_5_0_p2').value : document.getElementById('L_5_0_p1').value;
                     const t3Pid = isWin1 ? document.getElementById('L_5_0_s2').getAttribute('data-pid') : document.getElementById('L_5_0_s1').getAttribute('data-pid');
-                    
                     const res3 = document.getElementById('res_3');
                     if(res3) res3.innerText = t3Nama;
                     updateAvatar('pod', 3, t3Nama, (window.teamNames[t3Pid]?.avatar || ''));
@@ -572,8 +591,7 @@ window.kira = (id) => {
 
     autoBye();
     window.updateMatchHighlights(); 
-};
-
+};  
 
  function autoBye() {
     const brackets = ['W', 'L', 'GF'];
@@ -679,40 +697,55 @@ window.updateMatchHighlights = () => {
     get(ref(db, 'tournament_data/roundSequence')).then((snapshot) => {
         const sequences = snapshot.val() || {};
         
-        // Susun pusingan mengikut nombor yang diisi (1, 2, 3...)
+        // 1. Susun pusingan ikut nombor Sequence (P1, P2...)
         const sortedRounds = Object.entries(sequences)
             .filter(([id, val]) => val !== "" && val !== null)
             .sort((a, b) => parseInt(a[1]) - parseInt(b[1]));
 
         let activeRoundId = null;
 
+        // 2. Cari pusingan mana yang "Tengah Berjalan" sekarang
         for (let [roundId, seqNo] of sortedRounds) {
-            // Cari semua kotak perlawanan yang bermula dengan ID pusingan (cth: W_0_)
             const matchesInRound = document.querySelectorAll(`[id^="${roundId}_"].kotak-perlawanan`);
-            
-            let isComplete = true;
+            let pusinganSelesai = true;
+
             matchesInRound.forEach(box => {
-                const sc1 = document.getElementById(box.id + '_sc1').value;
-                const sc2 = document.getElementById(box.id + '_sc2').value;
-                
-                // Jika perlawanan belum ada skor, pusingan dikira belum tamat
-                if (sc1 === "" || sc2 === "") {
-                    isComplete = false;
-                }
+                const sc1 = document.getElementById(box.id + '_sc1')?.value || "";
+                const sc2 = document.getElementById(box.id + '_sc2')?.value || "";
+                // Jika ada match dalam pusingan ini yang belum ada pemenang (skor kosong)
+                if (sc1 === "" || sc2 === "") pusinganSelesai = false;
             });
 
-            if (!isComplete) {
+            if (!pusinganSelesai) {
                 activeRoundId = roundId;
-                break; // Berhenti pada pusingan aktif yang pertama
+                break; // Kita kunci pada pusingan terawal yang belum tamat
             }
         }
 
-        // Apply visual highlight
+        // 3. Apply warna hanya pada kotak-kotak dalam Pusingan Aktif tersebut
         document.querySelectorAll('.kotak-perlawanan').forEach(box => {
-            box.classList.remove('kotak-aktif');
-            // Kita tambah '_' untuk pastikan W_0 tidak highlight W_10 (jika ada)
+            box.classList.remove('kotak-aktif', 'kotak-belum-selesai');
+
+            // Cek jika kotak ini milik pusingan yang aktif tadi
             if (activeRoundId && box.id.startsWith(activeRoundId + '_')) {
-                box.classList.add('kotak-aktif');
+                const sc1 = document.getElementById(box.id + '_sc1')?.value || "";
+                const sc2 = document.getElementById(box.id + '_sc2')?.value || "";
+                const p1 = document.getElementById(box.id + '_p1')?.value || "";
+                const p2 = document.getElementById(box.id + '_p2')?.value || "";
+
+                const adaPemain = (p1 !== "" && p1 !== "...") && (p2 !== "" && p2 !== "...");
+                const bukanBye = !(p1 === "BYE" && p2 === "BYE");
+
+                if (adaPemain && bukanBye) {
+                    // JIKA SKOR 0-0 -> MERAH (Sedia dimainkan)
+                    if ((sc1 === "" || sc2 === "") || (parseInt(sc1) === 0 && parseInt(sc2) === 0)) {
+                        box.classList.add('kotak-belum-selesai');
+                    } 
+                    // JIKA DAH ADA SKOR -> BIRU (Tengah berlangsung)
+                    else {
+                        box.classList.add('kotak-aktif');
+                    }
+                }
             }
         });
     });
