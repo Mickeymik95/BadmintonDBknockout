@@ -535,3 +535,15 @@ body {
     50% { opacity: 0.8; }
     100% { opacity: 1; }
 }
+/* Secara asal, kunci semua input supaya orang awam tak boleh klik */
+.skor, .round-seq-input {
+    pointer-events: none; 
+    opacity: 0.9;
+}
+
+/* Hanya bila Admin masuk, baru kunci ini terbuka */
+body.admin-active .skor, 
+body.admin-active .round-seq-input {
+    pointer-events: auto !important;
+    opacity: 1 !important;
+}

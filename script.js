@@ -87,13 +87,17 @@ window.checkAuth = () => {
     if(document.getElementById('passInput').value === "admin123") {
         localStorage.setItem('adminStatus', 'active');
         window.isAdminMode = true;
+        document.body.classList.add('admin-active');
         document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'flex');
         document.getElementById('authSection').style.display = 'none';
         setTimeout(() => { populatePesertaInputs(); updatePesertaInputDisplay(); }, 100);
     } else { alert("Salah!"); }
 };
 
-window.logoutAdmin = () => { localStorage.removeItem('adminStatus'); location.reload(); };
+window.logoutAdmin = () => {
+    localStorage.removeItem('adminStatus');
+    document.body.classList.remove('admin-active');
+    location.reload(); };
 window.toggleAdmin = () => { const p = document.getElementById('panelAdmin'); p.style.display = (p.style.display === 'block') ? 'none' : 'block'; };
 
 // --- CARI DAN GANTI BLOK INI DI BAHAGIAN PALING BAWAH script.js ---
@@ -104,23 +108,20 @@ onValue(dbRef, (snapshot) => {
     const data = snapshot.val();
     if (!data || !data.teams) return;
 
-    // 1. KUNCI UTAMA: Check kalau ada mana-mana input sedang aktif (fokus)
-    // Walaupun awak baru lepas klik input lain, browser tetap anggap ada "activeElement"
-    const sedangMenaip = document.activeElement.tagName === 'INPUT';
+    window.teamNames = data.teams;
 
-    if (!sedangMenaip) {
-        // Hanya refresh bracket kalau Admin tak tengah sentuh mana-mana input
-        window.teamNames = data.teams;
+    // SEMAK: Adakah kursor sedang berada dalam kotak input?
+    const sedangFokus = document.activeElement.tagName === 'INPUT';
+
+    // Jika Admin TAK tengah menaip, barulah kita lukis semula (refresh) bracket
+    if (!sedangFokus) {
         jana(data.scores || {}, data.matchLabels || {}, data.roundSequence || {});
-    } else {
-        // Jika sedang menaip/klik input, jangan jana semula (refresh) HTML
-        // Cuma update data dalam background sahaja
-        window.teamNames = data.teams;
-    }
+    } 
     
-    // Highlight tetap boleh update sebab dia tak kacau HTML (guna CSS class sahaja)
+    // Update highlight (berkelip-kelip) tetap jalan tanpa ganggu input
     window.updateMatchHighlights();
 });
+
 window.saveAll = () => {
     const inputSection = document.getElementById('pesertaInputSection');
     if(!inputSection || inputSection.children.length === 0) return;
@@ -716,3 +717,22 @@ window.updateMatchHighlights = () => {
         });
     });
 };
+// --- PENJAGA STATUS ADMIN (PASTIKAN KUNCI TERBUKA SELEPAS REFRESH) ---
+document.addEventListener('DOMContentLoaded', () => {
+    const status = localStorage.getItem('adminStatus');
+    if (status === 'active') {
+        window.isAdminMode = true;
+        document.body.classList.add('admin-active');
+        
+        // Paparkan semula bahagian admin yang tersembunyi
+        document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'flex');
+        const authSection = document.getElementById('authSection');
+        if (authSection) authSection.style.display = 'none';
+        
+        // Jalankan semula fungsi input peserta
+        setTimeout(() => { 
+            if (typeof populatePesertaInputs === "function") populatePesertaInputs(); 
+            if (typeof updatePesertaInputDisplay === "function") updatePesertaInputDisplay(); 
+        }, 100);
+    }
+});
