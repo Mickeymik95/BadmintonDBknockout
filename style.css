@@ -74,71 +74,82 @@ body {
 #barisL { border: 2px solid rgba(231, 76, 60, 0.3); box-shadow: inset 0 0 50px rgba(231, 76, 60, 0.05); }
 #barisL .label-bracket { background: var(--kalah); color: #fff; }
 
-/* 1. KOTAK UTAMA (SAIZ TETAP & RESPONSIF) */
+/* 1. KOTAK UTAMA (Dilebarkan, Besarkan 30%, Tolak ke Kanan) */
 #podiumFinal {
     position: absolute; 
     bottom: 50px; 
-    left: 50%; /* Kita guna 50% dulu untuk centering yang stabil */
-    transform: translateX(-50%); /* Buang scale di sini */
+    left: 75%; /* Tolak ke kanan (asal 50%) */
+    transform: translateX(-50%); 
     display: block; 
     background: linear-gradient(180deg, #1a1a1f 0%, #0b0b0d 100%); 
-    border: 3px solid #ffd700;
-    padding: 30px 40px; 
-    border-radius: 30px; 
-    box-shadow: 0 0 40px rgba(255, 215, 0, 0.5); 
+    border: 4px solid #ffd700;
+    padding: 50px 60px; /* Tambah padding */
+    border-radius: 40px; 
+    box-shadow: 0 0 60px rgba(255, 215, 0, 0.6); 
     z-index: 200;
-    width: 650px; /* Gunakan width tetap, bukan min-width gergasi */
-    max-width: 90vw; /* Supaya tak terkeluar dari skrin phone */
+    width: 850px; /* Lebarkan gila-gila (asal 650px) */
+    max-width: 95vw; 
     text-align: center;
 }
 
-/* 2. TAJUK (JARAK DENGAN MEDAL) */
+/* 2. TAJUK */
 .podium-title { 
-    font-size: 1.1rem !important; 
+    font-size: 1.4rem !important; /* Besarkan teks tajuk */
     color: #ffd700; 
-    margin-bottom: 70px !important; /* Ruang untuk medal di bawahnya */
-    letter-spacing: 4px;
+    margin-bottom: 80px !important; 
+    letter-spacing: 6px;
     display: block;
 }
 
+/* 3. SUSUNAN ITEM */
 .podium-flex {
-    display: flex;             /* Tukar jadi mode flex */
-    flex-direction: row;      /* Susun secara melintang (horizontal) */
-    justify-content: center;   /* Letak di tengah-tengah kotak */
-    align-items: flex-end;     /* Pastikan pemenang tempat ke-2 & ke-3 nampak lebih rendah */
-    gap: 40px;                 /* Jarak antara setiap pemenang */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 50px; /* Jarak lebih luas */
     width: 100%;
 }
 
 .podium-item {
     display: flex;
-    flex-direction: column;    /* Item di DALAM (avatar, nama) tetap vertikal */
+    flex-direction: column;
     align-items: center;
-    flex: 1;                   /* Bahagi ruang secara adil */
-    min-width: 150px;          /* Elakkan item jadi terlalu sempit */
+    flex: 1;
 }
 
-
-/* 4. SAIZ ITEM (MANUAL, BUKAN SCALE) */
-.pod-rank { 
-    font-size: 3rem !important; 
-    margin-bottom: 5px !important; 
-}
-
+/* 4. FIX AVATAR JADI BULAT SEMPURNA */
 .pod-avatar { 
-    width: 85px !important; 
-    height: 85px !important; 
-    font-size: 1.4rem !important; 
+    width: 115px !important; /* Besarkan 30% */
+    height: 115px !important; 
+    border-radius: 50% !important; /* WAJIB UNTUK BULAT */
+    overflow: hidden !important;   /* Potong gambar yang terkeluar */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-size: cover;
+    background-position: center;
+    border: 3px solid rgba(255, 215, 0, 0.5);
+    font-size: 1.8rem !important;
+    margin-bottom: 15px !important;
+}
+
+/* 5. SAIZ TEKS (BESARKAN 30%) */
+.pod-rank { 
+    font-size: 4.5rem !important; 
+    margin-bottom: 10px !important; 
 }
 
 .pod-name { 
-    font-size: 1.4rem !important; /* Nama yang jelas tapi tidak melimpah */
-    font-weight: 900;
-    white-space: nowrap; /* Elakkan nama turun baris baru */
+    font-size: 1.8rem !important; 
+    font-weight: 950;
+    color: #fff;
+    white-space: nowrap;
 }
 
 .pod-label { 
-    font-size: 0.8rem !important;
+    font-size: 1rem !important;
+    color: #aaa;
 }
 
 
