@@ -96,24 +96,31 @@ window.checkAuth = () => {
 window.logoutAdmin = () => { localStorage.removeItem('adminStatus'); location.reload(); };
 window.toggleAdmin = () => { const p = document.getElementById('panelAdmin'); p.style.display = (p.style.display === 'block') ? 'none' : 'block'; };
 
+// --- CARI DAN GANTI BLOK INI DI BAHAGIAN PALING BAWAH script.js ---
+
+// --- GANTI BLOK onValue ANDA DENGAN INI ---
+
 onValue(dbRef, (snapshot) => {
     const data = snapshot.val();
     if (!data || !data.teams) return;
 
-    window.teamNames = data.teams;
-    
-    // Jana bracket (visual)
-    jana(data.scores || {}, data.matchLabels || {});
-    
-    // Hanya update display input jika admin mode DAN user tidak sedang menaip
-    if(window.isAdminMode) {
-        const sedangMenaip = document.activeElement.tagName === 'INPUT';
-        if (!sedangMenaip) {
-            updatePesertaInputDisplay();
-        }
-    }
-});
+    // 1. KUNCI UTAMA: Check kalau ada mana-mana input sedang aktif (fokus)
+    // Walaupun awak baru lepas klik input lain, browser tetap anggap ada "activeElement"
+    const sedangMenaip = document.activeElement.tagName === 'INPUT';
 
+    if (!sedangMenaip) {
+        // Hanya refresh bracket kalau Admin tak tengah sentuh mana-mana input
+        window.teamNames = data.teams;
+        jana(data.scores || {}, data.matchLabels || {}, data.roundSequence || {});
+    } else {
+        // Jika sedang menaip/klik input, jangan jana semula (refresh) HTML
+        // Cuma update data dalam background sahaja
+        window.teamNames = data.teams;
+    }
+    
+    // Highlight tetap boleh update sebab dia tak kacau HTML (guna CSS class sahaja)
+    window.updateMatchHighlights();
+});
 window.saveAll = () => {
     const inputSection = document.getElementById('pesertaInputSection');
     if(!inputSection || inputSection.children.length === 0) return;
@@ -122,7 +129,7 @@ window.saveAll = () => {
     let usedSeeds = new Set();
     let hasConflict = false;
 
-    // 1. Kumpul data dan semak pertindihan nombor
+    // 1. Kumpul data Peserta/Team
     for(let i = 0; i < 16; i++) {
         const seedInput = document.getElementById(`admin_seed${i}`);
         const pInput = document.getElementById(`admin_p${i}`);
@@ -134,17 +141,15 @@ window.saveAll = () => {
 
             const seedNum = parseInt(seedValue);
 
-            // Amaran jika nombor seed luar julat 1-16
             if (seedNum < 1 || seedNum > 16) {
                 alert(`Slot ${i+1}: Sila guna nombor seed antara 1-16.`);
                 seedInput.value = "";
                 continue;
             }
 
-            // Semak jika nombor seed sudah digunakan oleh input lain
             if (usedSeeds.has(seedNum)) {
                 alert(`Ralat: Nombor Seed ${seedNum} sudah digunakan! Sila guna nombor lain.`);
-                seedInput.value = ""; // Padam nombor yang bertindih
+                seedInput.value = "";
                 hasConflict = true;
                 continue;
             }
@@ -152,7 +157,6 @@ window.saveAll = () => {
             usedSeeds.add(seedNum);
             const namaValue = pInput.value.trim();
 
-            // Simpan ke dalam objek mengikut nombor seed (index 0-15)
             teams[seedNum - 1] = {
                 nama: namaValue === "" ? "BYE" : namaValue,
                 avatar: pAvatarInput.value.trim()
@@ -160,34 +164,51 @@ window.saveAll = () => {
         }
     }
 
-    if (hasConflict) return; // Berhenti jika ada ralat
+    if (hasConflict) return;
 
-    // 2. Isi slot yang tidak dipilih dengan "BYE"
     for(let j = 0; j < 16; j++) {
-        if(!teams[j]) {
-            teams[j] = { nama: "BYE", avatar: "" };
-        }
+        if(!teams[j]) teams[j] = { nama: "BYE", avatar: "" };
     }
 
+    // 2. Kumpul data Skor
     let scores = {};
     document.querySelectorAll('.skor').forEach(s => { 
         if(s.value !== "") scores[s.id] = s.value; 
     });
 
+    // 3. Kumpul data Label Match (P1, P2, dll)
     let matchLabels = {};
     document.querySelectorAll('.match-top-input').forEach(mi => { 
         if(mi.value && mi.value.trim() !== '') matchLabels[mi.id] = mi.value.trim(); 
     });
 
-    // 3. Simpan ke Firebase
-    set(dbRef, { n: 16, teams, scores, matchLabels }).then(() => {
+    // --- BAHAGIAN BARU: Kumpul data Urutan Pusingan (Kotak P) ---
+    let roundSequence = {};
+    document.querySelectorAll('.round-seq-input').forEach(inp => {
+        if(inp.value !== "") {
+            // Ambil rId (contoh: W_0) daripada ID input (contoh: seq_W_0)
+            let rId = inp.id.replace('seq_', '');
+            roundSequence[rId] = inp.value;
+        }
+    });
+
+    // 4. Simpan SEMUA ke Firebase (Termasuk roundSequence)
+    set(dbRef, { 
+        n: 16, 
+        teams: teams, 
+        scores: scores, 
+        matchLabels: matchLabels,
+        roundSequence: roundSequence // Simpan nombor highlight di sini
+    }).then(() => {
         const toast = document.getElementById('syncToast');
         if(toast) {
             toast.style.opacity = "1";
             setTimeout(() => { toast.style.opacity = "0"; }, 2000);
         }
+        // Selepas simpan, terus update highlight
+        window.updateMatchHighlights();
     }).catch(err => alert("Gagal simpan: " + err));
-};
+};  
 
 window.resetSkor = async () => {
     if(confirm("Reset semua skor sahaja? Nama & Nombor Match akan dikekalkan.")) {
@@ -312,30 +333,60 @@ function jana(savedScores, savedMatchLabels) {
     bl.innerHTML = '<div class="label-bracket">Loser Bracket (Lower)</div>';
     bw.appendChild(podiumClone);
 
+  // --- 1. WINNER BRACKET (4 ROUNDS) ---
     let winMatchOffsets = [1, 9, 13, 15]; 
     for(let r=0; r<4; r++) {
         let div = document.createElement('div'); 
         div.className = 'pusingan';
+
+        // TAMBAH INPUT SEQUENCE DI SINI
+        let rId = `W_${r}`;
+        let seqInput = document.createElement('input');
+        seqInput.type = 'number';
+        seqInput.className = 'round-seq-input admin-only';
+        seqInput.id = `seq_${rId}`;
+        seqInput.placeholder = "P";
+        // Cuba dapatkan nilai sedia ada dari Firebase
+        get(ref(db, `tournament_data/roundSequence/${rId}`)).then(s => {
+            if(s.exists()) seqInput.value = s.val();
+        });
+        seqInput.onchange = (e) => set(ref(db, `tournament_data/roundSequence/${rId}`), e.target.value);
+        div.appendChild(seqInput);
+
         for(let m=0; m<Math.pow(2, 3-r); m++) {
             div.appendChild(createBox('W', r, m, winMatchOffsets[r] + m));
         }
         bw.appendChild(div);
     }
 
-   let divGF = document.createElement('div'); 
-divGF.className = 'pusingan';
-// Kita panggil createBox, kemudian simpan dalam variable 'gfWrapper'
-let gfWrapper = createBox('GF', 0, 0, 30); 
-// Kita cari kotak di dalamnya dan tambah class 'grand-final'
-gfWrapper.querySelector('.kotak-perlawanan').classList.add('grand-final');
-divGF.appendChild(gfWrapper); 
-bw.appendChild(divGF);
+    // --- 2. GRAND FINAL ---
+    let divGF = document.createElement('div'); 
+    divGF.className = 'pusingan';
+    let gfWrapper = createBox('GF', 0, 0, 30); 
+    gfWrapper.querySelector('.kotak-perlawanan').classList.add('grand-final');
+    divGF.appendChild(gfWrapper); 
+    bw.appendChild(divGF);
 
+    // --- 3. LOSER BRACKET (6 ROUNDS) ---
     const loserMatchesCount = [4, 4, 2, 2, 1, 1];
     let losMatchOffsets = [16, 20, 24, 26, 28, 29];
     for(let r=0; r < 6; r++) {
         let div = document.createElement('div'); 
         div.className = 'pusingan';
+
+        // TAMBAH INPUT SEQUENCE DI SINI
+        let rId = `L_${r}`;
+        let seqInput = document.createElement('input');
+        seqInput.type = 'number';
+        seqInput.className = 'round-seq-input admin-only';
+        seqInput.id = `seq_${rId}`;
+        seqInput.placeholder = "P";
+        get(ref(db, `tournament_data/roundSequence/${rId}`)).then(s => {
+            if(s.exists()) seqInput.value = s.val();
+        });
+        seqInput.onchange = (e) => set(ref(db, `tournament_data/roundSequence/${rId}`), e.target.value);
+        div.appendChild(seqInput);
+
         for(let m=0; m < loserMatchesCount[r]; m++) {
             let matchNum = losMatchOffsets[r] + m;
             let box = createBox('L', r, m, matchNum);
@@ -343,7 +394,7 @@ bw.appendChild(divGF);
             div.appendChild(box);
         }
         bl.appendChild(div);
-    }
+    }   
 
     const seeds = [0, 15, 7, 8, 3, 12, 4, 11, 1, 14, 6, 9, 2, 13, 5, 10];
     for(let m=0; m < 8; m++) {
@@ -518,7 +569,8 @@ window.kira = (id) => {
         }
     }
 
-    autoBye(); 
+    autoBye();
+    window.updateMatchHighlights(); 
 };
 
 
@@ -622,3 +674,45 @@ document.addEventListener('keypress', (e) => {
         e.target.blur(); // Trigger 'change' event di atas
     }
 });
+window.updateMatchHighlights = () => {
+    get(ref(db, 'tournament_data/roundSequence')).then((snapshot) => {
+        const sequences = snapshot.val() || {};
+        
+        // Susun pusingan mengikut nombor yang diisi (1, 2, 3...)
+        const sortedRounds = Object.entries(sequences)
+            .filter(([id, val]) => val !== "" && val !== null)
+            .sort((a, b) => parseInt(a[1]) - parseInt(b[1]));
+
+        let activeRoundId = null;
+
+        for (let [roundId, seqNo] of sortedRounds) {
+            // Cari semua kotak perlawanan yang bermula dengan ID pusingan (cth: W_0_)
+            const matchesInRound = document.querySelectorAll(`[id^="${roundId}_"].kotak-perlawanan`);
+            
+            let isComplete = true;
+            matchesInRound.forEach(box => {
+                const sc1 = document.getElementById(box.id + '_sc1').value;
+                const sc2 = document.getElementById(box.id + '_sc2').value;
+                
+                // Jika perlawanan belum ada skor, pusingan dikira belum tamat
+                if (sc1 === "" || sc2 === "") {
+                    isComplete = false;
+                }
+            });
+
+            if (!isComplete) {
+                activeRoundId = roundId;
+                break; // Berhenti pada pusingan aktif yang pertama
+            }
+        }
+
+        // Apply visual highlight
+        document.querySelectorAll('.kotak-perlawanan').forEach(box => {
+            box.classList.remove('kotak-aktif');
+            // Kita tambah '_' untuk pastikan W_0 tidak highlight W_10 (jika ada)
+            if (activeRoundId && box.id.startsWith(activeRoundId + '_')) {
+                box.classList.add('kotak-aktif');
+            }
+        });
+    });
+};
