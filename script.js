@@ -496,11 +496,10 @@ window.kira = (id) => {
     // PENTING: Jalankan auto-bye selepas setiap kiraan untuk kesan pemenang baru yang lawan BYE
     autoBye(); 
 };
- // --- 1. FUNGSI AUTO-BYE (WAJIB ADA ISI) ---
-function autoBye() {
-    // Senarai pusingan yang perlu disemak
+ function autoBye() {
     const brackets = ['W', 'L', 'GF'];
-    
+    let adaPerubahan = false; // Penanda untuk semak jika ada pemenang baru
+
     brackets.forEach(type => {
         document.querySelectorAll(`[id^="${type}_"].kotak-perlawanan`).forEach(box => {
             const id = box.id;
@@ -511,22 +510,39 @@ function autoBye() {
 
             // Hanya proses jika skor masih kosong
             if (sc1.value === "" && sc2.value === "") {
-                // Jika slot 1 BYE, slot 2 menang 21-0
+                
+                // KES 1: Slot 1 adalah BYE (Slot 2 menang)
                 if (p1 === "BYE" && p2 !== "" && p2 !== "BYE" && p2 !== "...") {
                     sc1.value = 0; 
                     sc2.value = 21; 
                     window.kira(id);
+                    adaPerubahan = true;
                 } 
-                // Jika slot 2 BYE, slot 1 menang 21-0
+                // KES 2: Slot 2 adalah BYE (Slot 1 menang)
                 else if (p2 === "BYE" && p1 !== "" && p1 !== "BYE" && p1 !== "...") {
                     sc1.value = 21; 
                     sc2.value = 0; 
                     window.kira(id);
+                    adaPerubahan = true;
+                }
+                // KES EXTRA: Jika kedua-duanya BYE (penting untuk Loser Bracket)
+                else if (p1 === "BYE" && p2 === "BYE") {
+                    sc1.value = 0;
+                    sc2.value = 0;
+                    window.kira(id);
+                    adaPerubahan = true;
                 }
             }
         });
     });
+
+    // Jika ada pemain yang baru menang, jalankan semula autoBye 
+    // untuk semak jika pusingan seterusnya juga adalah BYE
+    if (adaPerubahan) {
+        setTimeout(() => autoBye(), 50); 
+    }
 }
+
 
 // --- 2. PENYELARASAN LEBAR BRACKET ---
 function penyelarasanLebar() {
