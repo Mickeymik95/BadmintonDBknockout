@@ -447,7 +447,7 @@ window.kira = (id) => {
     const p1 = document.getElementById(id + '_p1').value;
     const p2 = document.getElementById(id + '_p2').value;
 
-    // 1. Validasi Skor
+    // 1. Validasi Input
     if(sc1 === "" || sc2 === "") return;
     if(sc1 === sc2 && !(p1 === "BYE" && p2 === "BYE")) return;
 
@@ -464,7 +464,7 @@ window.kira = (id) => {
 
     let p = id.split('_'), r = parseInt(p[1]), m = parseInt(p[2]);
 
-    // 3. Logik Pergerakan Bracket
+    // 3. Logik Pergerakan Bracket (Winner & Loser)
     if(p[0] === 'W') {
         let nextR = r + 1, nextM = Math.floor(m/2), nextS = (m % 2) + 1;
         if(r < 3) updateSlot(`W_${nextR}_${nextM}`, nextS, winN, winP);
@@ -472,7 +472,7 @@ window.kira = (id) => {
 
         if(r === 0) updateSlot(`L_0_${Math.floor(m/2)}`, (m % 2) + 1, losN, losP);
         else if(r === 1) updateSlot(`L_1_${3-m}`, 2, losN, losP);
-                else if(r === 2) updateSlot(`L_3_${1-m}`, 2, losN, losP);
+        else if(r === 2) updateSlot(`L_3_${1-m}`, 2, losN, losP);
         else if(r === 3) updateSlot(`L_5_0`, 2, losN, losP);
     } 
     else if(p[0] === 'L') {
@@ -483,25 +483,26 @@ window.kira = (id) => {
             updateSlot('GF_0_0', 2, winN, winP);
         }
     } 
-    // --- BAHAGIAN YANG ANDA TERLEPAS (DIBAIKI) ---
+    // 4. LOGIK PODIUM (GF) - DIKEMASKINI UNTUK ID ANDA
     else if(p[0] === 'GF') {
         const podium = document.getElementById('podiumFinal');
         if(podium) {
             podium.style.display = 'block';
             
-            // Masukkan Nama Juara (Pemenang GF)
-            const pName1 = document.getElementById('pod_name1');
-            if(pName1) pName1.innerText = winN;
+            // Masukkan Juara (🥇)
+            const res1 = document.getElementById('res_1');
+            if(res1) res1.innerText = winN;
             updateAvatar('pod', 1, winN, (window.teamNames[winP]?.avatar || ''));
 
-            // Masukkan Nama Naib Juara (Kalah GF)
-            const pName2 = document.getElementById('pod_name2');
-            if(pName2) pName2.innerText = losN;
+            // Masukkan Naib Juara (🥈)
+            const res2 = document.getElementById('res_2');
+            if(res2) res2.innerText = losN;
             updateAvatar('pod', 2, losN, (window.teamNames[losP]?.avatar || ''));
 
-            // Masukkan Nama Tempat Ke-3 (Kalah di Loser Final L_5_0)
-            const finalLoser = document.getElementById('L_5_0');
-            if(finalLoser) {
+            // Masukkan Tempat Ke-3 (🥉)
+            // Diambil secara automatik dari yang kalah di Loser Final (L_5_0)
+            const l5Box = document.getElementById('L_5_0');
+            if(l5Box) {
                 const sL1 = document.getElementById('L_5_0_sc1').value;
                 const sL2 = document.getElementById('L_5_0_sc2').value;
                 if(sL1 !== "" && sL2 !== "") {
@@ -509,8 +510,8 @@ window.kira = (id) => {
                     const t3Nama = isWin1 ? document.getElementById('L_5_0_p2').value : document.getElementById('L_5_0_p1').value;
                     const t3Pid = isWin1 ? document.getElementById('L_5_0_s2').getAttribute('data-pid') : document.getElementById('L_5_0_s1').getAttribute('data-pid');
                     
-                    const pName3 = document.getElementById('pod_name3');
-                    if(pName3) pName3.innerText = t3Nama;
+                    const res3 = document.getElementById('res_3');
+                    if(res3) res3.innerText = t3Nama;
                     updateAvatar('pod', 3, t3Nama, (window.teamNames[t3Pid]?.avatar || ''));
                 }
             }
