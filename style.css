@@ -76,21 +76,20 @@ body {
 
 #podiumFinal {
     position: absolute; 
-    bottom: 20px; 
-    /* Ubah left dari 50% ke 60% atau lebih untuk tolak ke kanan */
-    left: 75%; 
-    /* Scale dinaikkan ke 1.7 untuk saiz gergasi */
-    transform: translateX(-50%) scale(1.7); 
+    bottom: 50px; 
+    left: 70%; /* Tolak ke kanan (adjust antara 65% - 75%) */
+    transform: translateX(-50%) scale(1.8); /* Besarkan lagi sedikit */
     display: block; 
     background: linear-gradient(180deg, #1a1a1f 0%, #0b0b0d 100%); 
-    border: 4px solid #ffd700;
-    padding: 50px 100px; 
-    border-radius: 50px; 
-    box-shadow: 0 0 80px rgba(255, 215, 0, 0.7); 
+    border: 5px solid #ffd700; /* Tebalkan border emas */
+    padding: 60px 100px; 
+    border-radius: 60px; 
+    box-shadow: 0 0 100px rgba(255, 215, 0, 0.8); /* Glow lebih padu */
     z-index: 200;
-    min-width: 800px; 
+    min-width: 900px; 
     text-align: center;
 }
+
 
 .podium-title { 
     font-size: 1.4rem !important; 
@@ -98,11 +97,15 @@ body {
     font-weight: 900; 
     text-transform: uppercase; 
     letter-spacing: 6px; 
-    /* Tambah jarak bawah yang banyak supaya tak kena ikon emas */
-    margin-bottom: 60px !important; 
+    /* Tambah padding-top supaya teks ada ruang atas */
+    padding-top: 20px;
+    /* Tambah margin-bottom yang sangat besar supaya ikon rank tak tutup teks */
+    margin-bottom: 100px !important; 
     opacity: 0.9;
     display: block;
+    position: relative;
 }
+
 
 .pod-rank { 
     font-size: 5rem !important; /* Ikon 1,2,3 jadi lebih besar */
