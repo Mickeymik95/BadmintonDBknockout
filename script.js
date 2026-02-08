@@ -712,32 +712,34 @@ function autoBye() {
 
         // Proses hanya jika skor masih kosong
         if (sc1.value === "" && sc2.value === "") {
-          // Kes: Pemain vs BYE
+          // KES 1: Pemain vs BYE (Auto win hanya jika lawan BYE)
           if (p1 !== "" && p1 !== "BYE" && p1 !== "..." && p2 === "BYE") {
             sc1.value = 21;
             sc2.value = 0;
             window.kira(id);
             adaPerubahan = true;
           }
-          // Kes: BYE vs Pemain
+          // KES 2: BYE vs Pemain (Auto win hanya jika lawan BYE)
           else if (p1 === "BYE" && p2 !== "" && p2 !== "BYE" && p2 !== "...") {
             sc1.value = 0;
             sc2.value = 21;
             window.kira(id);
             adaPerubahan = true;
           }
-          // Kes: BYE vs BYE (Sering berlaku di Loser Bracket)
+          // KES 3: BYE vs BYE (Auto draw)
           else if (p1 === "BYE" && p2 === "BYE") {
             sc1.value = 0;
             sc2.value = 0;
             window.kira(id);
             adaPerubahan = true;
           }
+          // JIKA LAWAN BELUM ADA → JANGAN AUTO-WIN
+          // Biarkan kosong untuk menunggu lawan
         }
       });
   });
 
-  // Jika ada yang menang secara automatik, sistem akan semak semula
+  // Jika ada yang menang secara automatik, sistem akan semak semula 
   // pusingan seterusnya untuk kesan "double BYE"
   if (adaPerubahan) {
     setTimeout(() => autoBye(), 100);
