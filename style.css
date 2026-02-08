@@ -389,7 +389,7 @@ body {
 /* Syarat: Kotak perlawanan mesti sudah ada pemenang */
 .kotak-perlawanan:has(.pemenang) .slot-pasukan:not(.pemenang) .nama-display {
     color: #555 !important; /* Warna kelabu gelap/pudar */
-    opacity: 0.6;
+    opacity: 0.9;
     transition: all 0.3s ease;
 }
 
