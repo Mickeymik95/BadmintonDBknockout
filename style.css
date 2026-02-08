@@ -75,38 +75,91 @@ body {
 #barisL .label-bracket { background: var(--kalah); color: #fff; }
 
 /* 1. KOTAK UTAMA (Dilebarkan, Besarkan 30%, Tolak ke Kanan) */
+/* 1. KOTAK UTAMA (Podium) - Tambah Efek Glow & Kilau */
 #podiumFinal {
     position: absolute; 
     bottom: 50px; 
-    left: 70%; /* Tolak ke kanan (asal 50%) */
+    left: 70%; 
     transform: translateX(-50%); 
     display: block; 
     background: linear-gradient(180deg, #1a1a1f 0%, #0b0b0d 100%); 
     border: 4px solid #ffd700;
-    padding: 50px 60px; /* Tambah padding */
+    padding: 50px 60px; 
     border-radius: 40px; 
-    box-shadow: 0 0 60px rgba(255, 215, 0, 0.6); 
     z-index: 200;
-    width: 950px; /* Lebarkan gila-gila (asal 650px) */
+    width: 950px; 
     text-align: center;
+
+    /* TAMBAHAN KILAUAN */
+    overflow: hidden; /* Supaya kilauan cahaya tak terkeluar kotak */
+    animation: goldGlowPulse 2s infinite alternate;
 }
 
-/* 2. TAJUK */
+/* 2. TAJUK - Tambah Efek Sparkling */
 .podium-title { 
-    font-size: 1.4rem !important; /* Besarkan teks tajuk */
+    font-size: 1.4rem !important; 
     color: #ffd700; 
     margin-bottom: 80px !important; 
     letter-spacing: 6px;
     display: block;
+
+    /* TAMBAHAN KILAUAN TEKS */
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.8), 0 0 20px rgba(255, 215, 0, 0.5);
+    animation: textSparkle 1.5s infinite alternate;
 }
 
-/* 3. SUSUNAN ITEM */
+/* 3. EFEK CAHAYA MELINTAS (Shine Sweep) */
+/* Ini akan buat ada jalur cahaya putih lalu kat atas kotak emas tu */
+#podiumFinal::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -150%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+        to right, 
+        transparent 0%, 
+        rgba(255, 255, 255, 0.3) 50%, 
+        transparent 100%
+    );
+    transform: skewX(-25deg);
+    animation: shineSweep 4s infinite;
+}
+
+/* --- ANIMASI LOGIK --- */
+
+/* Buat border nampak macam lampu neon emas */
+@keyframes goldGlowPulse {
+    0% { 
+        box-shadow: 0 0 40px rgba(255, 215, 0, 0.4); 
+        border-color: #ffd700; 
+    }
+    100% { 
+        box-shadow: 0 0 80px rgba(255, 215, 0, 0.8), inset 0 0 20px rgba(255, 215, 0, 0.2); 
+        border-color: #ffffff; 
+    }
+}
+
+/* Gerakkan cahaya melintas kotak */
+@keyframes shineSweep {
+    0% { left: -150%; }
+    100% { left: 150%; }
+}
+
+/* Buat tajuk bergetar cahaya */
+@keyframes textSparkle {
+    from { filter: brightness(1); }
+    to { filter: brightness(1.5); text-shadow: 0 0 20px #ffd700; }
+}
+
+/* Kod Susunan (Flex) awak kekal sama di bawah */
 .podium-flex {
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: flex-end;
-    gap: 50px; /* Jarak lebih luas */
+    gap: 50px; 
     width: 100%;
 }
 
@@ -319,19 +372,23 @@ body {
 .path-gangsa .nama-display { color: #ff9f43 !important; }
 
 .grand-final { 
-    width: 320px !important; 
-    border: 3px solid #00d2ff !important; /* Biru Cyan */
+    width: 400px !important; 
+    height: 180px;
+    border: 5px solid #00d2ff !important; /* Biru Cyan */
     transform: scale(1.05); 
     box-shadow: 0 0 40px rgba(0, 210, 255, 0.6); /* Glow Biru */
-    z-index: 5; 
+    z-index: 5;
+    margin-top: 70px;
+    margin-left: 350px;
 }
 
 
-.loser-final-highlight { transform: scale(1.02); }
 .loser-final-highlight .kotak-perlawanan {
-    border: 3px solid var(--kalah) !important;
-    box-shadow: 0 0 30px rgba(231,76,60,0.18), 0 6px 30px rgba(0,0,0,0.6);
-    background: linear-gradient(180deg, rgba(231,76,60,0.03), rgba(0,0,0,0.02));
+    width: 320px !important; 
+    border: 5px solid #8f0b0b !important; /* Biru Cyan */
+    transform: scale(1.05); 
+    box-shadow: 0 0 40px rgb(153, 11, 4); /* Glow Biru */
+    z-index: 5;
 }
 /* removed match-no styles for loser-final */
 
@@ -403,4 +460,90 @@ body {
 .nama-display[value="BYE"] {
     color: rgba(255, 255, 255, 0.3) !important; /* Putih yang sangat pudar */
     font-style: italic;
+}
+/* Pastikan input muncul di atas pusingan */
+.pusingan {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Ini akan paksa kotak duduk tengah-tengah pusingan */
+    align-items: center;
+    gap: 20px;
+}
+
+.round-seq-input {
+    width: 35px !important;    /* Lebar kotak */
+    height: 35px !important;   /* Tinggi kena sama dengan lebar */
+    background: #000 !important;
+    color: #f9f9f9 !important;
+    border: 2px solid #f1f4f5 !important;
+    text-align: center;
+    
+    /* INI KUNCI UNTUK JADI BULAT */
+    border-radius: 50% !important; 
+    
+    margin-bottom: 10px;
+    font-weight: bold;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    font-size: 14px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+/* Efek apabila Admin klik pada bulatan itu */
+.round-seq-input:focus {
+    box-shadow: 0 0 10px #7e7f80 !important;
+    background: #8d8d8d !important;
+    color: #000 !important;
+}
+
+/* Menghilangkan anak panah (spinner) dalam input number supaya bulatan nampak bersih */
+.round-seq-input::-webkit-inner-spin-button, 
+.round-seq-input::-webkit-outer-spin-button { 
+    -webkit-appearance: none; 
+    margin: 0; 
+}
+/* Efek garisan luar (border) yang berkelip */
+.kotak-aktif {
+    /* Kekalkan border asal yang tebal */
+    border: 3px solid #00d2ff !important;
+    position: relative;
+    z-index: 99;
+    background: rgba(0, 0, 0, 0.5) !important; /* Latar belakang gelap supaya border nampak jelas */
+    
+    /* Jalankan animasi kelipan pada border */
+    animation: borderBlink 1s infinite alternate;
+}
+
+/* Animasi fokus pada pertukaran warna dan cahaya border */
+@keyframes borderBlink {
+    0% {
+        border-color: #00d2ff;
+        box-shadow: 0 0 5px #00d2ff;
+    }
+    100% {
+        border-color: #ffffff; /* Tukar ke putih */
+        box-shadow: 0 0 15px #ffffff, inset 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+}
+
+
+@keyframes pulseGlow {
+    0% { opacity: 1; }
+    50% { opacity: 0.8; }
+    100% { opacity: 1; }
+}
+/* Secara asal, kunci semua input supaya orang awam tak boleh klik */
+.skor, .round-seq-input {
+    pointer-events: none; 
+    opacity: 0.9;
+}
+
+/* Hanya bila Admin masuk, baru kunci ini terbuka */
+body.admin-active .skor, 
+body.admin-active .round-seq-input {
+    pointer-events: auto !important;
+    opacity: 1 !important;
 }
