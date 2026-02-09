@@ -629,12 +629,19 @@ window.kira = (id) => {
     // Jika skor kosong ATAU kedua-duanya 0, tambah class merah.
     // Kecuali jika kedua-duanya BYE (biasanya auto-complete).
     if (
-      (sc1 === "" ||
-        sc2 === "" ||
-        (parseInt(sc1) === 0 && parseInt(sc2) === 0)) &&
       !(p1 === "BYE" && p2 === "BYE")
     ) {
-      box.classList.add("kotak-belum-selesai");
+      // Check jika skor betul-betul kosong (blank)
+      if (sc1 === "" || sc2 === "") {
+        box.classList.add("kotak-belum-selesai");
+      } 
+      // Check jika skor 0-0 (sudah ada nilai tapi kosong)
+      else if (parseInt(sc1) === 0 && parseInt(sc2) === 0) {
+        // JANGAN highlight merah - biarkan neutral
+        box.classList.remove("kotak-belum-selesai", "kotak-aktif", "kotak-selesai");
+      } else {
+        box.classList.remove("kotak-belum-selesai");
+      }
     } else {
       box.classList.remove("kotak-belum-selesai");
     }
@@ -965,13 +972,14 @@ window.updateMatchHighlights = () => {
         const bukanBye = !(p1 === "BYE" && p2 === "BYE");
 
         if (adaPemain && bukanBye) {
-          // JIKA SKOR 0-0 -> MERAH (Belum dimainkan)
-          if (
-            sc1 === "" ||
-            sc2 === "" ||
-            (parseInt(sc1) === 0 && parseInt(sc2) === 0)
-          ) {
+          // JIKA SKOR BLANK -> MERAH (Belum dimainkan)
+          if (sc1 === "" || sc2 === "") {
             box.classList.add("kotak-belum-selesai");
+          }
+          // JIKA SKOR 0-0 -> NEUTRAL (Sudah ada nilai tapi belum main)
+          else if (parseInt(sc1) === 0 && parseInt(sc2) === 0) {
+            // JANGAN highlight apa-apa - biarkan neutral
+            box.classList.remove("kotak-belum-selesai", "kotak-aktif", "kotak-selesai");
           }
           // JIKA DAH ADA SKOR & ADA PEMENANG -> PUTIH (Selesai)
           else if (sc1 !== "" && sc2 !== "" && sc1 !== sc2) {
