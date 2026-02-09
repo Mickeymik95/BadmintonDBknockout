@@ -592,19 +592,26 @@ function updateMatchLabelsForBye() {
             labelInput.style.fontWeight = "900";
             labelInput.style.textShadow = "0 0 10px rgba(255, 215, 0, 0.5)";
         } else {
-            // Kembali ke nilai asal jika tiada BYE
-            const matchNum = id.includes('GF') ? 30 : 
-                           id.includes('L') ? parseInt(id.split('_')[2]) + 16 : 
-                           parseInt(id.split('_')[2]) + 1;
+            // JANGAN override custom text - hanya tukar warna jika masih default
+            const currentValue = labelInput.value.trim();
             
-            if (id.includes('GF')) {
-                labelInput.value = "P30 GRAND FINAL";
-            } else if (id.includes('L_5')) {
-                labelInput.value = "P29 FINAL LOSER";
-            } else {
-                labelInput.value = `P${matchNum}`;
+            // Jika masih default value, baru update ke format standard
+            if (currentValue === "" || currentValue.startsWith("P") && !isNaN(currentValue.substring(1))) {
+                // Update ke format standard
+                const matchNum = id.includes('GF') ? 30 : 
+                               id.includes('L') ? parseInt(id.split('_')[2]) + 16 : 
+                               parseInt(id.split('_')[2]) + 1;
+                
+                if (id.includes('GF')) {
+                    labelInput.value = "P30 GRAND FINAL";
+                } else if (id.includes('L_5')) {
+                    labelInput.value = "P29 FINAL LOSER";
+                } else {
+                    labelInput.value = `P${matchNum}`;
+                }
             }
             
+            // Tukar warna ke ungu untuk normal matches
             labelInput.style.color = "rgb(217, 0, 255)"; // Warna ungu asal
             labelInput.style.fontWeight = "900";
             labelInput.style.textShadow = "none";
