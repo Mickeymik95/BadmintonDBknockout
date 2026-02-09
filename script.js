@@ -193,12 +193,17 @@ window.resetSkor = async () => {
     if(confirm("Reset semua skor sahaja? Nama & Nombor Match akan dikekalkan.")) {
         const snapshot = await get(dbRef);
         const data = snapshot.val() || {};
+        
+        // Hanya reset skor - kekal semua data lain
         set(dbRef, { 
             n: 16, 
             teams: data.teams || {}, 
-            scores: {}, 
-            matchNumbers: data.matchNumbers || {} 
-        }).then(() => location.reload());
+            scores: {},                    // Reset skor sahaja
+            matchLabels: data.matchLabels || {}  // Kekal match labels
+        }).then(() => {
+            // Refresh page untuk paparan terkini
+            location.reload();
+        });
     }
 };
 
