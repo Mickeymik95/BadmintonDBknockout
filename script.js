@@ -40,7 +40,13 @@ window.checkPersistentAdmin = () => {
 // Modified: Admin panel sekarang menampilkan 16 pemain individually (1-16), bukan 8 matches
 function populatePesertaInputs() {
   const section = document.getElementById("pesertaInputSection");
-  if (!section || section.children.length > 0) return; // Jika dah ada input, jangan overwrite
+  if (!section) return;
+
+  // JANGAN overwrite jika sudah ada input dan ada data
+  if (section.children.length > 0 && window.teamNames && Object.keys(window.teamNames).length > 0) {
+    console.log("🛡️ Admin panel already has data, skipping overwrite");
+    return;
+  }
 
   section.innerHTML = "";
 
@@ -48,15 +54,19 @@ function populatePesertaInputs() {
     const groupDiv = document.createElement("div");
     groupDiv.className = "peserta-input-group";
 
-    // Kita hanya ambil data awal dari Firebase jika ada
-    let initialNama =
-      window.teamNames && window.teamNames[i] ? window.teamNames[i].nama : "";
-    let initialAv =
-      window.teamNames && window.teamNames[i] ? window.teamNames[i].avatar : "";
+    // Dapatkan data dari window.teamNames yang di-load dari Firebase
+    let teamData = window.teamNames && window.teamNames[i] ? window.teamNames[i] : { nama: "", avatar: "" };
+    let initialNama = teamData.nama || "";
+    let initialAv = teamData.avatar || "";
+
+    // Gunakan index langsung - slot i = team index
+    let seedNumber = i + 1;
+    
+    console.log(`📝 Loading team ${i}: ${initialNama} (Slot: ${seedNumber})`);
 
     groupDiv.innerHTML = `
             <label>INPUT SLOT ${i + 1}</label>
-            <input type="number" id="admin_seed${i}" value="${i + 1}" min="1" max="16" placeholder="No Seed" class="admin-input">
+            <input type="number" id="admin_seed${i}" value="${seedNumber}" min="1" max="16" placeholder="No Seed" class="admin-input">
             <input type="text" id="admin_p${i}" value="${initialNama === "BYE" ? "" : initialNama}" placeholder="Nama Pasukan" class="admin-input">
             <input type="text" id="admin_av${i}" value="${initialAv}" placeholder="Link Avatar URL" class="admin-input">
         `;
@@ -144,13 +154,15 @@ onValue(dbRef, (snapshot) => {
     return; // JANGAN lukis semula jika data kosong
   }
 
-  // BACKUP PROTECTION - JANGAN OVERWRITE DENGAN DATA KOSONG
-  if (window.teamNames && Object.keys(window.teamNames).length > 0) {
-    console.log("🛡️ Protecting existing team data from overwrite");
-    // Jangan overwrite window.teamNames jika sudah ada data
-  } else {
-    console.log("📋 Loading teams from Firebase");
-    window.teamNames = data.teams || {};
+  // PASTIKAN DATA DARI FIREBASE DI-LOAD KE ADMIN PANEL
+  console.log("� Loading teams from Firebase:", data.teams);
+  window.teamNames = data.teams || {};
+
+  // Update admin panel dengan data dari Firebase
+  if (document.getElementById("pesertaInputSection")) {
+    console.log("� Updating admin panel with Firebase data");
+    populatePesertaInputs();
+    updatePesertaInputDisplay();
   }
 
   // SEMAK: Adakah kursor sedang berada dalam kotak input?
@@ -181,6 +193,7 @@ window.saveAll = () => {
   const inputSection = document.getElementById("pesertaInputSection");
   
   if (inputSection && inputSection.children.length > 0) {
+    console.log("📝 Collecting data from admin inputs");
     // Normal flow - kumpil dari admin inputs
     for (let i = 0; i < 16; i++) {
       const seedInput = document.getElementById(`admin_seed${i}`);
@@ -231,11 +244,7 @@ window.saveAll = () => {
     return;
   }
 
-  // Pastikan semua 16 slots ada data
-  for (let j = 0; j < 16; j++) {
-    if (!teams[j]) teams[j] = { nama: "BYE", avatar: "" };
-  }
-
+  // JANGAN force fill dengan BYE - gunakan data yang ada
   console.log("📊 Teams data collected:", teams);
 
   // 2. Kumpul data Skor
@@ -558,20 +567,27 @@ function jana(savedScores, savedMatchLabels, savedRoundSequence) {
     bl.appendChild(div);
   }
 
-  const seeds = [0, 15, 7, 8, 3, 12, 4, 11, 1, 14, 6, 9, 2, 13, 5, 10];
-  for (let m = 0; m < 8; m++) {
-    updateSlot(
-      `W_0_${m}`,
-      1,
-      window.teamNames[seeds[m * 2]]?.nama || "",
-      seeds[m * 2],
-    );
-    updateSlot(
-      `W_0_${m}`,
-      2,
-      window.teamNames[seeds[m * 2 + 1]]?.nama || "",
-      seeds[m * 2 + 1],
-    );
+  // Load teams dari window.teamNames ke bracket
+  if (window.teamNames && Object.keys(window.teamNames).length > 0) {
+    console.log("🔄 Loading teams from window.teamNames to bracket");
+    
+    // Update semua slot dengan data dari window.teamNames
+    for (let i = 0; i < 16; i++) {
+      const teamData = window.teamNames[i] || { nama: "BYE", avatar: "" };
+      console.log(`📝 Updating slot ${i}: ${teamData.nama}`);
+      
+      // Update W_0 slots
+      if (i < 8) {
+        const matchIndex = Math.floor(i / 2);
+        const slot = (i % 2) + 1;
+        updateSlot(
+          `W_0_${matchIndex}`,
+          slot,
+          teamData.nama,
+          i
+        );
+      }
+    }
   }
 
   for (let id in savedScores) {
