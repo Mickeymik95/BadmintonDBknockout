@@ -170,38 +170,6 @@ onValue(dbRef, (snapshot) => {
   window.updateMatchHighlights();
 });
 
-window.recoverData = () => {
-  console.log("🚨 EMERGENCY DATA RECOVERY");
-  
-  // Dapatkan data dari Firebase
-  get(dbRef).then((snapshot) => {
-    const data = snapshot.val() || {};
-    console.log("📋 Firebase data:", data);
-    
-    // Jika ada teams data, restore
-    if (data.teams && Object.keys(data.teams).length > 0) {
-      window.teamNames = data.teams;
-      console.log("✅ Teams data restored:", window.teamNames);
-      
-      // Rebuild bracket
-      jana(data.scores || {}, data.matchLabels || {}, data.roundSequence || {});
-      
-      // Restore admin inputs
-      if (document.getElementById("pesertaInputSection")) {
-        populatePesertaInputs();
-        updatePesertaInputDisplay();
-      }
-      
-      alert("✅ Data berjaya dipulihkan!");
-    } else {
-      alert("❌ Tiada data untuk dipulihkan dalam Firebase");
-    }
-  }).catch((err) => {
-    console.error("❌ Recovery failed:", err);
-    alert("❌ Gagal pulihkan data: " + err);
-  });
-};
-
 window.saveAll = () => {
   console.log("🔄 saveAll() called - collecting admin data...");
   
@@ -360,40 +328,43 @@ window.resetSkor = async () => {
   }
 };
 
-window.resetTournament = () => {
-  if (
-    confirm(
-      "Reset semua data? Ini akan memadam SEMUA Nama, Skor dan Nombor Match.",
-    )
-  ) {
-    // Backup current data sebelum reset
-    const currentTeams = window.teamNames || {};
-    
-    set(dbRef, {
-      n: 16,
-      teams: {},        // Reset teams
-      scores: {},
-      matchLabels: {},
-      roundSequence: {},
-    }).then(() => {
-      // Clear local data
-      window.teamNames = {};
-      
-      // Rebuild bracket dengan data kosong
-      jana({}, {}, {});
-      
-      // Reset admin inputs
-      if (document.getElementById("pesertaInputSection")) {
-        document.getElementById("pesertaInputSection").innerHTML = "";
-        populatePesertaInputs();
-        updatePesertaInputDisplay();
-      }
-      
-      alert("Semua data berjaya di-reset.");
-      location.reload();
-    });
-  }
-};
+// ❌ FUNCTION RESET ALL DIPADAM - MENGHANCURKAN DATA!
+// Jika perlu reset, gunakan resetSkor() atau edit manual dalam Firebase
+
+// window.resetTournament = () => {
+//   if (
+//     confirm(
+//       "Reset semua data? Ini akan memadam SEMUA Nama, Skor dan Nombor Match.",
+//     )
+//   ) {
+//     // Backup current data sebelum reset
+//     const currentTeams = window.teamNames || {};
+//     
+//     set(dbRef, {
+//       n: 16,
+//       teams: {},        // ❌ PADAM SEMUA DATA!
+//       scores: {},
+//       matchLabels: {},
+//       roundSequence: {},
+//     }).then(() => {
+//       // Clear local data
+//       window.teamNames = {};
+//       
+//       // Rebuild bracket dengan data kosong
+//       jana({}, {}, {});
+//       
+//       // Reset admin inputs
+//       if (document.getElementById("pesertaInputSection")) {
+//         document.getElementById("pesertaInputSection").innerHTML = "";
+//         populatePesertaInputs();
+//         updatePesertaInputDisplay();
+//       }
+//       
+//       alert("Semua data berjaya di-reset.");
+//       location.reload();
+//     });
+//   }
+// };
 
 // Modified: Match numbers now display as P1-P8 instead of 1-8
 function createBox(j, r, m, matchNum) {
