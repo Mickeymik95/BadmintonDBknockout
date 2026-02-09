@@ -962,6 +962,7 @@ function checkDanProsesPusinganSelesai() {
 
     console.log("📊 Sorted rounds:", sortedRounds);
 
+    // PROSES SEMUA ROUND - BUKAN SATU SAHAJA
     for (let [roundId, seqNo] of sortedRounds) {
       const matchesInRound = document.querySelectorAll(
         `[id^="${roundId}_"].kotak-perlawanan`,
@@ -990,14 +991,13 @@ function checkDanProsesPusinganSelesai() {
       console.log(`🏆 Round ${roundId} completed: ${pusinganSelesai}`);
       console.log(`🎯 Matches to process:`, matchIdsToProcess);
 
-      // Jika pusingan ini selesai, proses semua match
-      if (pusinganSelesai && matchIdsToProcess.length > 0) {
+      // PROSES SEMUA MATCH YANG ADA SKOR - TUNGGU PUSINGAN SELESAI
+      if (matchIdsToProcess.length > 0) {
         console.log(`⚡ Processing ${matchIdsToProcess.length} matches in round ${roundId}`);
         matchIdsToProcess.forEach(matchId => {
           console.log(`🎮 Processing match: ${matchId}`);
           window.kira(matchId);
         });
-        break; // Proses satu pusingan pada satu masa
       }
     }
   });
@@ -1036,12 +1036,33 @@ document.addEventListener("change", function (e) {
     currentInput.defaultValue = newValue;
   }
   
-  // 2. Auto-save logic (handleAutoSave)
+  // 2. SKOR INPUT - AUTO PROSES BRACKET
+  if (e.target && e.target.classList.contains("skor")) {
+    console.log("🎯 Skor input changed:", e.target.id);
+    
+    // Dapatkan match ID dari input ID
+    const matchId = e.target.id.replace(/_sc[12]$/, "");
+    console.log("🎮 Processing match:", matchId);
+    
+    // Proses bracket immediately
+    setTimeout(() => {
+      window.kira(matchId);
+    }, 100);
+    
+    // Auto-save after processing
+    setTimeout(() => {
+      console.log("💾 Auto-saving after score change...");
+      window.saveAll();
+    }, 300);
+    
+    return; // Skip auto-save logic below
+  }
+  
+  // 3. Auto-save logic (handleAutoSave)
   if (!window.isAdminMode) return;
 
-  // Simpan jika yang berubah adalah skor, input admin, atau label match
+  // Simpan jika yang berubah adalah input admin atau label match
   if (
-    e.target.classList.contains("skor") ||
     e.target.classList.contains("admin-input") ||
     e.target.classList.contains("match-top-input")
   ) {
