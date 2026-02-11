@@ -593,11 +593,11 @@ function updateMatchLabelsForBye() {
             labelInput.style.fontWeight = "900";
             labelInput.style.textShadow = "0 0 10px rgba(255, 215, 0, 0.5)";
         } else {
-            // JANGAN override custom text - hanya tukar warna jika masih default
+            // JANGAN override custom text - hanya tukar warna
             const currentValue = labelInput.value.trim();
             
-            // Jika masih default value, baru update ke format standard
-            if (currentValue === "" || currentValue.startsWith("P") && !isNaN(currentValue.substring(1))) {
+            // Hanya update jika masih kosong atau default value
+            if (currentValue === "" || currentValue === "P1" || currentValue === "P2" || currentValue === "P3" || currentValue === "P4") {
                 // Update ke format standard
                 const matchNum = id.includes('GF') ? 30 : 
                                id.includes('L') ? parseInt(id.split('_')[2]) + 16 : 

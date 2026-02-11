@@ -474,21 +474,42 @@ body {
   transition: 0.3s;
   outline: none;
   margin-left: auto;
-  appearance: textfield;
-  -moz-appearance: textfield;
-  -webkit-appearance: textfield;
+  /* Hilangkan semua appearance */
+  appearance: none !important;
+  -moz-appearance: none !important;
+  -webkit-appearance: none !important;
+  /* Hilangkan scroll arrows untuk semua browser */
+  -moz-appearance: textfield !important;
 }
 
-/* Hilangkan scroll arrows untuk semua browser */
-.skor::-webkit-inner-spin-button,
-.skor::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-  display: none;
+/* Hilangkan scroll arrows untuk Chrome/Safari/Edge */
+.skor::-webkit-outer-spin-button,
+.skor::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0 !important;
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
 
+/* Hilangkan scroll arrows untuk Firefox */
 .skor::-moz-number-spin-box {
-  display: none;
+  display: none !important;
+}
+
+/* Additional untuk Firefox */
+.skor[type=number]::-moz-number-spin-box {
+  display: none !important;
+}
+
+/* Hilangkan arrows untuk IE/Edge lama */
+.skor::-ms-clear {
+  display: none !important;
+}
+
+.skor::-ms-reveal {
+  display: none !important;
 }
 
 .slot-pasukan.pemenang .skor {
