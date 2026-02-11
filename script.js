@@ -388,13 +388,9 @@ document.querySelectorAll('.nama-display').forEach(el => {
 
 // 2. Kunci label Match (P1, P2, dll)
 document.querySelectorAll('.match-top-input').forEach(el => {
-    if (window.isAdminMode) {
-        el.readOnly = false;
-        el.style.pointerEvents = "auto";
-    } else {
-        el.readOnly = true;
-        el.style.pointerEvents = "none";
-    }
+    // Buka untuk semua user - label match boleh diedit sesiapa sahaja
+    el.readOnly = false;
+    el.style.pointerEvents = "auto";
 });
 
 // 3. Kawalan Input Skor
@@ -657,8 +653,6 @@ document.addEventListener('change', function(e) {
 
 // --- 4. SISTEM AUTO-SAVE (SATU SAHAJA) ---
 const handleAutoSave = (e) => {
-    if (!window.isAdminMode) return;
-
     // Simpan jika yang berubah adalah skor, input admin, atau label match
     if (e.target.classList.contains('skor') || 
         e.target.closest('#pesertaInputSection') || 
