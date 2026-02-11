@@ -562,6 +562,14 @@ body {
   z-index: 5;
 }
 
+.semifinal-lower-highlight .kotak-perlawanan {
+  width: 320px !important;
+  border: 5px solid #00ff00 !important;
+  transform: scale(1.05);
+  box-shadow: 0 0 40px rgba(0, 255, 0, 0.8);
+  z-index: 5;
+}
+
 #panelAdmin {
   display: none;
   position: fixed;
