@@ -580,8 +580,6 @@ window.kira = (id) => {
     }
 }
 
-
-
 // --- 4. AUTO UPDATE MATCH LABEL UNTUK BYE MATCHES ---
 function updateMatchLabelsForBye() {
     document.querySelectorAll('.kotak-perlawanan').forEach(box => {
@@ -594,34 +592,25 @@ function updateMatchLabelsForBye() {
         
         // Check jika mana-mana pemain adalah BYE
         if (p1 === "BYE" || p2 === "BYE") {
-            labelInput.value = "BYE";
-            labelInput.style.color = "#FFD700"; // Warna kuning
-            labelInput.style.fontWeight = "900";
-            labelInput.style.textShadow = "0 0 10px rgba(255, 215, 0, 0.5)";
+            // Hanya tukar kepada BYE jika masih default value
+            const currentValue = labelInput.value.trim();
+            if (currentValue === "" || currentValue.startsWith("P") || currentValue.includes("FINAL")) {
+                labelInput.value = "BYE";
+                labelInput.style.color = "#FFD700"; // Warna kuning
+                labelInput.style.fontWeight = "900";
+                labelInput.style.textShadow = "0 0 10px rgba(255, 215, 0, 0.5)";
+            }
         } else {
             // JANGAN override custom text - hanya tukar warna
             const currentValue = labelInput.value.trim();
             
-            // Hanya update jika masih kosong atau default value
-            if (currentValue === "" || currentValue === "P1" || currentValue === "P2" || currentValue === "P3" || currentValue === "P4") {
-                // Update ke format standard
-                const matchNum = id.includes('GF') ? 30 : 
-                               id.includes('L') ? parseInt(id.split('_')[2]) + 16 : 
-                               parseInt(id.split('_')[2]) + 1;
-                
-                if (id.includes('GF')) {
-                    labelInput.value = "P30 GRAND FINAL";
-                } else if (id.includes('L_5')) {
-                    labelInput.value = "P29 FINAL LOSER";
-                } else {
-                    labelInput.value = `P${matchNum}`;
-                }
+            // Jika bukan BYE, jangan sentuh sama sekali
+            if (currentValue !== "BYE") {
+                // Hanya set warna, jangan ubah text
+                labelInput.style.color = "rgb(217, 0, 255)"; // Warna ungu asal
+                labelInput.style.fontWeight = "900";
+                labelInput.style.textShadow = "none";
             }
-            
-            // Tukar warna ke ungu untuk normal matches
-            labelInput.style.color = "rgb(217, 0, 255)"; // Warna ungu asal
-            labelInput.style.fontWeight = "900";
-            labelInput.style.textShadow = "none";
         }
     });
 }
