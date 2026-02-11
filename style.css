@@ -479,6 +479,18 @@ body {
   -webkit-appearance: textfield;
 }
 
+/* Hilangkan scroll arrows untuk semua browser */
+.skor::-webkit-inner-spin-button,
+.skor::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+  display: none;
+}
+
+.skor::-moz-number-spin-box {
+  display: none;
+}
+
 .slot-pasukan.pemenang .skor {
   background: var(--menang) !important;
   color: #000 !important;
