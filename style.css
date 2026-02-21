@@ -959,7 +959,7 @@ body.admin-active .round-seq-input {
 .header-banner {
   width: 1200px;
   height: 500px;
-  border-radius: 15px;
+  border-radius: 35px;
   overflow: hidden;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
   border: 2px solid rgba(255, 255, 255, 0.2);
@@ -977,13 +977,16 @@ body.admin-active .round-seq-input {
 
 /* Side Photos */
 .side-photo {
-  width: 490px;
+  width: 500px;
   height: 500px;
-  border-radius: 15px;
+  border-radius: 50%;
   overflow: hidden;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.6);
   transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin-bottom: 20px;
 }
 
