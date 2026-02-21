@@ -214,8 +214,23 @@ window.resetSkor = async () => {
 };
 
 window.resetTournament = () => {
-    if(confirm("Reset semua data? Ini akan memadam SEMUA Nama, Skor dan Nombor Match.")) {
-        set(dbRef, { n: 16, teams: {}, scores: {}, matchNumbers: {} }).then(() => location.reload());
+    if(confirm("Reset nama pasukan dan avatar sahaja? Skor dan struktur bracket akan dikekalkan.")) {
+        get(dbRef).then(snapshot => {
+            const data = snapshot.val() || {};
+            
+            // Reset hanya teams data - kosongkan nama dan avatar
+            // Kekal skor, match labels, dan struktur bracket
+            set(dbRef, { 
+                n: data.n || 16, 
+                teams: {},                    // Reset teams sahaja
+                scores: data.scores || {},     // Kekal skor
+                matchLabels: data.matchLabels || {},  // Kekal match labels
+                matchNumbers: data.matchNumbers || {}  // Kekal match numbers
+            }).then(() => {
+                alert("✅ Nama pasukan dan avatar telah direset!");
+                location.reload();
+            });
+        }).catch(err => alert("GAGAL RESET: " + err));
     }
 };
 
