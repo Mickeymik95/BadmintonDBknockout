@@ -118,6 +118,12 @@ onValue(dbRef, (snapshot) => {
             updatePesertaInputDisplay();
         }
     }
+    
+    // Trigger autoBye after data is loaded and bracket is generated
+    setTimeout(() => {
+        autoBye();
+        updateMatchLabelsForBye();
+    }, 300);
 });
 
 window.saveAll = () => {
@@ -192,6 +198,12 @@ window.saveAll = () => {
             toast.style.opacity = "1";
             setTimeout(() => { toast.style.opacity = "0"; }, 2000);
         }
+        
+        // Trigger autoBye after saving data
+        setTimeout(() => {
+            autoBye();
+            updateMatchLabelsForBye();
+        }, 100);
     }).catch(err => alert("GAGAL SIMPAN: " + err));
 };
 
@@ -397,8 +409,13 @@ bw.appendChild(divGF);
             if(box.classList.contains('kotak-perlawanan')) window.kira(box.id);
         });
     });
-    autoBye();
-    updateMatchLabelsForBye(); // Update match labels untuk BYE
+    
+    // Delay autoBye to ensure DOM is ready
+    setTimeout(() => {
+        autoBye();
+        updateMatchLabelsForBye(); // Update match labels untuk BYE
+    }, 200);
+    
     penyelarasanLebar();
 
   // --- Letakkan ini di bahagian paling bawah dalam fungsi jana() ---
@@ -571,13 +588,13 @@ window.kira = (id) => {
                 
                 // Kes: Pemain vs BYE
                 if (p1 !== "" && p1 !== "BYE" && p1 !== "..." && p2 === "BYE") {
-                    sc1.value = 21; sc2.value = 0;
+                    sc1.value = 1; sc2.value = 0;
                     window.kira(id);
                     adaPerubahan = true;
                 } 
                 // Kes: BYE vs Pemain
                 else if (p1 === "BYE" && p2 !== "" && p2 !== "BYE" && p2 !== "...") {
-                    sc1.value = 0; sc2.value = 21;
+                    sc1.value = 0; sc2.value = 1;
                     window.kira(id);
                     adaPerubahan = true;
                 }
