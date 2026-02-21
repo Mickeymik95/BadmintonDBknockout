@@ -98,12 +98,12 @@ window.toggleAdmin = () => { const p = document.getElementById('panelAdmin'); p.
 
 onValue(dbRef, (snapshot) => {
     const data = snapshot.val();
-    if (!data || !data.teams) return;
-
-    window.teamNames = data.teams;
     
-    // Jana bracket (visual)
-    jana(data.scores || {}, data.matchLabels || {});
+    // Jana bracket walaupun tiada data teams - gunakan default
+    window.teamNames = data?.teams || {};
+    
+    // Jana bracket (visual) - walaupun teams kosong
+    jana(data?.scores || {}, data?.matchLabels || {});
     
     // Pastikan label match sentiasa boleh diedit
     document.querySelectorAll('.match-top-input').forEach(el => {
@@ -376,8 +376,8 @@ bw.appendChild(divGF);
 
     const seeds = [0, 15, 7, 8, 3, 12, 4, 11, 1, 14, 6, 9, 2, 13, 5, 10];
     for(let m=0; m < 8; m++) {
-        updateSlot(`W_0_${m}`, 1, window.teamNames[seeds[m*2]]?.nama || "", seeds[m*2]);
-        updateSlot(`W_0_${m}`, 2, window.teamNames[seeds[m*2+1]]?.nama || "", seeds[m*2+1]);
+        updateSlot(`W_0_${m}`, 1, window.teamNames[seeds[m*2]]?.nama || "BYE", seeds[m*2]);
+        updateSlot(`W_0_${m}`, 2, window.teamNames[seeds[m*2+1]]?.nama || "BYE", seeds[m*2+1]);
     }
 
     for(let id in savedScores) {
