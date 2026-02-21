@@ -73,12 +73,13 @@ body {
   animation: shine 4s linear infinite;
 }
 .tajuk-box p {
-  font-size: 2rem;
+  font-size: 1.8rem;
   color: #888;
-  margin-top: 10px;
+  margin-top: 20px;
   letter-spacing: 0.5rem;
   text-transform: uppercase;
   font-weight: 1000;
+  animation: textGlow 2s ease-in-out infinite alternate;
 }
 
 #syncToast {
@@ -95,6 +96,30 @@ body {
 @keyframes shine {
   to {
     background-position: 200% center;
+  }
+}
+
+@keyframes textGlow {
+  0% {
+    text-shadow: 
+      0 0 5px rgba(0, 123, 255, 0.3),
+      0 0 10px rgba(0, 123, 255, 0.2),
+      0 0 15px rgba(0, 123, 255, 0.1);
+    color: #666;
+  }
+  50% {
+    text-shadow: 
+      0 0 10px rgba(0, 123, 255, 0.5),
+      0 0 20px rgba(255, 255, 255, 0.3),
+      0 0 30px rgba(0, 123, 255, 0.2);
+    color: #87CEEB;
+  }
+  100% {
+    text-shadow: 
+      0 0 15px rgba(0, 123, 255, 0.7),
+      0 0 30px rgba(255, 255, 255, 0.4),
+      0 0 45px rgba(0, 123, 255, 0.3);
+    color: #fff;
   }
 }
 
@@ -952,13 +977,14 @@ body.admin-active .round-seq-input {
 
 /* Side Photos */
 .side-photo {
-  width: 500px;
+  width: 490px;
   height: 500px;
   border-radius: 15px;
   overflow: hidden;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
   border: 2px solid rgba(255, 255, 255, 0.2);
   transition: all 0.3s ease;
+  margin-bottom: 20px;
 }
 
 .side-photo img {
@@ -969,11 +995,11 @@ body.admin-active .round-seq-input {
 }
 
 .left-photo {
-  margin-right: 20px;
+  margin-right: 30px;
 }
 
 .right-photo {
-  margin-left: 20px;
+  margin-left: 0px;
 }
 
 /* Update header-container to be flex */
