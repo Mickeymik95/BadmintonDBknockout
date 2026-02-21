@@ -710,26 +710,27 @@ body {
   height: 180px;
   border: 5px solid #00d2ff !important;
   transform: scale(1.35);
-  box-shadow: 0 0 40px rgba(0, 210, 255, 0.6);
+  box-shadow: 0 0 40px rgba(33, 206, 236, 0.6);
   z-index: 5;
-  margin-top: 20px;
+  margin-top: 5px;
   margin-left: 450px;
 }
 
 .loser-final-highlight .kotak-perlawanan {
-  width: 320px !important;
-  border: 5px solid #00ff00 !important;
-  transform: scale(1.15);
-  box-shadow: 0 0 40px rgba(0, 155, 0, 0.8);
+  width: 380px !important;
+  border: 5px solid #ff6403 !important;
+  transform: scale(1.05);
+  box-shadow: 0 0 40px rgba(255, 98, 0, 0.7);
   z-index: 5;
-  margin-left: 40px;
+  margin-left: 50px;
+  height: 180px;
 }
 
 .semifinal-lower-highlight .kotak-perlawanan {
   width: 320px !important;
-  border: 5px solid #8f0b0b !important;
+  border: 5px solid #fa1404 !important;
   transform: scale(1.05);
-  box-shadow: 0 0 40px rgb(153, 11, 4);
+  box-shadow: 0 0 40px rgba(250, 37, 37, 0.5);
   z-index: 5;
 }
 
@@ -737,9 +738,10 @@ body {
   width: 320px !important;
   border: 5px solid #e6e4e4 !important;
   transform: scale(1.05);
-  box-shadow: 0 0 40px rgba(192, 192, 192, 0.8);
+  box-shadow: 0 0 40px rgba(252, 249, 249, 0.4);
   z-index: 5;
   margin-left: 100px;
+   height: 180px;
 }
 
 #panelAdmin {
