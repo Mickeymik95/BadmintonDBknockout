@@ -718,9 +718,9 @@ body {
 
 .loser-final-highlight .kotak-perlawanan {
   width: 380px !important;
-  border: 5px solid #ff6403 !important;
+  border: 5px solid #8B4513 !important; /* Brown */
   transform: scale(1.05);
-  box-shadow: 0 0 40px rgba(255, 98, 0, 0.7);
+  box-shadow: 0 0 40px rgba(139, 69, 19, 0.7);
   z-index: 5;
   margin-left: 50px;
   height: 180px;
@@ -728,9 +728,9 @@ body {
 
 .semifinal-lower-highlight .kotak-perlawanan {
   width: 320px !important;
-  border: 5px solid #fa1404 !important;
+  border: 5px solid #8000FF !important; /* Purple */
   transform: scale(1.05);
-  box-shadow: 0 0 40px rgba(250, 37, 37, 0.5);
+  box-shadow: 0 0 40px rgba(128, 0, 255, 0.5);
   z-index: 5;
 }
 
