@@ -718,13 +718,14 @@ body {
 
 .loser-final-highlight .kotak-perlawanan {
   width: 380px !important;
-  border: 5px solid #8B4513 !important; /* Brown */
+  border: 5px solid rgba(255, 0, 0, 1) !important;
   transform: scale(1.05);
-  box-shadow: 0 0 40px rgba(220,20,60,0.5);
+  box-shadow: 0 0 40px rgba(255, 0, 0, 0.9);
   z-index: 5;
   margin-left: 50px;
   height: 180px;
 }
+
 
 .semifinal-lower-highlight .kotak-perlawanan {
   width: 320px !important;
