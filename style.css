@@ -720,7 +720,7 @@ body {
   width: 380px !important;
   border: 5px solid #8B4513 !important; /* Brown */
   transform: scale(1.05);
-  box-shadow: 0 0 40px rgba(139, 69, 19, 0.7);
+  box-shadow: 0 0 40px rgba(220,20,60,0.5);
   z-index: 5;
   margin-left: 50px;
   height: 180px;
