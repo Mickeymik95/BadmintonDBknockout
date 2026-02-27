@@ -1517,3 +1517,8 @@ document.addEventListener('keypress', (e) => {
     }
 
 });
+// Muzik akan dimainkan apabila pengguna klik di mana-mana dalam laman web
+document.addEventListener('click', function() {
+    var audio = document.getElementById("myAudio");
+    audio.play();
+}, { once: true }); // 'once: true' bermaksud ia hanya aktif pada klik pertama sahaja

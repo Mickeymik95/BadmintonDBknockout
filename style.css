@@ -769,11 +769,12 @@ body {
   height: 180px;
 }
 
+
 .semifinal-lower-highlight .kotak-perlawanan {
   width: 320px !important;
-  border: 5px solid #fa1404 !important;
+  border: 5px solid #8000FF !important; /* Purple */
   transform: scale(1.05);
-  box-shadow: 0 0 40px rgba(250, 37, 37, 0.5);
+  box-shadow: 0 0 40px rgba(128, 0, 255, 0.5);
   z-index: 5;
 }
 
