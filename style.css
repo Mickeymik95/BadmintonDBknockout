@@ -211,6 +211,7 @@ body {
   width: 770px;
   text-align: center;
   margin-bottom: 150px;
+  margin-left: 150px;
 
   /* TAMBAHAN KILAUAN */
   overflow: hidden; /* Supaya kilauan cahaya tak terkeluar kotak */
@@ -443,7 +444,49 @@ body {
   flex-direction: column;
   width: 360px;
   justify-content: center;
-  gap: 40px;
+  gap: 100px;
+}
+
+/* Winner Bracket - Gap untuk setiap round */
+#barisW .pusingan.round-1 {
+  gap: 15px; /* Round 1 */
+}
+
+#barisW .pusingan.round-2 {
+  gap: 200px; /* Round 2 - lebih besar */
+}
+
+#barisW .pusingan.round-3 {
+  gap: 520px; /* Round 3 */
+}
+
+#barisW .pusingan.round-4 {
+  gap: 90px; /* Round 4 (Final) */
+}
+
+/* Loser Bracket - Gap untuk setiap round */
+#barisL .pusingan:nth-child(2) {
+  gap: 20px; /* Loser Round 1 */
+}
+
+#barisL .pusingan:nth-child(3) {
+  gap: 20px; /* Loser Round 2 */
+}
+
+#barisL .pusingan:nth-child(4) {
+  gap: 180px; /* Loser Round 3 */
+}
+
+#barisL .pusingan:nth-child(5) {
+  gap: 90px; /* Loser Round 4 */
+}
+
+#barisL .pusingan:nth-child(6) {
+  gap: 100px; /* Loser Round 5 */
+}
+
+#barisL .pusingan:nth-child(7) {
+  gap: 110px; /* Loser Round 6 (Final) */
 }
 
 .kotak-perlawanan {
@@ -452,7 +495,7 @@ body {
   border-radius: 14px;
   position: relative;
   /* Tambah padding atas kepada 45px atau lebih untuk beri ruang input label */
-  padding: 45px 15px 12px 15px;
+  padding: 45px 15px 12px 14px;
   min-width: 340px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
 }
@@ -713,14 +756,14 @@ body {
   box-shadow: 0 0 40px rgba(33, 206, 236, 0.6);
   z-index: 5;
   margin-top: 5px;
-  margin-left: 450px;
+  margin-left: 500px;
 }
 
 .loser-final-highlight .kotak-perlawanan {
   width: 380px !important;
-  border: 5px solid #ff6403 !important;
+  border: 5px solid #fe4e02 !important;
   transform: scale(1.05);
-  box-shadow: 0 0 40px rgba(255, 98, 0, 0.7);
+  box-shadow: 0 0 20px rgba(255, 64, 0, 0.975);
   z-index: 5;
   margin-left: 50px;
   height: 180px;

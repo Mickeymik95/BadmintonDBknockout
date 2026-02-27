@@ -820,7 +820,7 @@ function jana(savedScores, savedMatchLabels) {
 
         let div = document.createElement('div'); 
 
-        div.className = 'pusingan';
+        div.className = 'pusingan round-' + (r + 1);
 
         for(let m=0; m<Math.pow(2, 3-r); m++) {
 
