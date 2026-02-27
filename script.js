@@ -418,7 +418,7 @@ window.saveAll = () => {
 
 window.resetSkor = async () => {
 
-    if(confirm("RESET SEMUA SKOR SAHAJA? NAMA & NOMBOR MATCH AKAN DIKEKALKAN.")) {
+    if(confirm("RESET SEMUA SKOR ?")) {
 
         const snapshot = await get(dbRef);
 
@@ -454,7 +454,7 @@ window.resetSkor = async () => {
 
 window.resetTournament = () => {
 
-    if(confirm("Reset nama pasukan dan avatar sahaja? Skor dan struktur bracket akan dikekalkan.")) {
+    if(confirm("RESET NAMA PASUKAN, SKOR DAN AVATAR ?")) {
 
         get(dbRef).then(snapshot => {
 
@@ -462,9 +462,7 @@ window.resetTournament = () => {
 
             
 
-            // Reset hanya teams data - kosongkan nama dan avatar
-
-            // Kekal skor, match labels, dan struktur bracket
+            // Reset hanya teams data, skor dan kosongkan nama dan avatar
 
             set(dbRef, { 
 
@@ -472,7 +470,7 @@ window.resetTournament = () => {
 
                 teams: {},                    // Reset teams sahaja
 
-                scores: data.scores || {},     // Kekal skor
+                scores: {},     // Kekal skor
 
                 matchLabels: data.matchLabels || {},  // Kekal match labels
 
@@ -480,7 +478,7 @@ window.resetTournament = () => {
 
             }).then(() => {
 
-                alert("✅ Nama pasukan dan avatar telah direset!");
+                alert("✅ Nama pasukan, skor dan avatar telah direset!");
 
                 location.reload();
 

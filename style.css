@@ -126,8 +126,7 @@ body {
 .header-actions-grid {
   display: flex;
   justify-content: center;
-  gap: 15px;
-  margin-top: 35px;
+  gap: 40px;
 }
 
 .btn-action {
@@ -169,16 +168,14 @@ body {
 
 .laluan-row {
   display: flex;
-  gap: 50px;
+  gap:30px;
   padding: 40px 60px;
-  /* Kurangkan dari 100px 80px */
   border-radius: 40px;
   position: relative;
   background: rgba(255, 255, 255, 0.01);
   width: max-content;
   box-sizing: border-box;
   min-height: auto;
-  /* Tukar dari 200px */
 }
 
 #barisW {
@@ -580,7 +577,7 @@ body {
   border-radius: 14px;
   position: relative;
   /* Tambah padding atas kepada 45px atau lebih untuk beri ruang input label */
-  padding: 45px 15px 12px 14px;
+  padding: 42px 15px 15px 5px;
   min-width: 340px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
 }
@@ -592,7 +589,7 @@ body {
 }
 
 .slot-pasukan .seed-no {
-  margin-right: 1px;
+  margin-right: 0px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -604,11 +601,8 @@ body {
   font-weight: 900;
   font-size: 16px;
   min-width: 15px;
-  /* Dari 45px ke 35px - lebih compact */
   width: 20px;
-  /* Tetapkan lebar sama dengan min-width */
   height: 35px;
-  /* Sama dengan lebar - jadikan persegi */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -795,20 +789,18 @@ body {
   width: 450px !important;
   height: 180px;
   border: 5px solid #00d2ff !important;
-  transform: scale(1.35);
+  transform: scale(1.4  );
   box-shadow: 0 0 40px rgba(33, 206, 236, 0.6);
-  z-index: 5;
   margin-top: 5px;
-  margin-left: 500px;
+  margin-left: 620px;
 }
 
 .loser-final-highlight .kotak-perlawanan {
   width: 350px !important;
   border: 3px solid #fe4e02 !important;
-  transform: scale(1.06);
+  transform: scale(1.15);
   box-shadow: 0 0 20px rgba(255, 64, 0, 0.975);
-  z-index: 5;
-  margin-left: 30px;
+  margin-left: 120px;
   height: 180px;
 }
 
@@ -924,15 +916,15 @@ body {
 }
 
 .kotak-perlawanan:has(.pemenang) .slot-pasukan:not(.pemenang) {
-  opacity: 0.4;
+  opacity: 0.6;
   filter: grayscale(0.5);
-  transition: all 0.3s ease;
+  transform: scale(1);
 }
 
 .slot-pasukan.pemenang {
   opacity: 1 !important;
   filter: grayscale(0) !important;
-  transform: scale(1.02);
+  transform: scale(1);
 }
 
 .nama-display[value="BYE"] {
