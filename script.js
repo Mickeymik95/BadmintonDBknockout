@@ -1444,70 +1444,42 @@ function penyelarasanLebar() {
 
 // --- 3. SWAP NOMBOR SEED (ADMIN PANEL) ---
 
-document.addEventListener('change', function(e) {
-
-    if (e.target && e.target.id.startsWith('admin_seed')) {
-
-        let currentInput = e.target;
-
-        let newValue = parseInt(currentInput.value);
-
-        let oldValue = parseInt(currentInput.defaultValue) || (parseInt(currentInput.id.replace('admin_seed', '')) + 1);
-
-
-
-        document.querySelectorAll('input[id^="admin_seed"]').forEach(input => {
-
-            if (input !== currentInput && parseInt(input.value) === newValue) {
-
-                input.value = oldValue;
-
-                input.defaultValue = oldValue;
-
-            }
-
-        });
-
-        currentInput.defaultValue = newValue;
-
-    }
-
-});
-
-
-
 // --- 4. SISTEM AUTO-SAVE (SATU SAHAJA) ---
 
 const handleAutoSave = (e) => {
-
     // Simpan jika yang berubah adalah skor, input admin, atau label match
-
-    if (e.target.classList.contains('skor') || 
-
-        e.target.closest('#pesertaInputSection') || 
-
-        e.target.classList.contains('match-top-input')) {
-
+    if (e.target && (e.target.classList.contains('skor') || 
+                     e.target.id.startsWith('admin_') || 
+                     e.target.classList.contains('match-top-input'))) {
         
-
-        console.log("Auto-saving data...");
-
-        window.saveAll();
-
+        // Jangan auto-save jika sedang menaip seed
+        if (e.target.id.startsWith('admin_seed')) {
+            let currentInput = e.target;
+            let newValue = parseInt(currentInput.value);
+            let oldValue = parseInt(currentInput.defaultValue) || (parseInt(currentInput.id.replace('admin_seed', '')) + 1);
+            
+            document.querySelectorAll('input[id^="admin_seed"]').forEach(input => {
+                if (input !== currentInput && parseInt(input.value) === newValue) {
+                    alert(`RALAT: NOMBOR SEED ${newValue} SUDAH DIGUNAKAN!`);
+                    currentInput.value = oldValue;
+                    return;
+                }
+            });
+        }
+        
+        // Auto-save dengan delay untuk elakkan save berlebihan
+        clearTimeout(window.autoSaveTimeout);
+        window.autoSaveTimeout = setTimeout(() => {
+            saveAll();
+        }, 2000);
     }
-
 };
 
-
-
-// Kesan perubahan input
-
+// Kesan perubahan input (termasuk seed swap dan auto-save)
 document.addEventListener('change', handleAutoSave);
 
 
-
 // Kesan tekan Enter
-
 document.addEventListener('keypress', (e) => {
 
     if (e.key === 'Enter' && e.target.tagName === 'INPUT') {
@@ -1517,8 +1489,52 @@ document.addEventListener('keypress', (e) => {
     }
 
 });
-// Muzik akan dimainkan apabila pengguna klik di mana-mana dalam laman web
-document.addEventListener('click', function() {
+
+// Auto-play muzik apabila page load
+document.addEventListener('DOMContentLoaded', function() {
     var audio = document.getElementById("myAudio");
-    audio.play();
-}, { once: true }); // 'once: true' bermaksud ia hanya aktif pada klik pertama sahaja
+    var audioIcon = document.getElementById("audioIcon");
+    var audioText = document.getElementById("audioText");
+    
+    // Set initial state
+    audioIcon.textContent = "🔇";
+    audioText.textContent = "PLAY";
+    
+    // Auto-play muzik (dengan user interaction)
+    setTimeout(function() {
+        audio.play().then(function() {
+            audioIcon.textContent = "🔊";
+            audioText.textContent = "PAUSE";
+        }).catch(function(error) {
+            console.log("Auto-play prevented:", error);
+        });
+    }, 1000);
+    
+    // Update button when audio state changes
+    audio.addEventListener('play', function() {
+        audioIcon.textContent = "�";
+        audioText.textContent = "PAUSE";
+    });
+    
+    audio.addEventListener('pause', function() {
+        audioIcon.textContent = "🔇";
+        audioText.textContent = "PLAY";
+    });
+});
+
+// Toggle Audio Function
+window.toggleAudio = function() {
+    var audio = document.getElementById("myAudio");
+    var audioIcon = document.getElementById("audioIcon");
+    var audioText = document.getElementById("audioText");
+    
+    if (audio.paused) {
+        audio.play();
+        audioIcon.textContent = "🔊";
+        audioText.textContent = "PAUSE";
+    } else {
+        audio.pause();
+        audioIcon.textContent = "🔇";
+        audioText.textContent = "PLAY";
+    }
+};
