@@ -769,20 +769,20 @@ body {
 }
 
 .loser-final-highlight .kotak-perlawanan {
-  width: 380px !important;
-  border: 5px solid #fe4e02 !important;
-  transform: scale(1.05);
+  width: 350px !important;
+  border: 3px solid #fe4e02 !important;
+  transform: scale(1.06);
   box-shadow: 0 0 20px rgba(255, 64, 0, 0.975);
   z-index: 5;
-  margin-left: 50px;
+  margin-left: 30px;
   height: 180px;
 }
 
 
 .semifinal-lower-highlight .kotak-perlawanan {
   width: 320px !important;
-  border: 5px solid #8000FF !important; /* Purple */
-  transform: scale(1.05);
+  border: 3px solid #8000FF !important; /* Purple */
+  transform: scale(1.02);
   box-shadow: 0 0 40px rgba(128, 0, 255, 0.5);
   z-index: 5;
 }
