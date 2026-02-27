@@ -1264,6 +1264,8 @@ window.kira = (id) => {
 
  function autoBye() {
 
+    console.log("🔍 AutoBye triggered - checking for BYE matches");
+    
     const brackets = ['W', 'L', 'GF'];
 
     let adaPerubahan = false;
@@ -1296,6 +1298,8 @@ window.kira = (id) => {
 
                 if (p1 !== "" && p1 !== "BYE" && p1 !== "..." && p2 === "BYE") {
 
+                    console.log(`✅ Auto-win: ${p1} vs BYE in ${id} - setting 1-0`);
+
                     sc1.value = 1; sc2.value = 0;
 
                     window.kira(id);
@@ -1308,6 +1312,8 @@ window.kira = (id) => {
 
                 else if (p1 === "BYE" && p2 !== "" && p2 !== "BYE" && p2 !== "...") {
 
+                    console.log(`✅ Auto-win: BYE vs ${p2} in ${id} - setting 0-1`);
+
                     sc1.value = 0; sc2.value = 1;
 
                     window.kira(id);
@@ -1319,6 +1325,8 @@ window.kira = (id) => {
                 // Kes: BYE vs BYE (Sering berlaku di Loser Bracket)
 
                 else if (p1 === "BYE" && p2 === "BYE") {
+
+                    console.log(`⚠️ Double BYE: ${id} - setting 0-0`);
 
                     sc1.value = 0; sc2.value = 0;
 
@@ -1342,13 +1350,23 @@ window.kira = (id) => {
 
     if (adaPerubahan) {
 
+        console.log("🔄 Changes detected, re-running autoBye");
+
         setTimeout(() => autoBye(), 100);
+
+    } else {
+
+        console.log("✅ No BYE matches to process");
 
     }
 
 }
 
-
+// Manual trigger untuk test auto bye (boleh dibuang kemudian)
+window.testAutoBye = function() {
+    console.log("🧪 Manual AutoBye test triggered");
+    autoBye();
+};
 
 // --- 4. AUTO UPDATE MATCH LABEL UNTUK BYE MATCHES ---
 
