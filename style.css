@@ -168,7 +168,7 @@ body {
 
 .laluan-row {
   display: flex;
-  gap:30px;
+  gap: 25px;
   padding: 40px 60px;
   border-radius: 40px;
   position: relative;
@@ -788,26 +788,22 @@ body {
 .grand-final {
   width: 450px !important;
   height: 180px;
-  border: 5px solid #00d2ff !important;
+  border: 2px solid #00d2ff !important;
   transform: scale(1.4  );
   box-shadow: 0 0 40px rgba(33, 206, 236, 0.6);
-  margin-top: 5px;
-  margin-left: 620px;
+  left: 55%;
 }
-
 .loser-final-highlight .kotak-perlawanan {
-  width: 350px !important;
-  border: 3px solid #fe4e02 !important;
+  border: 2px solid #fe4e02 !important;
   transform: scale(1.15);
   box-shadow: 0 0 20px rgba(255, 64, 0, 0.975);
-  margin-left: 120px;
-  height: 180px;
+  left: 6.7%;
 }
 
 
 .semifinal-lower-highlight .kotak-perlawanan {
   width: 320px !important;
-  border: 3px solid #8000FF !important;
+  border: 2px solid #8000FF !important;
   /* Purple */
   transform: scale(1.02);
   box-shadow: 0 0 40px rgba(128, 0, 255, 0.5);
@@ -816,7 +812,7 @@ body {
 
 .winner-final-highlight .kotak-perlawanan {
   width: 320px !important;
-  border: 5px solid #e6e4e4 !important;
+  border: 3px solid #e6e4e4 !important;
   transform: scale(1.05);
   box-shadow: 0 0 40px rgba(252, 249, 249, 0.4);
   z-index: 5;
